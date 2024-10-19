@@ -15,7 +15,8 @@ function LoginAdmin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const loadScript = (src, id) => {   
+    // Fungsi untuk memuat skrip eksternal
+    const loadScript = (src, id) => {
       return new Promise((resolve, reject) => {
         if (document.getElementById(id)) {
           resolve();
@@ -33,9 +34,10 @@ function LoginAdmin() {
 
     const loadScripts = async () => {
       try {
-        await loadScript(process.env.PUBLIC_URL + "/assets/login/js/jquery-3.3.1.min.js", "jquery-3.3.1.min.js");
-        await loadScript(process.env.PUBLIC_URL + "/assets/login/js/popper.min.js", "popper.min.js");
-        await loadScript(process.env.PUBLIC_URL + "/assets/login/js/bootstrap.min.js", "bootstrap.min.js");
+        // Memuat skrip secara berurutan
+        await loadScript(process.env.PUBLIC_URL + "/assets/login/js/jquery-3.3.1.min.js", "jquery-js");
+        await loadScript(process.env.PUBLIC_URL + "/assets/login/js/popper.min.js", "popper-js");
+        await loadScript(process.env.PUBLIC_URL + "/assets/login/js/bootstrap.min.js", "bootstrap-js");
         await loadScript(process.env.PUBLIC_URL + "/assets/login/js/main.js", "main-js");
       } catch (error) {
         console.error("Error loading scripts:", error);
@@ -48,10 +50,11 @@ function LoginAdmin() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Memanggil fungsi login dan navigasi ke admin
       await login(username, password);
       navigate('/admin');
     } catch (error) {
-      setError('Login failed. Please check your username and password.');
+      setError('Login failed. Please check your username and password.'); 
     }
   };
 
@@ -69,7 +72,7 @@ function LoginAdmin() {
                   <h3>Sign In</h3>
                   <p className="mb-4">Lorem ipsum dolor sit amet elit. Sapiente sit aut eos consectetur adipisicing.</p>
                 </div>
-                {error && <div className="alert alert-danger">{error}</div>}
+                {error && <div className="alert alert-danger">{error}</div>} 
                 <form onSubmit={handleSubmit}>
                   <div className="form-group first">
                     <label htmlFor="username">Username</label>
@@ -79,6 +82,7 @@ function LoginAdmin() {
                       id="username"
                       value={username}
                       onChange={(e) => setUsername(e.target.value)}
+                      required 
                     />
                   </div>
                   <div className="form-group last mb-4">
@@ -89,6 +93,7 @@ function LoginAdmin() {
                       id="password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                   </div>
                   <div className="d-flex mb-5 align-items-center">

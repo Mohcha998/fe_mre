@@ -1,26 +1,27 @@
+import React, { useContext } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AuthProvider } from './context/AuthContext'; // pastikan ini adalah AuthContext yang benar
+import { AuthContext } from './context/AuthContext';  // pastikan import AuthContext
 import LoginAdmin from './admin/auth/LoginAdmin';
-import AdminDashboard from './admin/pages/AdminDashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import AppAdmin from './admin/AppAdmin';
 
 function App() {
+  const { isAuthenticated } = useContext(AuthContext); // gunakan useContext dengan AuthContext
+
   return (
-    <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/login" element={<LoginAdmin />} />
-          <Route 
-            path="/admin" 
-            element={
-              <ProtectedRoute>
-                <AdminDashboard />
-              </ProtectedRoute>
-            } 
-          />
-        </Routes>
-      </Router>
-    </AuthProvider>
+    <Router>
+      <Routes>
+        <Route path="/login" element={<LoginAdmin />} />
+        <Route 
+          path="/admin/*"
+          element={
+            <ProtectedRoute isAuthenticated={isAuthenticated}>
+              <AppAdmin />
+            </ProtectedRoute>
+          } 
+        />
+      </Routes>
+    </Router>
   );
 }
 

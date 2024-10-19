@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
   return (
@@ -84,10 +85,10 @@ const Sidebar = () => {
     <ul className='menu-inner py-1'>
       {/* Dashboard */}
       <li className='menu-item active'>
-        <a href='index.html' className='menu-link'>
+        <Link to='/' className='menu-link'>
           <i className='menu-icon tf-icons bx bx-home-circle' />
           <div data-i18n='Analytics'>Dashboard</div>
-        </a>
+        </Link>
       </li>
       {/* Layouts */}
       <li className='menu-item'>

@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { Routes, Route } from "react-router-dom"; // Hapus Router
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/vendor/fonts/boxicons.css"; 
 import "../assets/vendor/css/core.css";
@@ -9,11 +10,11 @@ import "../assets/vendor/libs/apex-charts/apex-charts.css";
 
 import "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar";
 import "../assets/vendor/js/bootstrap.js";
-// import "../assets/vendor/js/bootstrap.js";
 
 import Navbar from "./components/Navbar";
 import Sidebar from './components/Sidebar';
-import Content from './pages/AdminDashboard';
+import AdminDashboard from './pages/AdminDashboard';
+// import AnotherPage from './pages/AnotherPage'; 
 
 function AdminApp() {
   useEffect(() => {
@@ -61,7 +62,10 @@ function AdminApp() {
         <div className="layout-page">
           <Navbar />
           <div className="content-wrapper">
-            <Content />
+            <Routes>
+              <Route path="dashboard" element={<AdminDashboard />} /> {/* Route dashboard */}
+              {/* <Route path="another-page" element={<AnotherPage />} /> */}
+            </Routes>
             <div className="content-backdrop fade"></div>
           </div>  
         </div>
