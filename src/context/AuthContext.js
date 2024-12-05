@@ -1,28 +1,25 @@
-// context/AuthContext.js
 import React, { createContext, useState, useContext } from "react";
 import axios from "axios";
 
-// Create the context
-const AuthContext = createContext();
+const APP_URL = "http://localhost:8080/api/";
 
-// Custom hook to use AuthContext
+export const AuthContext = createContext();
+
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
-// Provider component
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token"));
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post("http://127.0.0.1:8000/login", {
+      const response = await axios.post(`${APP_URL}login`, {
         email,
         password,
       });
 
-      // On successful login, store the token and user data
       setUser(response.data.user);
       setToken(response.data.token);
       localStorage.setItem("token", response.data.token); // Store the token in localStorage
