@@ -1,30 +1,47 @@
-import React, { createContext, useState, useEffect } from 'react';
+// context/AuthContext.js
+import React, { createContext, useState, useContext } from "react";
+import axios from "axios";
 
-export const AuthContext = createContext();
+// Create the context
+const AuthContext = createContext();
 
+// Custom hook to use AuthContext
+export const useAuth = () => {
+  return useContext(AuthContext);
+};
+
+// Provider component
 export const AuthProvider = ({ children }) => {
-  const [auth, setAuth] = useState(null);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
-  useEffect(() => {
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setAuth(token);
+  const login = async (email, password) => {
+    try {
+      const response = await axios.post("http://127.0.0.1:8000/login", {
+        email,
+        password,
+      });
+
+      // On successful login, store the token and user data
+      setUser(response.data.user);
+      setToken(response.data.token);
+      localStorage.setItem("token", response.data.token); // Store the token in localStorage
+
+      return true;
+    } catch (error) {
+      console.error("Login failed:", error.response?.data?.message);
+      return false;
     }
-  }, []);
-
-  const login = (username, password) => {
-    // login logic
   };
 
   const logout = () => {
-    setAuth(null);
-    localStorage.removeItem('authToken');
+    setUser(null);
+    setToken(null);
+    localStorage.removeItem("token"); // Remove token from localStorage
   };
 
-  const isAuthenticated = () => !!auth;  // cek apakah token ada
-
   return (
-    <AuthContext.Provider value={{ auth, isAuthenticated, login, logout }}>
+    <AuthContext.Provider value={{ user, token, login, logout }}>
       {children}
     </AuthContext.Provider>
   );
