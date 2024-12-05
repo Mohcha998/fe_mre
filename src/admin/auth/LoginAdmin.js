@@ -7,15 +7,13 @@ import "../../assets/login/css/owl.carousel.min.css";
 import "../../assets/login/css/bootstrap.min.css";
 import "../../assets/login/css/style.css";
 
-function LoginAdmin() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const LoginAdmin = () => {
+  const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const { login } = useContext(AuthContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Load external scripts (optional)
     const loadScript = (src, id) => {
       return new Promise((resolve, reject) => {
         if (document.getElementById(id)) {
@@ -33,23 +31,17 @@ function LoginAdmin() {
     };
 
     const loadScripts = async () => {
+      const scripts = [
+        { src: "/assets/login/js/jquery-3.3.1.min.js", id: "jquery-js" },
+        { src: "/assets/login/js/popper.min.js", id: "popper-js" },
+        { src: "/assets/login/js/bootstrap.min.js", id: "bootstrap-js" },
+        { src: "/assets/login/js/main.js", id: "main-js" },
+      ];
+
       try {
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/login/js/jquery-3.3.1.min.js",
-          "jquery-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/login/js/popper.min.js",
-          "popper-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/login/js/bootstrap.min.js",
-          "bootstrap-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/login/js/main.js",
-          "main-js"
-        );
+        for (const script of scripts) {
+          await loadScript(process.env.PUBLIC_URL + script.src, script.id);
+        }
       } catch (error) {
         console.error("Error loading scripts:", error);
       }
@@ -58,15 +50,18 @@ function LoginAdmin() {
     loadScripts();
   }, []);
 
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+    setCredentials((prev) => ({ ...prev, [id]: value }));
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous error message
+    setError("");
 
     try {
-      // Attempt to log the user in using the email and password
-      const success = await login(email, password);
+      const success = await login(credentials.email, credentials.password);
       if (success) {
-        // If login is successful, navigate to the admin dashboard
         navigate("/admin");
       } else {
         setError("Login failed. Please check your username and password.");
@@ -82,10 +77,7 @@ function LoginAdmin() {
         <div className="row">
           <div className="col-md-6">
             <img
-              src={
-                process.env.PUBLIC_URL +
-                "/assets/login/images/undraw_remotely_2j6y.svg"
-              }
+              src={`${process.env.PUBLIC_URL}/assets/login/images/undraw_remotely_2j6y.svg`}
               alt="Image"
               className="img-fluid"
             />
@@ -108,8 +100,8 @@ function LoginAdmin() {
                       type="email"
                       className="form-control"
                       id="email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      value={credentials.email}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -119,8 +111,8 @@ function LoginAdmin() {
                       type="password"
                       className="form-control"
                       id="password"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
+                      value={credentials.password}
+                      onChange={handleChange}
                       required
                     />
                   </div>
@@ -163,6 +155,6 @@ function LoginAdmin() {
       </div>
     </div>
   );
-}
+};
 
 export default LoginAdmin;
