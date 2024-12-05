@@ -1,20 +1,26 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import { useAuth } from "./context/AuthContext"; // Use useAuth instead of AuthContext
 import LoginAdmin from "./admin/auth/LoginAdmin";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppAdmin from "./admin/AppAdmin";
 
 function App() {
-  const { token } = useAuth(); // Use the useAuth hook to get the token
+  const { token } = useAuth();
 
   return (
     <Router>
       <Routes>
-        {/* Login route */}
-        <Route path="/login" element={<LoginAdmin />} />
+        <Route
+          path="/login"
+          element={token ? <Navigate to="/admin/dashboard" /> : <LoginAdmin />}
+        />
 
-        {/* Protected route */}
         <Route
           path="/admin/*"
           element={

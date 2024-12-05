@@ -6,9 +6,9 @@ import "../assets/vendor/css/core.css";
 import "../assets/vendor/css/theme-default.css";
 import "../assets/css/demo.css";
 import "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css";
-// import "../assets/vendor/libs/apex-charts/apex-charts.css";
-import "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar";
-import "../assets/vendor/js/bootstrap.js";
+import "../assets/vendor/libs/apex-charts/apex-charts.css";
+// import "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar";
+// import "../assets/vendor/js/bootstrap.js";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";

@@ -1,18 +1,17 @@
 import React from "react";
-import { Navigate, useLocation } from "react-router-dom";
-import { useAuth } from "../context/AuthContext"; // Use useAuth hook instead of importing AuthContext directly
+import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
-const ProtectedRoute = ({ children }) => {
-  const { token } = useAuth(); // Use the useAuth hook to get the token
+function ProtectedRoute({ children }) {
+  const { token } = useAuth();
 
-  const location = useLocation();
+  // Jika tidak ada token (pengguna belum login), redirect ke halaman login
+  if (!token) {
+    return <Navigate to="/login" />;
+  }
 
-  // Check if there is a token to decide if the user is authenticated
-  return token ? (
-    children
-  ) : (
-    <Navigate to="/login" state={{ from: location.pathname }} />
-  );
-};
+  // Jika ada token (pengguna sudah login), tampilkan komponen anak
+  return children;
+}
 
 export default ProtectedRoute;
