@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { FaUserGraduate, FaMicrophoneAlt, FaBrain, FaRocket, FaChalkboardTeacher, FaUserTie, FaPlane, FaVideo } from "react-icons/fa";
-import EditDashboard from "./EditDashboard";
+import { PiStudentBold } from "react-icons/pi";
+import { MdOutlinePendingActions, MdPaid } from "react-icons/md";
+import { RiPassExpiredLine } from "react-icons/ri";
 
 const initialFilters = {
   startDate: "",
@@ -22,26 +23,28 @@ const tableData = [
   { id: 8, name: "Hank", hp: "8901234567", email: "hank@example.com", program: "PS", branch: "BSD", class: "B", invitationCode: "VWX234", status: "Paid", FU: "FU8", date: "2022-08-01" },
 ];
 
-const AdminDashboard = () => {
+const cardData = [
+  { id: "totalStudent", icon: <PiStudentBold style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Total Prospect", count: "12,628" },
+  { id: "pending", icon: <MdOutlinePendingActions style={{ fontSize: "28px", color: "#FFC107" }} />, title: "Pending", count: "12,628" },
+  { id: "expired", icon: <RiPassExpiredLine style={{ fontSize: "28px", color: "#F44336" }} />, title: "Expired", count: "2,456" },
+  { id: "paid", icon: <MdPaid style={{ fontSize: "28px", color: "#2196F3" }} />, title: "Paid", count: "14,857" },
+];
+
+const Card = ({ card, setActiveDetail }) => (
+  <div className="col-6 col-sm-4 col-md-3 mb-3">
+    <div className="card h-100 shadow-sm text-center" onClick={() => setActiveDetail(card.id)} style={{ cursor: "pointer", borderRadius: "10px" }}>
+      <div className="card-body d-flex flex-column align-items-center p-3">
+        <div className="icon mb-2">{card.icon}</div>
+        <h6 className="card-title mb-1" style={{ fontSize: "14px", fontWeight: "500" }}>{card.title}</h6>
+        <p className="fw-bold mb-0" style={{ fontSize: "18px" }}>{card.count}</p>
+      </div>
+    </div>
+  </div>
+);
+
+const SPProgram = ({ setActiveDetail }) => {
   const [filters, setFilters] = useState(initialFilters);
   const [activeFilters, setActiveFilters] = useState({});
-  const [data, setData] = useState(tableData);
-  const [isEditModalOpen, setEditModalOpen] = useState(false);
-  const [selectedParticipant, setSelectedParticipant] = useState(null);
-
-  const handleEditClick = (participant) => {
-    setSelectedParticipant(participant);
-    setEditModalOpen(true);
-  };
-
-  const handleSave = (updatedParticipant) => {
-    setData(prevData => prevData.map(participant => 
-      participant.id === updatedParticipant.id ? updatedParticipant : participant
-    ));
-    setEditModalOpen(false);
-  };
-
-  const handleCancel = () => setEditModalOpen(false);
 
   const handleFilterChange = ({ target: { name, value } }) => {
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -56,9 +59,8 @@ const AdminDashboard = () => {
     return data.filter(item => {
       const isWithinDateRange = (!activeFilters.startDate || new Date(item.date) >= new Date(activeFilters.startDate)) &&
                                 (!activeFilters.endDate || new Date(item.date) <= new Date(activeFilters.endDate));
-      return isWithinDateRange && Object.keys(activeFilters).every(key => 
-        !activeFilters[key] || item[key] === activeFilters[key]
-      );
+      const matchesFilters = Object.entries(activeFilters).every(([key, value]) => !value || item[key] === value);
+      return isWithinDateRange && matchesFilters;
     });
   };
 
@@ -89,19 +91,12 @@ const AdminDashboard = () => {
           <td>
             <div className="dropdown">
               <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i className="fas fa-cog"></i>
+                <i className="fas fa-ellipsis-v"></i>
               </button>
               <ul className="dropdown-menu">
                 {["Detail", "Edit", "Delete"].map(action => (
-                  <li key={action} className="dropdown-item">
-                    <a
-                      href="#"
-                      onClick={() => action === "Edit" && handleEditClick({ id, name, hp, email, program, branch, class: className, invitationCode, status, FU })}
-                      className={`text-primary d-flex align-items-center ${action === "Edit" ? "fw-bold" : ""}`}
-                    >
-                      <i className={`fas fa-${action === "Edit" ? "pencil-alt" : action === "Delete" ? "trash-alt" : "eye"}`} style={{ marginRight: "8px" }}></i> 
-                      <span>{action}</span>
-                    </a>
+                  <li key={action}>
+                    <a className="dropdown-item" href="#">{action}</a>
                   </li>
                 ))}
               </ul>
@@ -112,41 +107,14 @@ const AdminDashboard = () => {
     </tbody>
   );
 
-  const cardData = [
-    { id: "totalStudentActive", icon: <FaUserGraduate style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Total Student Active", count: "12,628" },
-    { id: "ps", icon: <FaMicrophoneAlt style={{ fontSize: "28px", color: "#FF5733" }} />, title: "Public Speaking", count: "1,234" },
-    { id: "sl", icon: <FaBrain style={{ fontSize: "28px", color: "#6A5ACD" }} />, title: "Smart Learning", count: "1,025" },
-    { id: "ls", icon: <FaRocket style={{ fontSize: "28px", color: "#FF9800" }} />, title: "Life & Success", count: "980" },
-    { id: "psa", icon: <FaChalkboardTeacher style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Public Speaking Academy", count: "650" },
-    { id: "pcps", icon: <FaUserTie style={{ fontSize: "28px", color: "#2196F3" }} />, title: "Private Coaching Public Speaking", count: "450" },
-    { id: "hp", icon: <FaPlane style={{ fontSize: "28px", color: "#FFC107" }} />, title: "Holiday Program", count: "325" },
-    { id: "iam", icon: <FaVideo style={{ fontSize: "28px", color: "#E91E63" }} />, title: "I Am YouTuber", count: "280" },
-  ];
-
-  const Card = ({ card }) => (
-    <div className="col-6 col-sm-4 col-md-3 mb-3">
-      <div className="card h-100 shadow-sm text-center" style={{ cursor: "pointer", borderRadius: "10px" }}>
-        <div className="card-body d-flex flex-column align-items-center p-3">
-          <div className="icon mb-2">{card.icon}</div>
-          <h6 className="card-title mb-1" style={{ fontSize: "14px", fontWeight: "500" }}>{card.title}</h6>
-          <p className="fw-bold mb-0" style={{ fontSize: "18px" }}>{card.count}</p>
-        </div>
-      </div>
-    </div>
-  );
-
-  const ProgramDashboard = () => (
-    <div className="container-xxl flex-grow-1 container-p-y">
-      <div className="row g-3">
-        {cardData.map(card => <Card key={card.id} card={card} />)}
-      </div>
-    </div>
-  );
-
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
-      <ProgramDashboard />
-      <div className="card mt-4" style={{ marginLeft: "15px", marginRight: "15px" }}>
+      <div className="row g-3">
+        {cardData.map(card => (
+          <Card key={card.id} card={card} setActiveDetail={setActiveDetail} />
+        ))}
+      </div>
+      <div className="card mt-4">
         <div className="card-header">
           <h5>Filter</h5>
         </div>
@@ -174,26 +142,19 @@ const AdminDashboard = () => {
           </button>
         </div>
       </div>
-      <div className="card mt-4 shadow-sm" style={{ marginLeft: "15px", marginRight: "15px" }}>
+      <div className="card mt-4 shadow-sm">
         <div className="card-header text-white">
-          <h5 className="mb-0">Detail Total Student</h5>
+          <h5 className="mb-0">Detail Student</h5>
         </div>
         <div className="card-body">
           <table className="table table-striped table-hover">
             {renderTableHeader()}
-            {renderTableBody(filterData(data))}
+            {renderTableBody(filterData(tableData))}
           </table>
         </div>
       </div>
-      {isEditModalOpen && (
-        <EditDashboard
-          participant={selectedParticipant}
-          onSave={handleSave}
-          onCancel={handleCancel}
-        />
-      )}
     </div>
   );
 };
 
-export default AdminDashboard;
+export default SPProgram;
