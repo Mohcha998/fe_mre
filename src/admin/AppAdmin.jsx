@@ -13,8 +13,9 @@ import "../assets/vendor/libs/apex-charts/apex-charts.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import AdminDashboard from "./pages/dashboard/AdminDashboard.js";
-import SPProgram from "../MRLC/SP.jsx";
-import PesertaSP from "../MRLC/PesertaSP.jsx";
+import SPProgram from "./pages/dashboard/SP.jsx";
+import PesertaSP from "./pages/dashboard/PesertaSP.jsx";
+import Interest from "./pages/dashboard/Interest.jsx";
 
 function AdminApp() {
   useEffect(() => {
@@ -101,6 +102,7 @@ function AdminApp() {
               <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/sp" element={<SPProgram />} />
               <Route path="/daftar-peserta-sp" element={<PesertaSP />} />
+              <Route path="/interest" element={<Interest />}></Route>
             </Routes>
             <div className="content-backdrop fade"></div>
           </div>

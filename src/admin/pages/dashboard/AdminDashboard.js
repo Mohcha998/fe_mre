@@ -11,14 +11,14 @@ const initialFilters = {
 };
 
 const tableData = [
-  { id: 1, name: "Alice", hp: "1234567890", email: "alice@example.com", program: "PS", branch: "PI", class: "A", invitationCode: "ABC123", status: "Active", FU: "wa", date: "2022-01-01" },
-  { id: 2, name: "Bob", hp: "2345678901", email: "bob@example.com", program: "SL", branch: "BSD", class: "B", invitationCode: "DEF456", status: "Active", FU: "v", date: "2022-02-01" },
-  { id: 3, name: "Charlie", hp: "3456789012", email: "charlie@example.com", program: "LS", branch: "KG", class: "A", invitationCode: "GHI789", status: "Active", FU: "cb", date: "2022-03-01" },
-  { id: 4, name: "David", hp: "4567890123", email: "david@example.com", program: "PSA", branch: "PI", class: "B", invitationCode: "JKL012", status: "Active", FU: "1", date: "2022-04-01" },
-  { id: 5, name: "Eve", hp: "5678901234", email: "eve@example.com", program: "PCPS", branch: "BSD", class: "A", invitationCode: "MNO345", status: "Inactive", FU: "2", date: "2022-05-01" },
-  { id: 6, name: "Frank", hp: "6789012345", email: "frank@example.com", program: "HP", branch: "KG", class: "B", invitationCode: "PQR678", status: "Inactive", FU: "3", date: "2022-06-01" },
-  { id: 7, name: "Grace", hp: "7890123456", email: "grace@example.com", program: "IAY", branch: "PI", class: "A", invitationCode: "STU901", status: "Inactive", FU: "x", date: "2022-07-01" },
-  { id: 8, name: "Hank", hp: "8901234567", email: "hank@example.com", program: "PS", branch: "BSD", class: "B", invitationCode: "VWX234", status: "Inactive", FU: "wa", date: "2022-08-01" },
+  { id: 1, name: "Alice", hp: "1234567890", email: "alice@example.com", program: "PS", branch: "PI", class: "A", status: "Active", date: "2022-01-01" },
+  { id: 2, name: "Bob", hp: "2345678901", email: "bob@example.com", program: "SL", branch: "BSD", class: "B", status: "Active", date: "2022-02-01" },
+  { id: 3, name: "Charlie", hp: "3456789012", email: "charlie@example.com", program: "LS", branch: "KG", class: "A", status: "Active", date: "2022-03-01" },
+  { id: 4, name: "David", hp: "4567890123", email: "david@example.com", program: "PSA", branch: "PI", class: "B", status: "Active", date: "2022-04-01" },
+  { id: 5, name: "Eve", hp: "5678901234", email: "eve@example.com", program: "PCPS", branch: "BSD", class: "A", status: "Inactive", date: "2022-05-01" },
+  { id: 6, name: "Frank", hp: "6789012345", email: "frank@example.com", program: "HP", branch: "KG", class: "B", status: "Inactive", date: "2022-06-01" },
+  { id: 7, name: "Grace", hp: "7890123456", email: "grace@example.com", program: "IAY", branch: "PI", class: "A", status: "Inactive", date: "2022-07-01" },
+  { id: 8, name: "Hank", hp: "8901234567", email: "hank@example.com", program: "PS", branch: "BSD", class: "B", status: "Inactive", date: "2022-08-01" },
 ];
 
 const AdminDashboard = () => {
@@ -35,10 +35,6 @@ const AdminDashboard = () => {
     setFilters(initialFilters);
   };
 
-  const handleFUChange = (id, value) => {
-    setData(prevData => prevData.map(item => (item.id === id ? { ...item, FU: value } : item)));
-  };
-
   const filterData = (data) => {
     return data.filter(item => {
       const isWithinDateRange = (!activeFilters["start date"] || new Date(item.date) >= new Date(activeFilters["start date"])) &&
@@ -52,7 +48,7 @@ const AdminDashboard = () => {
   const renderTableHeader = () => (
     <thead>
       <tr>
-        {["No", "Name", "HP", "Email", "Program", "Branch", "Class", "Invitation Code", "Status", "FU"].map(header => (
+        {["No", "Name", "HP", "Email", "Program", "Branch", "Class", "Status"].map(header => (
           <th key={header} className="text-center">{header}</th>
         ))}
       </tr>
@@ -61,7 +57,7 @@ const AdminDashboard = () => {
 
   const renderTableBody = (data) => (
     <tbody>
-      {data.map(({ id, name, hp, email, program, branch, class: className, invitationCode, status, FU }) => (
+      {data.map(({ id, name, hp, email, program, branch, class: className, status }) => (
         <tr key={id} className="text-center">
           <td>{id}</td>
           <td>{name}</td>
@@ -70,31 +66,19 @@ const AdminDashboard = () => {
           <td>{program}</td>
           <td>{branch}</td>
           <td>{className}</td>
-          <td>{invitationCode}</td>
           <td>{status}</td>
-          <td>
-            <select
-              className="form-select"
-              value={FU}
-              onChange={(e) => handleFUChange(id, e.target.value)}
-            >
-              {["wa", "v", "cb", "1", "2", "3", "x"].map(option => (
-                <option key={option} value={option}>{option}</option>
-              ))}
-            </select>
-          </td>
         </tr>
       ))}
     </tbody>
   );
 
   const cardData = [
-    { id: "totalStudentActive", icon: <FaUserGraduate style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Total Student Active", count: "12,628" },
-    { id: "ps", icon: <FaMicrophoneAlt style={{ fontSize: "28px", color: "#FF5733" }} />, title: "Public Speaking", count: "1,234" },
-    { id: "sl", icon: <FaBrain style={{ fontSize: "28px", color: "#6A5ACD" }} />, title: "Smart Learning", count: "1,025" },
-    { id: "ls", icon: <FaRocket style={{ fontSize: "28px", color: "#FF9800" }} />, title: "Life & Success", count: "980" },
-    { id: "psa", icon: <FaChalkboardTeacher style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Public Speaking Academy", count: "650" },
-    { id: "iam", icon: <FaVideo style={{ fontSize: "28px", color: "#E91E63" }} />, title: "I Am YouTuber", count: "280" },
+    { id: "totalStudentActive", icon: <FaUserGraduate style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Total Student Active", count: "5000" },
+    { id: "ps", icon: <FaMicrophoneAlt style={{ fontSize: "28px", color: "#FF5733" }} />, title: "Public Speaking", count: "1000" },
+    { id: "sl", icon: <FaBrain style={{ fontSize: "28px", color: "#6A5ACD" }} />, title: "Smart Learning", count: "1000" },
+    { id: "ls", icon: <FaRocket style={{ fontSize: "28px", color: "#FF9800" }} />, title: "Life & Success", count: "1000" },
+    { id: "psa", icon: <FaChalkboardTeacher style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Public Speaking Academy", count: "1000" },
+    { id: "iam", icon: <FaVideo style={{ fontSize: "28px", color: "#E91E63" }} />, title: "I Am YouTuber", count: "1000" },
     { id: "pcps", icon: <FaUserTie style={{ fontSize: "28px", color: "#2196F3" }} />, title: "Private Coaching Public Speaking", count: "450" },
     { id: "hp", icon: <FaPlane style={{ fontSize: "28px", color: "#FFC107" }} />, title: "Holiday Program", count: "325" },
   ];
