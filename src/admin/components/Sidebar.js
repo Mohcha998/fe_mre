@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const Sidebar = () => {
+  const [activeItem, setActiveItem] = useState('');
+
+  const handleItemClick = (item) => {
+    setActiveItem(item); // Perbarui item aktif saat diklik
+  };
+
   return (
     <aside id='layout-menu' className='layout-menu menu-vertical menu bg-menu-theme'>
       <div className='app-brand demo'>
@@ -45,22 +51,27 @@ const Sidebar = () => {
       </div>
       <div className='menu-inner-shadow' />
       <ul className='menu-inner py-1'>
-        {/* Dashboard */}
-        <li className='menu-item active'>
+        {/* Dashboard
+        <li className='menu-item '>
           <Link to='/admin/dashboard' className='menu-link'>
             <i className='menu-icon tf-icons bx bx-home-circle' />
             <div data-i18n='Analytics'>Dashboard</div>
           </Link>
-        </li>
+        </li> */}
         {/* Layouts */}
-        <li className='menu-item'>
-          <a href='javascript:void(0);' className='menu-link menu-toggle'>
-            <i className='menu-icon tf-icons bx bx-layout' />
+        <li className={`menu-item ${activeItem === 'mrlc' ? 'active' : ''}`}>
+          <a href='javascript:void(0);' className='menu-link menu-toggle' onClick={() => handleItemClick('mrlc')}>
+            <i className='menu-icon tf-icons bx bx-home-circle' />
             <div data-i18n='Layouts'>MRLC</div>
           </a>
           <ul className='menu-sub'>
             <li className='menu-item'>
-              <a href='/admin/sp' className='menu-link'>
+              <a href='/admin/dashboard' className='menu-link' onClick={() => handleItemClick('sp')}>
+                <div data-i18n='Analytics'>Summary</div>
+              </a>
+            </li>
+            <li className='menu-item'>
+              <a href='/admin/sp' className='menu-link' onClick={() => handleItemClick('daftar-peserta-sp')}>
                 <div data-i18n='Without menu'>Sesi Perkenalan</div>
               </a>
             </li>
@@ -70,23 +81,18 @@ const Sidebar = () => {
               </a>
             </li>
             <li className='menu-item'>
-              <a href='layouts-container.html' className='menu-link'>
-                <div data-i18n='Container'>Container</div>
-              </a>
-            </li>
-            <li className='menu-item'>
               <a href='layouts-fluid.html' className='menu-link'>
-                <div data-i18n='Fluid'>Fluid</div>
+                <div data-i18n='Fluid'>Interest Program</div>
               </a>
             </li>
-            <li className='menu-item'>
+            {/* <li className='menu-item'>
               <a href='layouts-blank.html' className='menu-link'>
                 <div data-i18n='Blank'>Blank</div>
               </a>
-            </li>
+            </li> */}
           </ul>
         </li>
-        <li className='menu-header small text-uppercase'>
+        {/* <li className='menu-header small text-uppercase'>
           <span className='menu-header-text'>Pages</span>
         </li>
         <li className='menu-item'>
@@ -372,7 +378,7 @@ const Sidebar = () => {
             <i className='menu-icon tf-icons bx bx-file' />
             <div data-i18n='Documentation'>Documentation</div>
           </a>
-        </li>
+        </li> */}
       </ul>
     </aside>
   );

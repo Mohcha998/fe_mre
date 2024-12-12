@@ -75,16 +75,16 @@ const LoginAdmin = () => {
     <div className="content">
       <div className="container">
         <div className="row">
-          <div className="col-md-6">
+          <div className="col-12 col-md-6">
             <img
               src={`${process.env.PUBLIC_URL}/assets/login/images/undraw_remotely_2j6y.svg`}
               alt="Image"
               className="img-fluid"
             />
           </div>
-          <div className="col-md-6 contents">
+          <div className="col-12 col-md-6 contents">
             <div className="row justify-content-center">
-              <div className="col-md-8">
+              <div className="col-10 col-md-8">
                 <div className="mb-4">
                   <h3>Sign In</h3>
                   <p className="mb-4">

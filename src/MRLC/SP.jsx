@@ -8,19 +8,18 @@ const initialFilters = {
   endDate: "",
   branch: "",
   program: "",
-  class: "",
   status: "",
 };
 
 const tableData = [
-  { id: 1, name: "Alice", hp: "1234567890", email: "alice@example.com", program: "PS", branch: "PI", class: "A", invitationCode: "ABC123", status: "Active", FU: "FU1", date: "2022-01-01" },
-  { id: 2, name: "Bob", hp: "2345678901", email: "bob@example.com", program: "SL", branch: "BSD", class: "B", invitationCode: "DEF456", status: "Active", FU: "FU2", date: "2022-02-01" },
-  { id: 3, name: "Charlie", hp: "3456789012", email: "charlie@example.com", program: "LS", branch: "KG", class: "A", invitationCode: "GHI789", status: "Pending", FU: "FU3", date: "2022-03-01" },
-  { id: 4, name: "David", hp: "4567890123", email: "david@example.com", program: "PSA", branch: "PI", class: "B", invitationCode: "JKL012", status: "Pending", FU: "FU4", date: "2022-04-01" },
-  { id: 5, name: "Eve", hp: "5678901234", email: "eve@example.com", program: "PCPS", branch: "BSD", class: "A", invitationCode: "MNO345", status: "Expired", FU: "FU5", date: "2022-05-01" },
-  { id: 6, name: "Frank", hp: "6789012345", email: "frank@example.com", program: "HP", branch: "KG", class: "B", invitationCode: "PQR678", status: "Expired", FU: "FU6", date: "2022-06-01" },
-  { id: 7, name: "Grace", hp: "7890123456", email: "grace@example.com", program: "IAY", branch: "PI", class: "A", invitationCode: "STU901", status: "Paid", FU: "FU7", date: "2022-07-01" },
-  { id: 8, name: "Hank", hp: "8901234567", email: "hank@example.com", program: "PS", branch: "BSD", class: "B", invitationCode: "VWX234", status: "Paid", FU: "FU8", date: "2022-08-01" },
+  { id: 1, name: "Alice", hp: "1234567890", email: "alice@example.com", program: "PS", branch: "PI", invitationCode: "ABC123", status: "Pending", FU: "wa", date: "2022-01-01" },
+  { id: 2, name: "Bob", hp: "2345678901", email: "bob@example.com", program: "SL", branch: "BSD", invitationCode: "DEF456", status: "Expired", FU: "v", date: "2022-02-01" },
+  { id: 3, name: "Charlie", hp: "3456789012", email: "charlie@example.com", program: "LS", branch: "KG", invitationCode: "GHI789", status: "Paid", FU: "cb", date: "2022-03-01" },
+  { id: 4, name: "David", hp: "4567890123", email: "david@example.com", program: "PSA", branch: "PI", invitationCode: "JKL012", status: "Pending", FU: "1", date: "2022-04-01" },
+  { id: 5, name: "Eve", hp: "5678901234", email: "eve@example.com", program: "PCPS", branch: "BSD", invitationCode: "MNO345", status: "Expired", FU: "2", date: "2022-05-01" },
+  { id: 6, name: "Frank", hp: "6789012345", email: "frank@example.com", program: "HP", branch: "KG", invitationCode: "PQR678", status: "Paid", FU: "3", date: "2022-06-01" },
+  { id: 7, name: "Grace", hp: "7890123456", email: "grace@example.com", program: "IAY", branch: "PI", invitationCode: "STU901", status: "Pending", FU: "x", date: "2022-07-01" },
+  { id: 8, name: "Hank", hp: "8901234567", email: "hank@example.com", program: "PS", branch: "BSD", invitationCode: "VWX234", status: "Expired", FU: "wa", date: "2022-08-01" },
 ];
 
 const cardData = [
@@ -45,6 +44,7 @@ const Card = ({ card, setActiveDetail }) => (
 const SPProgram = ({ setActiveDetail }) => {
   const [filters, setFilters] = useState(initialFilters);
   const [activeFilters, setActiveFilters] = useState({});
+  const [data, setData] = useState(tableData);
 
   const handleFilterChange = ({ target: { name, value } }) => {
     setFilters(prev => ({ ...prev, [name]: value }));
@@ -53,6 +53,10 @@ const SPProgram = ({ setActiveDetail }) => {
   const handleFilterSubmit = () => {
     setActiveFilters(filters);
     setFilters(initialFilters);
+  };
+
+  const handleFUChange = (id, value) => {
+    setData(prevData => prevData.map(item => (item.id === id ? { ...item, FU: value } : item)));
   };
 
   const filterData = (data) => {
@@ -67,7 +71,7 @@ const SPProgram = ({ setActiveDetail }) => {
   const renderTableHeader = () => (
     <thead>
       <tr>
-        {["No", "Name", "HP", "Email", "Program", "Branch", "Class", "Invitation Code", "Status", "FU", "Action"].map(header => (
+        {["No", "Name", "HP", "Email", "Program", "Branch", "Invitation Code", "Status", "FU"].map(header => (
           <th key={header}>{header}</th>
         ))}
       </tr>
@@ -76,7 +80,7 @@ const SPProgram = ({ setActiveDetail }) => {
 
   const renderTableBody = (data) => (
     <tbody>
-      {data.map(({ id, name, hp, email, program, branch, class: className, invitationCode, status, FU }) => (
+      {data.map(({ id, name, hp, email, program, branch, invitationCode, status, FU }) => (
         <tr key={id}>
           <td>{id}</td>
           <td>{name}</td>
@@ -84,23 +88,18 @@ const SPProgram = ({ setActiveDetail }) => {
           <td>{email}</td>
           <td>{program}</td>
           <td>{branch}</td>
-          <td>{className}</td>
           <td>{invitationCode}</td>
           <td>{status}</td>
-          <td>{FU}</td>
           <td>
-            <div className="dropdown">
-              <button className="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                <i className="fas fa-ellipsis-v"></i>
-              </button>
-              <ul className="dropdown-menu">
-                {["Detail", "Edit", "Delete"].map(action => (
-                  <li key={action}>
-                    <a className="dropdown-item" href="#">{action}</a>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <select
+              className="form-select"
+              value={FU}
+              onChange={(e) => handleFUChange(id, e.target.value)}
+            >
+              {["wa", "v", "cb", "1", "2", "3", "x"].map(option => (
+                <option key={option} value={option}>{option}</option>
+              ))}
+            </select>
           </td>
         </tr>
       ))}
@@ -130,8 +129,7 @@ const SPProgram = ({ setActiveDetail }) => {
                     <option value="">All</option>
                     {filterKey === "program" && ["PS", "SL", "LS", "PSA", "PCPS", "HP", "IAY"].map(option => <option key={option} value={option}>{option}</option>)}
                     {filterKey === "branch" && ["KG", "BSD", "PI"].map(option => <option key={option} value={option}>{option}</option>)}
-                    {filterKey === "class" && ["A", "B"].map(option => <option key={option} value={option}>{option}</option>)}
-                    {filterKey === "status" && ["Active", "Pending", "Expired", "Paid"].map(option => <option key={option} value={option}>{option}</option>)}
+                    {filterKey === "status" && ["Pending", "Expired", "Paid"].map(option => <option key={option} value={option}>{option}</option>)}
                   </select>
                 )}
               </div>
@@ -144,12 +142,12 @@ const SPProgram = ({ setActiveDetail }) => {
       </div>
       <div className="card mt-4 shadow-sm">
         <div className="card-header text-white">
-          <h5 className="mb-0">Detail Student</h5>
+          <h5 className="mb-0">Prospect</h5>
         </div>
         <div className="card-body">
           <table className="table table-striped table-hover">
             {renderTableHeader()}
-            {renderTableBody(filterData(tableData))}
+            {renderTableBody(filterData(data))}
           </table>
         </div>
       </div>
