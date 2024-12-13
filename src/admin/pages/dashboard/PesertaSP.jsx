@@ -1,5 +1,11 @@
 import React, { useState } from "react";
 
+// Constants
+const PROGRAMS = ["PS", "SL", "LS", "PSA", "PCPS", "HP", "IAY"];
+const BRANCHES = ["KG", "BSD", "PI"];
+const STATUSES = ["Pending", "Expired", "Paid", "N/A"];
+const SOURCES = ["merryriana", "instagram", "ads", "google", "whatsapp", "email", "others"];
+
 const initialFilters = {
   "start date": "",
   "end date": "",
@@ -20,38 +26,66 @@ const tableData = [
   { id: 8, name: "Hank", hp: "8901234567", email: "hank@example.com", program: "PS", branch: "BSD", status: "N/A", date: "2022-08-01", spDate: "10 Aug 2022", source: "whatsapp" },
 ];
 
-const TableHeader = () => {
-  const headers = ["No", "Name", "HP", "Email", "Program", "Branch", "Status", "Tanggal SP", "Source", "Action"];
-  return (
-    <thead>
-      <tr>
-        {headers.map(header => (
-          <th key={header} className="text-center">{header}</th>
-        ))}
-      </tr>
-    </thead>
-  );
-};
+const TableHeader = () => (
+  <thead>
+    <tr>
+      {["No", "Name", "HP", "Email", "Program", "Branch", "Status", "Tanggal SP", "Source", "Action"].map(header => (
+        <th key={header} className="text-center">{header}</th>
+      ))}
+    </tr>
+  </thead>
+);
+
+const TableRow = ({ id, name, hp, email, program, branch, status, spDate, source, onCheckIn }) => (
+  <tr>
+    <td className="text-center">{id}</td>
+    <td>{name}</td>
+    <td>{hp}</td>
+    <td>{email}</td>
+    <td>{program}</td>
+    <td>{branch}</td>
+    <td className="text-center">{status}</td>
+    <td className="text-center">{spDate}</td>
+    <td className="text-center">{source}</td>
+    <td className="text-center">
+      <button className="btn btn-primary btn-sm w-100" onClick={() => onCheckIn(id)}>Check-in</button>
+    </td>
+  </tr>
+);
 
 const TableBody = ({ data, onCheckIn }) => (
   <tbody>
-    {data.map(({ id, name, hp, email, program, branch, status, spDate, source }) => (
-      <tr key={id}>
-        <td className="text-center">{id}</td>
-        <td>{name}</td>
-        <td>{hp}</td>
-        <td>{email}</td>
-        <td>{program}</td>
-        <td>{branch}</td>
-        <td className="text-center">{status}</td>
-        <td className="text-center">{spDate}</td>
-        <td className="text-center">{source}</td>
-        <td className="text-center">
-          <button className="btn btn-primary" onClick={() => onCheckIn(id)}>Check-in</button>
-        </td>
-      </tr>
+    {data.map(item => (
+      <TableRow key={item.id} {...item} onCheckIn={onCheckIn} />
     ))}
   </tbody>
+);
+
+const FilterInput = ({ name, value, onChange, type = "select", options = [] }) => (
+  <div className="col-12 col-sm-6 col-md-4 col-lg-2">
+    <label className="form-label">{name.replace(/^\w/, c => c.toUpperCase())}</label>
+    {type === "date" ? (
+      <input 
+        type="date"
+        className="form-control"
+        name={name}
+        value={value}
+        onChange={onChange}
+      />
+    ) : (
+      <select 
+        className="form-select"
+        name={name}
+        value={value}
+        onChange={onChange}
+      >
+        <option value="">All</option>
+        {options.map(option => (
+          <option key={option} value={option}>{option}</option>
+        ))}
+      </select>
+    )}
+  </div>
 );
 
 const PesertaSP = ({ setActiveDetail }) => {
@@ -67,41 +101,51 @@ const PesertaSP = ({ setActiveDetail }) => {
     setFilters(initialFilters);
   };
 
+  const getFilterOptions = (filterKey) => {
+    const optionsMap = {
+      program: PROGRAMS,
+      branch: BRANCHES,
+      status: STATUSES,
+      source: SOURCES
+    };
+    return optionsMap[filterKey] || [];
+  };
+
   const filterData = (data) => {
     return data.filter(item => {
-      const isWithinDateRange = (!activeFilters["start date"] || new Date(item.date) >= new Date(activeFilters["start date"])) &&
-                                (!activeFilters["end date"] || new Date(item.date) <= new Date(activeFilters["end date"]));
-      return isWithinDateRange && Object.keys(activeFilters).every(key => 
-        !activeFilters[key] || item[key] === activeFilters[key]
-      );
+      const startDate = activeFilters["start date"] ? new Date(activeFilters["start date"]) : null;
+      const endDate = activeFilters["end date"] ? new Date(activeFilters["end date"]) : null;
+      const itemDate = new Date(item.date);
+
+      const isWithinDateRange = 
+        (!startDate || itemDate >= startDate) && 
+        (!endDate || itemDate <= endDate);
+
+      const matchesFilters = Object.entries(activeFilters)
+        .filter(([key]) => !key.includes("date"))
+        .every(([key, value]) => !value || item[key] === value);
+
+      return isWithinDateRange && matchesFilters;
     });
   };
 
   return (
-    <div className="container-xxl flex-grow-1 container-p-y">
-      <div className="card mt-4 mx-3">
+    <div className="container-fluid p-4">
+      <div className="card mb-4">
         <div className="card-header">
           <h5>Filter</h5>
         </div>
         <div className="card-body">
           <div className="row g-3">
-            {Object.keys(initialFilters).map(filterKey => (
-              <div className="col-md-2" key={filterKey}>
-                <label className="form-label">{filterKey.replace(/^\w/, c => c.toUpperCase())}</label>
-                {filterKey.includes("date") ? (
-                  <input type="date" className="form-control" name={filterKey} value={filters[filterKey]} onChange={handleFilterChange} />
-                ) : (
-                  <select className="form-select" name={filterKey} value={filters[filterKey]} onChange={handleFilterChange}>
-                    <option value="">All</option>
-                    {filterKey === "program" && ["PS", "SL", "LS", "PSA", "PCPS", "HP", "IAY"].map(option => <option key={option} value={option}>{option}</option>)}
-                    {filterKey === "branch" && ["KG", "BSD", "PI"].map(option => <option key={option} value={option}>{option}</option>)}
-                    {filterKey === "status" && ["Pending", "Expired", "Paid", "N/A"].map(option => <option key={option} value={option}>{option}</option>)}
-                    {filterKey === "source" && ["merryriana", "instagram", "ads", "google", "whatsapp", "email", "others"].map(option => (
-                      <option key={option} value={option}>{option}</option>
-                    ))}
-                  </select>
-                )}
-              </div>
+            {Object.entries(initialFilters).map(([key, value]) => (
+              <FilterInput
+                key={key}
+                name={key}
+                value={filters[key]}
+                onChange={handleFilterChange}
+                type={key.includes("date") ? "date" : "select"}
+                options={getFilterOptions(key)}
+              />
             ))}
           </div>
           <button className="btn btn-primary mt-3" onClick={handleFilterSubmit}>
@@ -109,11 +153,12 @@ const PesertaSP = ({ setActiveDetail }) => {
           </button>
         </div>
       </div>
-      <div className="card mt-4 shadow-sm mx-3">
+
+      <div className="card shadow-sm">
         <div className="card-header text-white">
           <h5 className="mb-0">List Peserta SP</h5>
         </div>
-        <div className="card-body">
+        <div className="card-body px-0">
           <div className="table-responsive">
             <table className="table table-striped table-hover">
               <TableHeader />
