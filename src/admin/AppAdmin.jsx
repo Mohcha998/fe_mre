@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom"; // Hapus Router
+import { Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/vendor/fonts/boxicons.css";
 import "../assets/vendor/css/core.css";
@@ -7,8 +7,6 @@ import "../assets/vendor/css/theme-default.css";
 import "../assets/css/demo.css";
 import "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css";
 import "../assets/vendor/libs/apex-charts/apex-charts.css";
-// import "../assets/vendor/libs/perfect-scrollbar/perfect-scrollbar";
-// import "../assets/vendor/js/bootstrap.js";
 
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
@@ -17,78 +15,46 @@ import SPProgram from "./pages/dashboard/SP.jsx";
 import PesertaSP from "./pages/dashboard/PesertaSP.jsx";
 import Interest from "./pages/dashboard/Interest.jsx";
 
+const SCRIPTS = [
+  { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
+  { src: "/assets/js/config.js", id: "config-js" },
+  { src: "/assets/vendor/libs/jquery/jquery.js", id: "jquery-js" },
+  { src: "/assets/vendor/libs/popper/popper.js", id: "popper-js" },
+  { src: "/assets/vendor/js/bootstrap.js", id: "bootstrap-js" },
+  { src: "/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js", id: "perfect-scrollbar-js" },
+  { src: "/assets/vendor/js/menu.js", id: "menu-js" },
+  { src: "/assets/vendor/libs/apex-charts/apexcharts.js", id: "apexcharts-js" },
+  { src: "/assets/js/main.js", id: "main-js" },
+  { src: "/assets/js/dashboards-analytics.js", id: "dashboards-analytics-js" },
+  { src: "https://buttons.github.io/buttons.js", id: "github-buttons-js", isExternal: true }
+];
+
 function AdminApp() {
   useEffect(() => {
-    const loadScript = (src, id) => {
+    const loadScript = async ({ src, id, isExternal }) => {
+      if (document.getElementById(id)) return;
+
+      const script = document.createElement("script");
+      script.id = id;
+      script.src = isExternal ? src : process.env.PUBLIC_URL + src;
+      script.async = true;
+
       return new Promise((resolve, reject) => {
-        if (document.getElementById(id)) {
-          resolve();
-          return;
-        }
-        const script = document.createElement("script");
-        script.src = process.env.PUBLIC_URL + src;
-        script.id = id;
-        script.async = true;
         script.onload = resolve;
         script.onerror = reject;
         document.body.appendChild(script);
       });
     };
 
-    const loadScripts = async () => {
+    const loadAllScripts = async () => {
       try {
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/vendor/js/helpers.js",
-          "helpers-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/js/config.js",
-          "config-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/vendor/libs/jquery/jquery.js",
-          "jquery-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/vendor/libs/popper/popper.js",
-          "popper-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/vendor/js/bootstrap.js",
-          "bootstrap-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL +
-            "/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
-          "perfect-scrollbar-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/vendor/js/menu.js",
-          "menu-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL +
-            "/assets/vendor/libs/apex-charts/apexcharts.js",
-          "apexcharts-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/js/main.js",
-          "main-js"
-        );
-        await loadScript(
-          process.env.PUBLIC_URL + "/assets/js/dashboards-analytics.js",
-          "dashboards-analytics-js"
-        );
-        await loadScript(
-          "https://buttons.github.io/buttons.js",
-          "github-buttons-js"
-        );
+        await Promise.all(SCRIPTS.map(loadScript));
       } catch (error) {
         console.error("Error loading scripts:", error);
       }
     };
 
-    loadScripts();
+    loadAllScripts();
   }, []);
 
   return (
@@ -102,7 +68,7 @@ function AdminApp() {
               <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/sp" element={<SPProgram />} />
               <Route path="/daftar-peserta-sp" element={<PesertaSP />} />
-              <Route path="/interest" element={<Interest />}></Route>
+              <Route path="/interest" element={<Interest />} />
             </Routes>
             <div className="content-backdrop fade"></div>
           </div>
