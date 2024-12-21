@@ -9,6 +9,7 @@ import { useAuth } from "./context/AuthContext"; // Use useAuth instead of AuthC
 import LoginAdmin from "./admin/auth/LoginAdmin";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppAdmin from "./admin/AppAdmin";
+import { ProspectProvider } from "./context/ProspectContext";
 
 function App() {
   const { token } = useAuth();
@@ -25,9 +26,16 @@ function App() {
           path="/admin/*"
           element={
             <ProtectedRoute>
+              <ProspectProvider>
               <AppAdmin />
+              </ProspectProvider>
             </ProtectedRoute>
           }
+        />
+
+        <Route
+          path="*"
+          element={<Navigate to={token ? "/admin/dashboard" : "/login"} />}
         />
       </Routes>
     </Router>

@@ -2,26 +2,10 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 const MENU_ITEMS = [
-  {
-    path: '/admin/dashboard',
-    label: 'Summary',
-    dataI18n: 'Analytics',
-  },
-  {
-    path: '/admin/sp',
-    label: 'Sesi Perkenalan',
-    dataI18n: 'Without menu',
-  },
-  {
-    path: '/admin/daftar-peserta-sp',
-    label: 'Daftar Peserta SP',
-    dataI18n: 'Without navbar',
-  },
-  {
-    path: '/admin/interest',
-    label: 'Interest Program',
-    dataI18n: 'Fluid',
-  },
+  { path: '/admin/dashboard', label: 'Summary', dataI18n: 'Analytics' },
+  { path: '/admin/sp', label: 'Sesi Perkenalan', dataI18n: 'Without menu' },
+  { path: '/admin/daftar-peserta-sp', label: 'Daftar Peserta SP', dataI18n: 'Without navbar' },
+  { path: '/admin/interest', label: 'Interest Program', dataI18n: 'Fluid' },
 ];
 
 const Logo = () => (
@@ -91,14 +75,14 @@ const Sidebar = () => {
   return (
     <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
       <div className="app-brand demo">
-        <a href="#" className="app-brand-link" onClick={(e) => e.preventDefault()}>
+        <a href="/" className="app-brand-link" onClick={(e) => e.preventDefault()}>
           <span className="app-brand-logo demo">
             <Logo />
           </span>
           <span className="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
         </a>
         <a
-          href="#"
+          href="/"
           className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
           onClick={(e) => e.preventDefault()}
         >
@@ -110,7 +94,7 @@ const Sidebar = () => {
 
       <ul className="menu-inner py-1">
         <li className={`menu-item ${isMrlcActive ? 'active' : ''}`}>
-          <a href="#" className="menu-link menu-toggle" onClick={toggleMrlc}>
+          <a href="/" className="menu-link menu-toggle" onClick={toggleMrlc}>
             <i className="menu-icon tf-icons bx bx-home-circle" />
             <div data-i18n="Layouts">MRLC</div>
           </a>
