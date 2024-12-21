@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
-const APP_URL = "http://localhost:8000/api/";
+const APP_URL = "http://localhost:8001/api/";
 
 export const AuthContext = createContext();
 

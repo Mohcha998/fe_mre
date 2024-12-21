@@ -62,7 +62,7 @@ const LoginAdmin = () => {
     try {
       const success = await login(credentials.email, credentials.password);
       if (success) {
-        navigate("/admin");
+        navigate("/admin/dashboard");
       } else {
         setError("Login failed. Please check your username and password.");
       }
