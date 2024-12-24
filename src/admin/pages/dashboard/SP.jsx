@@ -112,11 +112,13 @@ const FilterInput = ({ name, value, onChange, options }) => {
 };
 
 const TableRow = ({ item, updateFU }) => {
+  const [localCall, setLocalCall] = useState(item.call);
+
   const handleFUChange = async (selectedOption) => {
     try {
       const updatedData = await updateFU(item.id, { call: selectedOption.value });
       if (updatedData) {
-        item.call = selectedOption.value;
+        setLocalCall(selectedOption.value)
       }
     } catch (error) {
       console.error("Error updating FU:", error);
