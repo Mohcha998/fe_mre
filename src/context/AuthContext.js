@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
-const APP_URL = "http://localhost:8001/api/";
+const API_URL = process.env.REACT_APP_API_URL; // Ambil URL dari .env
 
 export const AuthContext = createContext();
 
@@ -13,7 +13,6 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(sessionStorage.getItem("token")); // Use sessionStorage
 
-  // Save token in sessionStorage whenever it changes
   useEffect(() => {
     if (token) {
       sessionStorage.setItem("token", token); // Use sessionStorage
@@ -24,10 +23,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const response = await axios.post(`${APP_URL}login`, { email, password });
+      const response = await axios.post(`${API_URL}login`, { email, password });
 
       setUser(response.data.user);
-      setToken(response.data.token); // Token change will be saved by useEffect
+      setToken(response.data.token);
       return true;
     } catch (error) {
       console.error(
@@ -40,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     setUser(null);
-    setToken(null); // Removing token will clear it from sessionStorage via useEffect
+    setToken(null);
   };
 
   return (
