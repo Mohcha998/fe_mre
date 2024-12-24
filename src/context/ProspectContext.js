@@ -1,6 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axios from "axios";
 
+const API_PROSPECT_URL = process.env.REACT_APP_PROSPECT_URL; // Ambil URL dari .env
+
 const ProspectContext = createContext();
 
 export const useProspects = () => {
@@ -12,11 +14,10 @@ export const ProspectProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch all prospects
   useEffect(() => {
     const fetchProspects = async () => {
       try {
-        const response = await axios.get("http://localhost:8000/api/prospect");
+        const response = await axios.get(API_PROSPECT_URL);
         setProspects(response.data);
         setLoading(false);
       } catch (error) {
@@ -28,16 +29,14 @@ export const ProspectProvider = ({ children }) => {
     fetchProspects();
   }, []);
 
-  // Update prospect data
   const updateProspect = async (id, updatedData) => {
     try {
       const response = await axios.put(
-        `http://localhost:8000/api/prospect/${id}`,
+        `${API_PROSPECT_URL}/${id}`,
         updatedData
       );
       const updatedProspect = response.data;
 
-      // Update state locally
       setProspects((prevProspects) =>
         prevProspects.map((prospect) =>
           prospect.id === id ? updatedProspect : prospect
@@ -51,7 +50,6 @@ export const ProspectProvider = ({ children }) => {
     }
   };
 
-  // Filter prospects based on criteria
   const filterProspects = (filters) => {
     const { startDate, endDate, ...otherFilters } = filters;
 
@@ -77,7 +75,7 @@ export const ProspectProvider = ({ children }) => {
         loading,
         error,
         updateProspect,
-        filterProspects, // Expose filtering function
+        filterProspects,
       }}
     >
       {children}
