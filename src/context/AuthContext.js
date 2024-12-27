@@ -1,7 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = process.env.REACT_APP_API_URL; // Ambil URL dari .env
+const API_URL = process.env.REACT_APP_API_URL;
 
 export const AuthContext = createContext();
 
@@ -11,13 +11,13 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(sessionStorage.getItem("token")); // Use sessionStorage
+  const [token, setToken] = useState(sessionStorage.getItem("token"));
 
   useEffect(() => {
     if (token) {
-      sessionStorage.setItem("token", token); // Use sessionStorage
+      sessionStorage.setItem("token", token);
     } else {
-      sessionStorage.removeItem("token"); // Use sessionStorage
+      sessionStorage.removeItem("token");
     }
   }, [token]);
 

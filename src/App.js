@@ -27,7 +27,7 @@ function App() {
           element={
             <ProtectedRoute>
               <ProspectProvider>
-                  <AppAdmin />
+                <AppAdmin />
               </ProspectProvider>
             </ProtectedRoute>
           }

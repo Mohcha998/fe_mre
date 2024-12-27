@@ -11,9 +11,9 @@ import "../assets/vendor/libs/apex-charts/apex-charts.css";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
 import AdminDashboard from "./pages/dashboard/AdminDashboard.js";
-import SPProgram from "./pages/dashboard/SP.jsx";
-import PesertaSP from "./pages/dashboard/PesertaSP.jsx";
-import Interest from "./pages/dashboard/Interest.jsx";
+import SPProgram from "./pages/sesi_perkenalan/SP.jsx";
+import PesertaSP from "./pages/peserta_sp/PesertaSP.jsx";
+import Interest from "./pages/interest/Interest.jsx";
 
 const SCRIPTS = [
   { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
@@ -21,12 +21,19 @@ const SCRIPTS = [
   { src: "/assets/vendor/libs/jquery/jquery.js", id: "jquery-js" },
   { src: "/assets/vendor/libs/popper/popper.js", id: "popper-js" },
   { src: "/assets/vendor/js/bootstrap.js", id: "bootstrap-js" },
-  { src: "/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js", id: "perfect-scrollbar-js" },
+  {
+    src: "/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
+    id: "perfect-scrollbar-js",
+  },
   { src: "/assets/vendor/js/menu.js", id: "menu-js" },
   { src: "/assets/vendor/libs/apex-charts/apexcharts.js", id: "apexcharts-js" },
   { src: "/assets/js/main.js", id: "main-js" },
   { src: "/assets/js/dashboards-analytics.js", id: "dashboards-analytics-js" },
-  { src: "https://buttons.github.io/buttons.js", id: "github-buttons-js", isExternal: true }
+  {
+    src: "https://buttons.github.io/buttons.js",
+    id: "github-buttons-js",
+    isExternal: true,
+  },
 ];
 
 function AdminApp() {
