@@ -11,6 +11,7 @@ export const ProspectProvider = ({ children }) => {
   const [prospects, setProspects] = useState([]);
   const [spprospects, setSPProspects] = useState([]);
   const [prgprospects, setPrgProspects] = useState([]);
+  const [interestprospects, setInterestProspects] = useState([]);
   const [registprospects, setRegistprospects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -39,6 +40,11 @@ export const ProspectProvider = ({ children }) => {
 
         const responsePrgProspects = await axiosInstance.get("prgcall");
         setPrgProspects(responsePrgProspects.data);
+
+        const responseInterestProspects = await axiosInstance.get(
+          "interest-call"
+        );
+        setInterestProspects(responseInterestProspects.data);
 
         setLoading(false);
       } catch (error) {
@@ -212,6 +218,7 @@ export const ProspectProvider = ({ children }) => {
         registerUser,
         spprospects,
         prgprospects,
+        interestprospects,
         filteredSPProspects,
         loading,
         error,

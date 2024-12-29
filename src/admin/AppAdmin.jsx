@@ -14,6 +14,7 @@ import AdminDashboard from "./pages/dashboard/AdminDashboard.js";
 import SPProgram from "./pages/sesi_perkenalan/SP.jsx";
 import PesertaSP from "./pages/peserta_sp/PesertaSP.jsx";
 import Interest from "./pages/interest/Interest.jsx";
+import Interestfix from "./pages/interestfix/Interest.jsx";
 
 const SCRIPTS = [
   { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
@@ -76,6 +77,7 @@ function AdminApp() {
               <Route path="/sp" element={<SPProgram />} />
               <Route path="/daftar-peserta-sp" element={<PesertaSP />} />
               <Route path="/interest" element={<Interest />} />
+              <Route path="/interestfix" element={<Interestfix />} />
             </Routes>
             <div className="content-backdrop fade"></div>
           </div>

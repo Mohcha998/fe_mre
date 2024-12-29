@@ -10,6 +10,9 @@ import LoginAdmin from "./admin/auth/LoginAdmin";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AppAdmin from "./admin/AppAdmin";
 import { ProspectProvider } from "./context/ProspectContext";
+import { ProgramProvider } from "./context/ProgramContext";
+import { DaftarHadirProvider } from "./context/DaftarHadirContext";
+import { InterestProvider } from "./context/InterestContext";
 
 function App() {
   const { token } = useAuth();
@@ -27,7 +30,13 @@ function App() {
           element={
             <ProtectedRoute>
               <ProspectProvider>
-                <AppAdmin />
+                <ProgramProvider>
+                  <DaftarHadirProvider>
+                    <InterestProvider>
+                      <AppAdmin />
+                    </InterestProvider>
+                  </DaftarHadirProvider>
+                </ProgramProvider>
               </ProspectProvider>
             </ProtectedRoute>
           }

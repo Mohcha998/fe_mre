@@ -107,6 +107,7 @@ const TableRow = ({ item, onSignUp }) => {
         <button
           className="btn btn-primary btn-sm"
           onClick={() => onSignUp(item)}
+          disabled={item.status === 1}
         >
           Sign Up
         </button>
@@ -116,7 +117,7 @@ const TableRow = ({ item, onSignUp }) => {
 };
 
 const Interest = () => {
-  const { prgprospects, loading, filterProspects } = useProspects();
+  const { interestprospects, loading, filterProspects } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [showModal, setShowModal] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState(null);
@@ -142,7 +143,7 @@ const Interest = () => {
 
   if (loading) return <div>Loading...</div>;
 
-  const filteredProspects = prgprospects.filter((item) => {
+  const filteredProspects = interestprospects.filter((item) => {
     return Object.entries(filters).every(([key, value]) => {
       if (!value) return true;
       if (key === "status") return item.status === Number(value);
@@ -176,7 +177,9 @@ const Interest = () => {
                 value={filters[key]}
                 onChange={handleFilterChange}
                 options={[
-                  ...new Set(prgprospects.map((p) => p[key]).filter(Boolean)),
+                  ...new Set(
+                    interestprospects.map((p) => p[key]).filter(Boolean)
+                  ),
                 ]}
               />
             ))}

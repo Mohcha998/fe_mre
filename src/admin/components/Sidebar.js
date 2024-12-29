@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const MENU_ITEMS = [
-  { path: '/admin/dashboard', label: 'Summary', dataI18n: 'Analytics' },
-  { path: '/admin/sp', label: 'Sesi Perkenalan', dataI18n: 'Without menu' },
-  { path: '/admin/daftar-peserta-sp', label: 'Daftar Peserta SP', dataI18n: 'Without navbar' },
-  { path: '/admin/interest', label: 'Interest Program', dataI18n: 'Fluid' },
+  { path: "/admin/dashboard", label: "Summary", dataI18n: "Analytics" },
+  { path: "/admin/sp", label: "Sesi Perkenalan", dataI18n: "Without menu" },
+  {
+    path: "/admin/daftar-peserta-sp",
+    label: "Daftar Peserta SP",
+    dataI18n: "Without navbar",
+  },
+  { path: "/admin/interest", label: "Daftar Hadir SP", dataI18n: "Fluid" },
+  { path: "/admin/interestfix", label: "Interest Program", dataI18n: "Fluid" },
 ];
 
 const Logo = () => (
@@ -22,7 +27,13 @@ const Logo = () => (
         id="path-1"
       />
     </defs>
-    <g id="g-app-brand" stroke="none" strokeWidth={1} fill="none" fillRule="evenodd">
+    <g
+      id="g-app-brand"
+      stroke="none"
+      strokeWidth={1}
+      fill="none"
+      fillRule="evenodd"
+    >
       <g id="Brand-Logo" transform="translate(-27.000000, -15.000000)">
         <g id="Icon" transform="translate(27.000000, 15.000000)">
           <g id="Mask" transform="translate(0.000000, 8.000000)">
@@ -53,7 +64,7 @@ const Logo = () => (
 );
 
 const MenuItem = ({ path, label, dataI18n, isActive }) => (
-  <li className={`menu-item ${isActive ? 'active' : ''}`}>
+  <li className={`menu-item ${isActive ? "active" : ""}`}>
     <Link to={path} className="menu-link">
       <div data-i18n={dataI18n}>{label}</div>
     </Link>
@@ -70,16 +81,25 @@ const Sidebar = () => {
   };
 
   const isPathActive = (path) => location.pathname === path;
-  const isMrlcActive = isMrlcOpen || location.pathname.includes('/admin/');
+  const isMrlcActive = isMrlcOpen || location.pathname.includes("/admin/");
 
   return (
-    <aside id="layout-menu" className="layout-menu menu-vertical menu bg-menu-theme">
+    <aside
+      id="layout-menu"
+      className="layout-menu menu-vertical menu bg-menu-theme"
+    >
       <div className="app-brand demo">
-        <a href="/" className="app-brand-link" onClick={(e) => e.preventDefault()}>
+        <a
+          href="/"
+          className="app-brand-link"
+          onClick={(e) => e.preventDefault()}
+        >
           <span className="app-brand-logo demo">
             <Logo />
           </span>
-          <span className="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+          <span className="app-brand-text demo menu-text fw-bolder ms-2">
+            Sneat
+          </span>
         </a>
         <a
           href="/"
@@ -93,14 +113,18 @@ const Sidebar = () => {
       <div className="menu-inner-shadow" />
 
       <ul className="menu-inner py-1">
-        <li className={`menu-item ${isMrlcActive ? 'active' : ''}`}>
+        <li className={`menu-item ${isMrlcActive ? "active" : ""}`}>
           <a href="/" className="menu-link menu-toggle" onClick={toggleMrlc}>
             <i className="menu-icon tf-icons bx bx-home-circle" />
             <div data-i18n="Layouts">MRLC</div>
           </a>
-          <ul className={`menu-sub ${isMrlcOpen ? 'open' : ''}`}>
+          <ul className={`menu-sub ${isMrlcOpen ? "open" : ""}`}>
             {MENU_ITEMS.map((item) => (
-              <MenuItem key={item.path} {...item} isActive={isPathActive(item.path)} />
+              <MenuItem
+                key={item.path}
+                {...item}
+                isActive={isPathActive(item.path)}
+              />
             ))}
           </ul>
         </li>
