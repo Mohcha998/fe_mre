@@ -1,13 +1,12 @@
 import React, { useState } from "react";
+import moment from "moment";
+import PaymentModal from "./PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
-import { PiStudentBold } from "react-icons/pi";
-import { MdOutlinePendingActions, MdPaid, MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
-import { RiPassExpiredLine } from "react-icons/ri";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
+import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
 import Select from "react-select";
 
-// Constants
 const INITIAL_FILTERS = {
   startDate: "",
   endDate: "",
@@ -23,46 +22,12 @@ const STATUS_OPTIONS = [
   { value: "2", label: "Expired" },
 ];
 
-const FOLLOW_UP_OPTIONS = [
-  { value: "0", label: <FaWhatsapp style={{ color: "green" }} /> },
-  { value: "1", label: <FcCallback /> },
-  { value: "2", label: <MdClose style={{ color: "red" }} /> },
-  { value: "3", label: <MdCheck style={{ color: "green" }} /> },
-  { value: "4", label: <MdWifiCalling1 style={{ color: "red" }} /> },
-  { value: "5", label: <MdWifiCalling2 style={{ color: "red" }} /> },
-  { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
-];
-
 const formatLabel = (name) => {
-  switch (name) {
-    case "startDate":
-      return "Start Date";
-    case "endDate":
-      return "End Date";
-    case "branch_name":
-      return "Branch";
-    case "program_name":
-      return "Program";
-    default:
-      return name
-        .replace(/([a-z])([A-Z])/g, "$1 $2")
-        .replace(/_/g, " ")
-        .replace(/^\w/, (c) => c.toUpperCase());
-  }
+  return name
+    .replace(/([a-z])([A-Z])/g, "$1 $2")
+    .replace(/_/g, " ")
+    .replace(/^\w/, (c) => c.toUpperCase());
 };
-
-// Components
-const Card = ({ card }) => (
-  <div className="col-12 col-sm-6 col-md-3">
-    <div className="card h-100 shadow-sm" role="button">
-      <div className="card-body d-flex flex-column align-items-center p-3">
-        <div className="mb-2">{card.icon}</div>
-        <h6 className="card-title mb-1">{card.title}</h6>
-        <p className="fw-bold mb-0">{card.count}</p>
-      </div>
-    </div>
-  </div>
-);
 
 const FilterInput = ({ name, value, onChange, options }) => {
   const label = formatLabel(name);
@@ -123,14 +88,24 @@ const FilterInput = ({ name, value, onChange, options }) => {
   );
 };
 
-const TableRow = ({ item, updateFU }) => {
+const FOLLOW_UP_OPTIONS = [
+  { value: "0", label: <FaWhatsapp style={{ color: "green" }} /> },
+  { value: "1", label: <FcCallback /> },
+  { value: "2", label: <MdClose style={{ color: "red" }} /> },
+  { value: "3", label: <MdCheck style={{ color: "green" }} /> },
+  { value: "4", label: <MdWifiCalling1 style={{ color: "red" }} /> },
+  { value: "5", label: <MdWifiCalling2 style={{ color: "red" }} /> },
+  { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
+];
+
+const TableRow = ({ item, onSignUp, updateFU }) => {
   const handleFUChange = async (selectedOption) => {
     try {
       const updatedData = await updateFU(item.id, {
-        call: selectedOption.value,
+        call4: selectedOption.value,
       });
       if (updatedData) {
-        item.call = selectedOption.value;
+        item.call4 = selectedOption.value;
       }
     } catch (error) {
       console.error("Error updating FU:", error);
@@ -145,10 +120,14 @@ const TableRow = ({ item, updateFU }) => {
       <td>{item.email}</td>
       <td>{item.program_name}</td>
       <td>{item.branch_name}</td>
-      <td>{item.invitationCode || "-"}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
+      </td>
+      <td>
+        {item.tgl_checkin
+          ? moment(item.tgl_checkin).format("DD-MM-YYYY")
+          : "SU NO SP"}
       </td>
       <td>{item.source}</td>
       <td>
@@ -157,73 +136,53 @@ const TableRow = ({ item, updateFU }) => {
           classNamePrefix="react-select"
           options={FOLLOW_UP_OPTIONS}
           defaultValue={FOLLOW_UP_OPTIONS.find(
-            (opt) => opt.value === item.call
+            (opt) => opt.value === item.call4
           )}
           onChange={handleFUChange}
           isSearchable={false}
         />
       </td>
+      <td>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => onSignUp(item)}
+          disabled={item.status === 1}
+        >
+          Sign Up
+        </button>
+      </td>
     </tr>
   );
 };
 
-// Main Component
-const SPProgram = ({ setActiveDetail }) => {
-  const {
-    prospects,
-    loading,
-    filterProspects,
-    updateProspect,
-    prospectCount,
-    pendingCount,
-    expiredCount,
-    paidCount,
-  } = useProspects();
+const Interest = () => {
+  const { interestprospects, loading, filterProspects, updateProspect } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProspect, setSelectedProspect] = useState(null);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const CARD_DATA = [
-    {
-      id: "totalStudent",
-      icon: <PiStudentBold style={{ fontSize: "28px", color: "#4CAF50" }} />,
-      title: "Total Prospect",
-      count: prospectCount ?? "Loading...",
-    },
-    {
-      id: "pending",
-      icon: (
-        <MdOutlinePendingActions
-          style={{ fontSize: "28px", color: "#FFC107" }}
-        />
-      ),
-      title: "Pending",
-      count: pendingCount ?? "Loading...",
-    },
-    {
-      id: "expired",
-      icon: (
-        <RiPassExpiredLine style={{ fontSize: "28px", color: "#F44336" }} />
-      ),
-      title: "Expired",
-      count: expiredCount ?? "Loading...",
-    },
-    {
-      id: "paid",
-      icon: <MdPaid style={{ fontSize: "28px", color: "#2196F3" }} />,
-      title: "Paid",
-      count: paidCount ?? "Loading...",
-    },
-  ];
-
-  const applyFilters = () => {
-    filterProspects(filters);
+  const applyFilters = async () => {
+    await filterProspects(filters);
   };
 
-  const filteredProspects = prospects.filter((item) => {
+  const handleSignUp = (prospect) => {
+    setSelectedProspect(prospect);
+    setShowModal(true);
+  };
+
+  const handleCreatePayment = (prospectData) => {
+    console.log("Creating payment for:", prospectData);
+    // Logika untuk membuat pembayaran
+  };
+
+  if (loading) return <div>Loading...</div>;
+
+  const filteredProspects = interestprospects.filter((item) => {
     return Object.entries(filters).every(([key, value]) => {
       if (!value) return true;
       if (key === "status") return item.status === Number(value);
@@ -242,17 +201,9 @@ const SPProgram = ({ setActiveDetail }) => {
     });
   });
 
-  if (loading) return <div>Loading...</div>;
-
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
-      <div className="row g-3">
-        {CARD_DATA.map((card) => (
-          <Card key={card.id} card={card} onClick={setActiveDetail} />
-        ))}
-      </div>
-
-      <div className="card mt-4">
+      <div className="card mt-1">
         <div className="card-header">
           <h5>Filter</h5>
         </div>
@@ -265,7 +216,9 @@ const SPProgram = ({ setActiveDetail }) => {
                 value={filters[key]}
                 onChange={handleFilterChange}
                 options={[
-                  ...new Set(prospects.map((p) => p[key]).filter(Boolean)),
+                  ...new Set(
+                    interestprospects.map((p) => p[key]).filter(Boolean)
+                  ),
                 ]}
               />
             ))}
@@ -278,7 +231,7 @@ const SPProgram = ({ setActiveDetail }) => {
 
       <div className="card mt-4">
         <div className="card-header text-white">
-          <h5 className="mb-0">List Prospect</h5>
+          <h5 className="mb-0">List Interest Program</h5>
         </div>
         <div className="card-body px-0">
           <div className="table-responsive">
@@ -292,10 +245,11 @@ const SPProgram = ({ setActiveDetail }) => {
                     "Email",
                     "Program",
                     "Branch",
-                    "Invitation Code",
                     "Status",
+                    "Tanggal SP",
                     "Source",
-                    "FU",
+                    "Follow-up",
+                    "Action",
                   ].map((header) => (
                     <th key={header} className="text-center">
                       {header}
@@ -304,20 +258,37 @@ const SPProgram = ({ setActiveDetail }) => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProspects.map((item) => (
-                  <TableRow
-                    key={item.id}
-                    item={item}
-                    updateFU={updateProspect}
-                  />
-                ))}
+                {filteredProspects.length === 0 ? (
+                  <tr>
+                    <td colSpan="10" className="text-center">
+                      No data available
+                    </td>
+                  </tr>
+                ) : (
+                  filteredProspects.map((item) => (
+                    <TableRow
+                      key={item.id}
+                      item={item}
+                      updateFU={updateProspect}
+                      onSignUp={handleSignUp}
+                    />
+                  ))
+                )}
               </tbody>
             </table>
           </div>
         </div>
       </div>
+
+      {/* Payment Modal */}
+      <PaymentModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onSubmit={handleCreatePayment}
+        prospectData={selectedProspect}
+      />
     </div>
   );
 };
 
-export default SPProgram;
+export default Interest;

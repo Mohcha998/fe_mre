@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useProspects } from "../../../context/ProspectContext";
 import moment from "moment";
+import { FaWhatsapp } from "react-icons/fa";
+import { FcCallback } from "react-icons/fc";
+import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
+import Select from "react-select";
 
 const INITIAL_FILTERS = {
   startDate: "",
@@ -94,7 +98,30 @@ const FilterInput = ({ name, value, onChange, options }) => {
   );
 };
 
-const TableRow = ({ item, handleCheckin }) => {
+const FOLLOW_UP_OPTIONS = [
+  { value: "0", label: <FaWhatsapp style={{ color: "green" }} /> },
+  { value: "1", label: <FcCallback /> },
+  { value: "2", label: <MdClose style={{ color: "red" }} /> },
+  { value: "3", label: <MdCheck style={{ color: "green" }} /> },
+  { value: "4", label: <MdWifiCalling1 style={{ color: "red" }} /> },
+  { value: "5", label: <MdWifiCalling2 style={{ color: "red" }} /> },
+  { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
+];
+
+const TableRow = ({ item, handleCheckin, updateFU }) => {
+  const handleFUChange = async (selectedOption) => {
+    try {
+      const updatedData = await updateFU(item.id, {
+        call2: selectedOption.value,
+      });
+      if (updatedData) {
+        item.call2 = selectedOption.value;
+      }
+    } catch (error) {
+      console.error("Error updating FU:", error);
+    }
+  };
+
   const handleCheckinClick = async () => {
     try {
       await handleCheckin(item.id);
@@ -122,6 +149,18 @@ const TableRow = ({ item, handleCheckin }) => {
       </td>
       <td>{item.source}</td>
       <td>
+        <Select
+          className="react-select-container"
+          classNamePrefix="react-select"
+          options={FOLLOW_UP_OPTIONS}
+          defaultValue={FOLLOW_UP_OPTIONS.find(
+            (opt) => opt.value === item.call2
+          )}
+          onChange={handleFUChange}
+          isSearchable={false}
+        />
+      </td>
+      <td>
         <button
           className="btn btn-primary btn-sm w-100"
           onClick={handleCheckinClick}
@@ -135,7 +174,7 @@ const TableRow = ({ item, handleCheckin }) => {
 };
 
 const PesertaSP = ({ setActiveDetail }) => {
-  const { spprospects, loading, filterProspects, handleCheckin } =
+  const { spprospects, loading, filterProspects, handleCheckin, updateProspect } =
     useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
@@ -214,6 +253,7 @@ const PesertaSP = ({ setActiveDetail }) => {
                     "Status",
                     "Tanggal SP",
                     "Source",
+                    "Follow-up",
                     "Check-in",
                   ].map((header) => (
                     <th key={header} className="text-center">
@@ -234,6 +274,7 @@ const PesertaSP = ({ setActiveDetail }) => {
                     <TableRow
                       key={item.id}
                       item={item}
+                      updateFU={updateProspect}
                       handleCheckin={handleCheckin}
                     />
                   ))

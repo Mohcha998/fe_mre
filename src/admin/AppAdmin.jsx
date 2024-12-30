@@ -13,8 +13,9 @@ import Sidebar from "./components/Sidebar";
 import AdminDashboard from "./pages/dashboard/AdminDashboard.js";
 import SPProgram from "./pages/sesi_perkenalan/SP.jsx";
 import PesertaSP from "./pages/peserta_sp/PesertaSP.jsx";
-import Interest from "./pages/interest/Interest.jsx";
-import Interestfix from "./pages/interestfix/Interest.jsx";
+import Hadir from "./pages/hadir_sp/Hadir.jsx";
+import Interest from "./pages/interest_program/Interest.jsx";
+import Student from "./pages/data_student/DataStudent.jsx";
 
 const SCRIPTS = [
   { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
@@ -76,8 +77,9 @@ function AdminApp() {
               <Route path="/dashboard" element={<AdminDashboard />} />
               <Route path="/sp" element={<SPProgram />} />
               <Route path="/daftar-peserta-sp" element={<PesertaSP />} />
+              <Route path="/hadir" element={<Hadir />} />
               <Route path="/interest" element={<Interest />} />
-              <Route path="/interestfix" element={<Interestfix />} />
+              <Route path="/data-student" element={<Student />} />
             </Routes>
             <div className="content-backdrop fade"></div>
           </div>

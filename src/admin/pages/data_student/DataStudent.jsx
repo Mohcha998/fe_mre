@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import moment from "moment";
-import PaymentModal from "./PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
 
 const INITIAL_FILTERS = {
@@ -84,7 +83,8 @@ const FilterInput = ({ name, value, onChange, options }) => {
   );
 };
 
-const TableRow = ({ item, onSignUp }) => {
+const TableRow = ({ item, onSignUp, updateFU }) => {
+
   return (
     <tr className="text-center">
       <td>{item.id}</td>
@@ -103,6 +103,7 @@ const TableRow = ({ item, onSignUp }) => {
           : "SU NO SP"}
       </td>
       <td>{item.source}</td>
+      <td></td>
       <td>
         <button
           className="btn btn-primary btn-sm"
@@ -116,8 +117,9 @@ const TableRow = ({ item, onSignUp }) => {
   );
 };
 
-const Interest = () => {
-  const { interestprospects, loading, filterProspects } = useProspects();
+//main component
+const Student = () => {
+  const { interestprospects, loading, filterProspects, updateProspect } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [showModal, setShowModal] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState(null);
@@ -135,13 +137,6 @@ const Interest = () => {
     setSelectedProspect(prospect);
     setShowModal(true);
   };
-
-  const handleCreatePayment = (prospectData) => {
-    console.log("Creating payment for:", prospectData);
-    // Logika untuk membuat pembayaran
-  };
-
-  if (loading) return <div>Loading...</div>;
 
   const filteredProspects = interestprospects.filter((item) => {
     return Object.entries(filters).every(([key, value]) => {
@@ -162,7 +157,9 @@ const Interest = () => {
     });
   });
 
-  return (
+  if (loading) return <div>Loading...</div>;
+
+  return(
     <div className="container-xxl flex-grow-1 container-p-y">
       <div className="card mt-1">
         <div className="card-header">
@@ -192,7 +189,7 @@ const Interest = () => {
 
       <div className="card mt-4">
         <div className="card-header text-white">
-          <h5 className="mb-0">List Peserta SP</h5>
+          <h5 className="mb-0">Input Data Student</h5>
         </div>
         <div className="card-body px-0">
           <div className="table-responsive">
@@ -202,13 +199,14 @@ const Interest = () => {
                   {[
                     "No",
                     "Name",
+                    "Tanggal Lahir",
                     "HP",
                     "Email",
                     "Program",
                     "Branch",
+                    "Course",
+                    "Kelas",
                     "Status",
-                    "Tanggal SP",
-                    "Source",
                     "Action",
                   ].map((header) => (
                     <th key={header} className="text-center">
@@ -229,6 +227,7 @@ const Interest = () => {
                     <TableRow
                       key={item.id}
                       item={item}
+                      updateFU={updateProspect}
                       onSignUp={handleSignUp}
                     />
                   ))
@@ -238,16 +237,8 @@ const Interest = () => {
           </div>
         </div>
       </div>
-
-      {/* Payment Modal */}
-      <PaymentModal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={handleCreatePayment}
-        prospectData={selectedProspect}
-      />
     </div>
-  );
-};
+  )
+}
 
-export default Interest;
+export default Student
