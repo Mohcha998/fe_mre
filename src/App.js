@@ -13,6 +13,7 @@ import { ProspectProvider } from "./context/ProspectContext";
 import { ProgramProvider } from "./context/ProgramContext";
 import { DaftarHadirProvider } from "./context/DaftarHadirContext";
 import { InterestProvider } from "./context/InterestContext";
+import { StudentProvider } from "./context/StudentContext";
 
 function App() {
   const { token } = useAuth();
@@ -33,7 +34,9 @@ function App() {
                 <ProgramProvider>
                   <DaftarHadirProvider>
                     <InterestProvider>
-                      <AppAdmin />
+                      <StudentProvider>
+                        <AppAdmin />
+                      </StudentProvider>
                     </InterestProvider>
                   </DaftarHadirProvider>
                 </ProgramProvider>

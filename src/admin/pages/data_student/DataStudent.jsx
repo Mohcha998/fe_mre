@@ -1,15 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import moment from "moment";
-import { useProspects } from "../../../context/ProspectContext";
-
-const INITIAL_FILTERS = {
-  startDate: "",
-  endDate: "",
-  branch_name: "",
-  program_name: "",
-  status: "",
-  source: "",
-};
+import { StudentContext } from "../../../context/StudentContext"; // Import the context
 
 const STATUS_OPTIONS = [
   { value: "0", label: "Pending" },
@@ -24,126 +15,52 @@ const formatLabel = (name) => {
     .replace(/^\w/, (c) => c.toUpperCase());
 };
 
-const FilterInput = ({ name, value, onChange, options }) => {
-  const label = formatLabel(name);
-
-  if (name === "status") {
-    return (
-      <div className="col-md-2">
-        <label className="form-label">{label}</label>
-        <select
-          className="form-select"
-          name={name}
-          value={value}
-          onChange={onChange}
-        >
-          <option value="">All</option>
-          {STATUS_OPTIONS.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
-      </div>
-    );
-  }
-
-  if (name.toLowerCase().includes("date")) {
-    return (
-      <div className="col-md-2">
-        <label className="form-label">{label}</label>
-        <input
-          type="date"
-          className="form-control"
-          name={name}
-          value={value}
-          onChange={onChange}
-        />
-      </div>
-    );
-  }
-
-  return (
-    <div className="col-md-2">
-      <label className="form-label">{label}</label>
-      <select
-        className="form-select"
-        name={name}
-        value={value}
-        onChange={onChange}
-      >
-        <option value="">All</option>
-        {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
-          </option>
-        ))}
-      </select>
-    </div>
-  );
-};
-
-const TableRow = ({ item, onSignUp, updateFU }) => {
-
+const TableRow = ({ item }) => {
   return (
     <tr className="text-center">
       <td>{item.id}</td>
       <td>{item.name}</td>
+      <td>
+        {item.tgl_lahir
+          ? moment(item.tgl_lahir).format("DD-MM-YYYY")
+          : "SU NO SP"}
+      </td>
       <td>{item.phone}</td>
       <td>{item.email}</td>
       <td>{item.program_name}</td>
       <td>{item.branch_name}</td>
+      <td>{item.course_name}</td>
+      <td>{item.kelas_name}</td>
+      <td>{item.status === 0 ? "Inactive" : "Active"}</td>
       <td>
-        {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
-          ?.label || "N/A"}
-      </td>
-      <td>
-        {item.tgl_checkin
-          ? moment(item.tgl_checkin).format("DD-MM-YYYY")
-          : "SU NO SP"}
-      </td>
-      <td>{item.source}</td>
-      <td></td>
-      <td>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => onSignUp(item)}
-          disabled={item.status === 1}
-        >
-          Sign Up
-        </button>
+        <button className="btn btn-primary btn-sm">Sign Up</button>
       </td>
     </tr>
   );
 };
 
-//main component
-const Student = () => {
-  const { interestprospects, loading, filterProspects, updateProspect } = useProspects();
-  const [filters, setFilters] = useState(INITIAL_FILTERS);
-  const [showModal, setShowModal] = useState(false);
-  const [selectedProspect, setSelectedProspect] = useState(null);
+const DataStudent = () => {
+  const { students, loading, error } = useContext(StudentContext); // Use the context here
+  const [filters, setFilters] = useState({
+    startDate: "",
+    endDate: "",
+    branch_name: "",
+    program_name: "",
+    status: "",
+    source: "",
+  });
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const applyFilters = async () => {
-    await filterProspects(filters);
-  };
-
-  const handleSignUp = (prospect) => {
-    setSelectedProspect(prospect);
-    setShowModal(true);
-  };
-
-  const filteredProspects = interestprospects.filter((item) => {
+  const filteredStudents = students.filter((item) => {
     return Object.entries(filters).every(([key, value]) => {
       if (!value) return true;
       if (key === "status") return item.status === Number(value);
       if (key === "startDate" || key === "endDate") {
-        const itemDate = new Date(item.created_at);
+        const itemDate = new Date(item.tgl_lahir); // Adjusted to match schema
         const startDate = filters.startDate
           ? new Date(filters.startDate)
           : null;
@@ -158,8 +75,9 @@ const Student = () => {
   });
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
-  return(
+  return (
     <div className="container-xxl flex-grow-1 container-p-y">
       <div className="card mt-1">
         <div className="card-header">
@@ -167,29 +85,40 @@ const Student = () => {
         </div>
         <div className="card-body">
           <div className="row g-3">
-            {Object.keys(INITIAL_FILTERS).map((key) => (
-              <FilterInput
-                key={key}
-                name={key}
-                value={filters[key]}
-                onChange={handleFilterChange}
-                options={[
-                  ...new Set(
-                    interestprospects.map((p) => p[key]).filter(Boolean)
-                  ),
-                ]}
-              />
+            {Object.keys(filters).map((key) => (
+              <div key={key} className="col-md-2">
+                <label className="form-label">{formatLabel(key)}</label>
+                <select
+                  className="form-select"
+                  name={key}
+                  value={filters[key]}
+                  onChange={handleFilterChange}
+                >
+                  <option value="">All</option>
+                  {key === "status"
+                    ? STATUS_OPTIONS.map((option) => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))
+                    : Array.from(new Set(students.map((p) => p[key]))).map(
+                        (option) => (
+                          <option key={option} value={option}>
+                            {option}
+                          </option>
+                        )
+                      )}
+                </select>
+              </div>
             ))}
           </div>
-          <button className="btn btn-primary mt-3" onClick={applyFilters}>
-            Filter
-          </button>
+          <button className="btn btn-primary mt-3">Filter</button>
         </div>
       </div>
 
       <div className="card mt-4">
         <div className="card-header text-white">
-          <h5 className="mb-0">Input Data Student</h5>
+          <h5 className="mb-0">Data Students</h5>
         </div>
         <div className="card-body px-0">
           <div className="table-responsive">
@@ -216,20 +145,15 @@ const Student = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProspects.length === 0 ? (
+                {filteredStudents.length === 0 ? (
                   <tr>
-                    <td colSpan="10" className="text-center">
+                    <td colSpan="11" className="text-center">
                       No data available
                     </td>
                   </tr>
                 ) : (
-                  filteredProspects.map((item) => (
-                    <TableRow
-                      key={item.id}
-                      item={item}
-                      updateFU={updateProspect}
-                      onSignUp={handleSignUp}
-                    />
+                  filteredStudents.map((item) => (
+                    <TableRow key={item.id} item={item} />
                   ))
                 )}
               </tbody>
@@ -238,7 +162,7 @@ const Student = () => {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Student
+export default DataStudent;
