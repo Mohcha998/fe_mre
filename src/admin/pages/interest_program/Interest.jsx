@@ -4,8 +4,15 @@ import PaymentModal from "./PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
-import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
+import {
+  MdClose,
+  MdCheck,
+  MdWifiCalling1,
+  MdWifiCalling2,
+  MdWifiCalling3,
+} from "react-icons/md";
 import Select from "react-select";
+import DetailModal from "./DetailModal";
 
 const INITIAL_FILTERS = {
   startDate: "",
@@ -16,7 +23,7 @@ const INITIAL_FILTERS = {
   source: "",
 };
 
-const STATUS_OPTIONS = [
+export const STATUS_OPTIONS = [
   { value: "0", label: "Pending" },
   { value: "1", label: "Paid" },
   { value: "2", label: "Expired" },
@@ -98,7 +105,7 @@ const FOLLOW_UP_OPTIONS = [
   { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
 ];
 
-const TableRow = ({ item, onSignUp, updateFU }) => {
+const TableRow = ({ item, onSignUp, updateFU, onViewDetail }) => {
   const handleFUChange = async (selectedOption) => {
     try {
       const updatedData = await updateFU(item.id, {
@@ -151,14 +158,25 @@ const TableRow = ({ item, onSignUp, updateFU }) => {
           Sign Up
         </button>
       </td>
+      <td>
+        <button
+          className="btn btn-info btn-sm"
+          onClick={() => onViewDetail(item)}
+          disabled={item.status === 0}
+        >
+          Detail
+        </button>
+      </td>
     </tr>
   );
 };
 
 const Interest = () => {
-  const { interestprospects, loading, filterProspects, updateProspect } = useProspects();
+  const { interestprospects, loading, filterProspects, updateProspect } =
+    useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [showModal, setShowModal] = useState(false);
+  const [showDetailModal, setShowDetailModal] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState(null);
 
   const handleFilterChange = (e) => {
@@ -175,9 +193,18 @@ const Interest = () => {
     setShowModal(true);
   };
 
+  const handleViewDetail = (prospect) => {
+    setSelectedProspect(prospect);
+    setShowDetailModal(true);
+  };
+
+  const handleCloseDetailModal = () => {
+    setShowDetailModal(false);
+    setSelectedProspect(null);
+  };
+
   const handleCreatePayment = (prospectData) => {
     console.log("Creating payment for:", prospectData);
-    // Logika untuk membuat pembayaran
   };
 
   if (loading) return <div>Loading...</div>;
@@ -250,6 +277,7 @@ const Interest = () => {
                     "Source",
                     "Follow-up",
                     "Action",
+                    "Detail",
                   ].map((header) => (
                     <th key={header} className="text-center">
                       {header}
@@ -260,7 +288,7 @@ const Interest = () => {
               <tbody>
                 {filteredProspects.length === 0 ? (
                   <tr>
-                    <td colSpan="10" className="text-center">
+                    <td colSpan="11" className="text-center">
                       No data available
                     </td>
                   </tr>
@@ -271,6 +299,7 @@ const Interest = () => {
                       item={item}
                       updateFU={updateProspect}
                       onSignUp={handleSignUp}
+                      onViewDetail={handleViewDetail}
                     />
                   ))
                 )}
@@ -285,6 +314,13 @@ const Interest = () => {
         show={showModal}
         onClose={() => setShowModal(false)}
         onSubmit={handleCreatePayment}
+        prospectData={selectedProspect}
+      />
+
+      {/* Detail Modal */}
+      <DetailModal
+        show={showDetailModal}
+        onClose={handleCloseDetailModal}
         prospectData={selectedProspect}
       />
     </div>
