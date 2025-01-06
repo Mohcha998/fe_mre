@@ -25,7 +25,7 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
     if (prospectData) {
       setSelectedProgram(prospectData.id_program || "");
       setCourse(prospectData.course || "1");
-      setNumChildren(prospectData.num_children || 1);
+      setNumChildren(prospectData.children_count || "");
       setVoucherCode(prospectData.voucher_code || "");
       setPaymentAmount(prospectData.total || "");
       setPaymentStatus(prospectData.status_pembayaran || "0");
@@ -60,7 +60,7 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
             <label htmlFor="id_program" className="form-label">
               Program
             </label>
-            <input type="text" id="parent_id" value={prospectData?.id} hidden />
+            <input type="text" id="parent_id" value={prospectData?.id} />
             <input
               type="text"
               id="payment_id"

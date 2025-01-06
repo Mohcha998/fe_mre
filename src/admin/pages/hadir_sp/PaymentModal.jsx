@@ -12,7 +12,9 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
     message,
   } = useDaftarHadirContext();
 
-  const [selectedProgram, setSelectedProgram] = useState(prospectData?.id_program || "");
+  const [selectedProgram, setSelectedProgram] = useState(
+    prospectData?.id_program || ""
+  );
   const [paymentStatus, setPaymentStatus] = useState("1");
   const [course, setCourse] = useState("1");
   const [numChildren, setNumChildren] = useState(1);
@@ -75,7 +77,7 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
             <label htmlFor="id_program" className="form-label">
               Program
             </label>
-            <input type="text" id="parent_id" value={prospectData?.id} hidden />
+            <input type="text" id="parent_id" value={prospectData?.id} />
             {loading ? (
               <p>Loading programs...</p>
             ) : error ? (

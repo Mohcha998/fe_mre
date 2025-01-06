@@ -12,7 +12,7 @@ export const useInterestContext = () => {
 
 // Fungsi untuk mengambil data interests dari server
 const fetchInterests = async () => {
-  const response = await axiosInstance.get("interests");
+  const response = await axiosInstance.get("interest-call");
   return response.data;
 };
 
@@ -21,8 +21,12 @@ export const InterestProvider = ({ children }) => {
   const queryClient = useQueryClient();
 
   // Query untuk mengambil data interest
-  const { data: interests = [], isLoading, error } = useQuery({
-    queryKey: ["interests"],
+  const {
+    data: interests = [],
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["interest-call"],
     queryFn: fetchInterests,
   });
 
@@ -47,10 +51,10 @@ export const InterestProvider = ({ children }) => {
       });
 
       // Invalidate query untuk memastikan data terbaru diambil dari server
-      queryClient.invalidateQueries(["interests"]);
+      queryClient.invalidateQueries(["interest-call"]);
 
       // Memaksa refetch query untuk mengambil data terbaru
-      queryClient.refetchQueries(["interests"]);
+      queryClient.refetchQueries(["interest-call"]);
     },
     onError: (err) => {
       console.error("Error updating interest:", err);
