@@ -1,38 +1,80 @@
-import React, { createContext, useState, useContext } from "react";
-import axiosInstance from "../api/axiosInstance";
+import React, { createContext, useContext } from "react";
+import axiosInstance from "../api/axiosInstance"; // Pastikan axiosInstance sudah terkonfigurasi dengan benar
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
+// Membuat context untuk Interest
 const InterestContext = createContext();
 
+// Hook untuk mengakses context
 export const useInterestContext = () => {
   return useContext(InterestContext);
 };
 
-export const InterestProvider = ({ children }) => {
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [message, setMessage] = useState("");
+// Fungsi untuk mengambil data interests dari server
+const fetchInterests = async () => {
+  const response = await axiosInstance.get("interests");
+  return response.data;
+};
 
-  const handleInterestSubmission = async (interestData) => {
-    setLoading(true);
-    setError(null);
-    try {
+// InterestProvider untuk menyediakan data ke komponen lain
+export const InterestProvider = ({ children }) => {
+  const queryClient = useQueryClient();
+
+  // Query untuk mengambil data interest
+  const { data: interests = [], isLoading, error } = useQuery({
+    queryKey: ["interests"],
+    queryFn: fetchInterests,
+  });
+
+  // Mutation untuk menghandle pengiriman interest
+  const interestMutation = useMutation({
+    mutationFn: async (interestData) => {
       const response = await axiosInstance.put("payment/update", interestData, {
         headers: {
           "Content-Type": "application/json",
         },
       });
+      return response.data;
+    },
+    onSuccess: (newData) => {
+      console.log("New Data from Mutation:", newData);
 
-      setMessage(response.data.message);
-    } catch (err) {
-      setError(err.response?.data?.error || "An error occurred");
-    } finally {
-      setLoading(false);
+      // Update cache dengan data baru setelah mutation berhasil
+      queryClient.setQueryData(["interests"], (oldData = []) => {
+        const updatedData = [...oldData, newData];
+        console.log("Updated Data in Cache:", updatedData);
+        return updatedData;
+      });
+
+      // Invalidate query untuk memastikan data terbaru diambil dari server
+      queryClient.invalidateQueries(["interests"]);
+
+      // Memaksa refetch query untuk mengambil data terbaru
+      queryClient.refetchQueries(["interests"]);
+    },
+    onError: (err) => {
+      console.error("Error updating interest:", err);
+    },
+  });
+
+  // Fungsi untuk mengirimkan data interest
+  const handleInterestSubmission = async (interestData) => {
+    try {
+      // Log data yang akan dikirimkan
+      console.log("Interest Data being submitted:", interestData);
+      await interestMutation.mutateAsync(interestData);
+    } catch (error) {
+      console.error("Error during interest submission:", error);
     }
   };
 
   return (
     <InterestContext.Provider
-      value={{ handleInterestSubmission, loading, error, message }}
+      value={{
+        interests,
+        handleInterestSubmission,
+        error: error || interestMutation.error,
+      }}
     >
       {children}
     </InterestContext.Provider>

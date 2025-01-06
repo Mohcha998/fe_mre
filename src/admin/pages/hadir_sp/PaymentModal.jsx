@@ -11,9 +11,8 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
     error: paymentError,
     message,
   } = useDaftarHadirContext();
-  const [selectedProgram, setSelectedProgram] = useState(
-    prospectData?.id_program || ""
-  );
+
+  const [selectedProgram, setSelectedProgram] = useState(prospectData?.id_program || "");
   const [paymentStatus, setPaymentStatus] = useState("1");
   const [course, setCourse] = useState("1");
   const [numChildren, setNumChildren] = useState(1);

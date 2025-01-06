@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useProspects } from "../../../context/ProspectContext";
 import moment from "moment";
 import { FaWhatsapp } from "react-icons/fa";
@@ -174,8 +174,7 @@ const TableRow = ({ item, handleCheckin, updateFU }) => {
 };
 
 const PesertaSP = ({ setActiveDetail }) => {
-  const { spprospects, loading, filterProspects, handleCheckin, updateProspect } =
-    useProspects();
+  const { spprospects, loading, filterProspects, handleCheckin, updateProspect } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
   const handleFilterChange = (e) => {

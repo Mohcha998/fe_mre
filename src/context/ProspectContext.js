@@ -1,24 +1,57 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
-const ProspectContext = createContext();
+// Context creation
+export const ProspectContext = createContext();
 
 export const useProspects = () => {
   return useContext(ProspectContext);
 };
 
+// Fetching data with React Query
+const fetchProspects = async () => {
+  const response = await axiosInstance.get("prospect");
+  return response.data;
+};
+
+const fetchSPProspects = async () => {
+  const response = await axiosInstance.get("spcall");
+  return response.data;
+};
+
+const fetchPrgProspects = async () => {
+  const response = await axiosInstance.get("prgcall");
+  return response.data;
+};
+
+const fetchInterestProspects = async () => {
+  const response = await axiosInstance.get("interest-call");
+  return response.data;
+};
+
+const fetchProspectCount = async () => {
+  const response = await axiosInstance.get("count_prospect");
+  return response.data.count;
+};
+
+const fetchPendingCount = async () => {
+  const response = await axiosInstance.get("count_pending");
+  return response.data.count;
+};
+
+const fetchExpiredCount = async () => {
+  const response = await axiosInstance.get("count_expired");
+  return response.data.count;
+};
+
+const fetchPaidCount = async () => {
+  const response = await axiosInstance.get("count_paid");
+  return response.data.count;
+};
+
 export const ProspectProvider = ({ children }) => {
-  const [prospects, setProspects] = useState([]);
-  const [spprospects, setSPProspects] = useState([]);
-  const [prgprospects, setPrgProspects] = useState([]);
-  const [interestprospects, setInterestProspects] = useState([]);
-  const [registprospects, setRegistprospects] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [prospectCount, setProspectCount] = useState(null);
-  const [pendingCount, setPendingCount] = useState(null);
-  const [expiredCount, setExpiredCount] = useState(null);
-  const [paidCount, setPaidCount] = useState(null);
+  const queryClient = useQueryClient();
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
@@ -27,85 +60,83 @@ export const ProspectProvider = ({ children }) => {
     status: "",
     source: "",
   });
+
+  // State initialization for prospects and spprospects
+  const [prospects, setProspects] = useState([]);
+  const [spprospects, setSPProspects] = useState([]);
   const [filteredSPProspects, setFilteredSPProspects] = useState([]);
 
+  // Using React Query hooks
+  const { data: fetchedProspects = [], isLoading: loading, error } = useQuery({
+    queryKey: ["prospects"],
+    queryFn: fetchProspects
+  });
+  const { data: fetchedSPProspects = [] } = useQuery({
+    queryKey: ["spprospects"],
+    queryFn: fetchSPProspects
+  });
+  const { data: prgprospects = [] } = useQuery({
+    queryKey: ["prgprospects"],
+    queryFn: fetchPrgProspects
+  });
+  const { data: interestprospects = [] } = useQuery({
+    queryKey: ["interestprospects"],
+    queryFn: fetchInterestProspects
+  });
+  const { data: prospectCount } = useQuery({
+    queryKey: ["prospectCount"],
+    queryFn: fetchProspectCount
+  });
+  const { data: pendingCount } = useQuery({
+    queryKey: ["pendingCount"],
+    queryFn: fetchPendingCount
+  });
+  const { data: expiredCount } = useQuery({
+    queryKey: ["expiredCount"],
+    queryFn: fetchExpiredCount
+  });
+  const { data: paidCount } = useQuery({
+    queryKey: ["paidCount"],
+    queryFn: fetchPaidCount
+  });
+
+  // Update state when new data is fetched
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const responseProspects = await axiosInstance.get("prospect");
-        setProspects(responseProspects.data);
+    setProspects(fetchedProspects);
+    setSPProspects(fetchedSPProspects);
+  }, [fetchedProspects, fetchedSPProspects]);
 
-        const responseSPProspects = await axiosInstance.get("spcall");
-        setSPProspects(responseSPProspects.data);
+  // Filter logic
+  const applyFilters = () => {
+    const result = spprospects.filter((item) => {
+      const itemDate = new Date(item.created_at);
+      const start = filters.startDate ? new Date(filters.startDate) : null;
+      const end = filters.endDate ? new Date(filters.endDate) : null;
 
-        const responsePrgProspects = await axiosInstance.get("prgcall");
-        setPrgProspects(responsePrgProspects.data);
+      const withinDateRange =
+        (!start || itemDate >= start) && (!end || itemDate <= end);
 
-        const responseInterestProspects = await axiosInstance.get(
-          "interest-call"
-        );
-        setInterestProspects(responseInterestProspects.data);
+      const matchesFilters = Object.entries(filters).every(
+        ([key, value]) => !value || item[key] === value
+      );
 
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError(error);
-        setLoading(false);
-      }
-    };
+      return withinDateRange && matchesFilters;
+    });
 
-    const fetchProspectCount = async () => {
-      try {
-        const response = await axiosInstance.get("count_prospect");
-        setProspectCount(response.data.count);
-      } catch (error) {
-        console.error("Error fetching prospect count:", error);
-        setError(error);
-      }
-    };
+    setFilteredSPProspects(result);
+  };
 
-    const fetchPendingCount = async () => {
-      try {
-        const response = await axiosInstance.get("count_pending");
-        setPendingCount(response.data.count);
-      } catch (error) {
-        console.error("Error fetching prospect count:", error);
-        setError(error);
-      }
-    };
+  useEffect(() => {
+    applyFilters();
+  }, [filters, spprospects]);
 
-    const fetchExpiredCount = async () => {
-      try {
-        const response = await axiosInstance.get("count_expired");
-        setExpiredCount(response.data.count);
-      } catch (error) {
-        console.error("Error fetching prospect count:", error);
-        setError(error);
-      }
-    };
-
-    const fetchPaidCount = async () => {
-      try {
-        const response = await axiosInstance.get("count_paid");
-        setPaidCount(response.data.count);
-      } catch (error) {
-        console.error("Error fetching prospect count:", error);
-        setError(error);
-      }
-    };
-
-    fetchData();
-    fetchPaidCount();
-    fetchExpiredCount();
-    fetchPendingCount();
-    fetchProspectCount();
-  }, []);
-
+  // Update Prospect logic
   const updateProspect = async (id, updatedData) => {
     try {
       const response = await axiosInstance.put(`prospect/${id}`, updatedData);
       const updatedProspect = response.data;
 
+      // Update the state with the updated prospect
       setProspects((prevProspects) =>
         prevProspects.map((prospect) =>
           prospect.id === id
@@ -117,55 +148,56 @@ export const ProspectProvider = ({ children }) => {
       return updatedProspect;
     } catch (error) {
       console.error("Error updating prospect:", error);
-      setError(error);
     }
   };
 
+  // Register user logic
   const registerUser = async (data) => {
     try {
-      setLoading(true);
-
       const response = await axiosInstance.post("register", data);
-
       if (response.status === 201) {
-        setRegistprospects((prev) => [...prev, response.data.user]);
         alert("User registered successfully");
       }
     } catch (error) {
       console.error("Error registering user", error);
       alert("Failed to register user");
-    } finally {
-      setLoading(false);
     }
   };
+
+  // Check-in logic
+  const checkInMutation = useMutation({
+    mutationFn: async (id) => {
+      const response = await axiosInstance.put(`/prospects/checkin/${id}`);
+      return response.data;
+    },
+    onMutate: async (id) => {
+      await queryClient.cancelQueries(["prospects"]);
+      const previousData = queryClient.getQueryData(["prospects"]);
+      queryClient.setQueryData(["prospects"], (old) =>
+        old.map((prospect) =>
+          prospect.id === id
+            ? { ...prospect, tgl_checkin: new Date().toISOString() }
+            : prospect
+        )
+      );
+      return { previousData };
+    },
+    onError: (err, id, context) => {
+      queryClient.setQueryData(["prospects"], context.previousData);
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries(["prospects"]);
+    },
+  });
 
   const handleCheckin = async (id) => {
     try {
-      const response = await axiosInstance.put(`/prospects/checkin/${id}`);
-
-      setProspects((prevProspects) =>
-        prevProspects.map((prospect) =>
-          prospect.id === id
-            ? { ...prospect, tgl_checkin: response.data.prospect.tgl_checkin }
-            : prospect
-        )
-      );
-
-      setSPProspects((prevSPProspects) =>
-        prevSPProspects.map((prospect) =>
-          prospect.id === id
-            ? { ...prospect, tgl_checkin: response.data.prospect.tgl_checkin }
-            : prospect
-        )
-      );
-
-      return response.data;
-    } catch (error) {
-      console.error("Error checking in prospect:", error);
-      setError(error);
+      await checkInMutation.mutateAsync(id);
+    } catch {
     }
   };
 
+  // Filter prospects function
   const filterProspects = (filters) => {
     const { startDate, endDate, ...otherFilters } = filters;
 
@@ -186,34 +218,10 @@ export const ProspectProvider = ({ children }) => {
     });
   };
 
-  // Apply filters to spprospects
-  useEffect(() => {
-    const applyFilters = () => {
-      const result = spprospects.filter((item) => {
-        const itemDate = new Date(item.created_at);
-        const start = filters.startDate ? new Date(filters.startDate) : null;
-        const end = filters.endDate ? new Date(filters.endDate) : null;
-
-        const withinDateRange =
-          (!start || itemDate >= start) && (!end || itemDate <= end);
-
-        const matchesFilters = Object.entries(filters).every(
-          ([key, value]) => !value || item[key] === value
-        );
-
-        return withinDateRange && matchesFilters;
-      });
-      setFilteredSPProspects(result);
-    };
-
-    applyFilters();
-  }, [filters, spprospects]);
-
   return (
     <ProspectContext.Provider
       value={{
         prospects,
-        setProspects,
         handleCheckin,
         registerUser,
         spprospects,
@@ -229,7 +237,6 @@ export const ProspectProvider = ({ children }) => {
         expiredCount,
         paidCount,
         filters,
-        registprospects,
         setFilters,
       }}
     >

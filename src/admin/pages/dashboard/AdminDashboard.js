@@ -1,28 +1,11 @@
 import React, { useState, useContext } from "react";
-import {
-  FaUserGraduate,
-  FaMicrophoneAlt,
-  FaBrain,
-  FaRocket,
-  FaChalkboardTeacher,
-  FaUserTie,
-  FaPlane,
-  FaVideo,
-} from "react-icons/fa";
+import { FaUserGraduate, FaMicrophoneAlt, FaBrain, FaRocket, FaChalkboardTeacher, FaUserTie, FaPlane, FaVideo } from "react-icons/fa";
 import { StudentContext } from "../../../context/StudentContext"; // Import the context
 
 // Constants
 const PROGRAMS = ["PS", "SL", "LS", "PSA", "PCPS", "HP", "IAY"];
 const BRANCHES = ["KG", "BSD", "PI"];
-const CLASSES = [
-  "Senin",
-  "Selasa",
-  "Rabu",
-  "Kamis",
-  "Jumat",
-  "Sabtu",
-  "Minggu",
-];
+const CLASSES = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu", "Minggu"];
 const STATUSES = ["Active", "Inactive"];
 
 const INITIAL_FILTERS = {
