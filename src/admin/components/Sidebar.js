@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const SUMMARY_ITEM = { path: "/admin/dashboard", label: "Summary", dataI18n: "Analytics" };
-
 const SP_ITEMS = [
-  { path: "/admin/sp", label: "Sesi Perkenalan", dataI18n: "Without menu" },
-  { path: "/admin/daftar-peserta-sp", label: "Daftar Peserta SP", dataI18n: "Without navbar" },
-  { path: "/admin/hadir", label: "Daftar Hadir SP", dataI18n: "Fluid" },
+  { path: "/admin/sp", label: "Sesi Perkenalan" },
+  { path: "/admin/daftar-peserta-sp", label: "Daftar Peserta SP" },
+  { path: "/admin/hadir", label: "Daftar Hadir SP" },
 ];
 
 const OTHER_ITEMS = [
-  { path: "/admin/interest", label: "Interest Program", dataI18n: "Fluid" },
-  { path: "/admin/data-student", label: "Data Student", dataI18n: "Fluid" },
+  { path: "/admin/interest", label: "Interest Program" },
+  { path: "/admin/data-student", label: "Data Student" },
 ];
 
 const Logo = () => (
@@ -26,103 +24,85 @@ const Logo = () => (
   </svg>
 );
 
-const MenuItem = ({ path, label, dataI18n, isActive }) => (
+const MenuItem = ({ path, label, isActive }) => (
   <li className={`menu-item ${isActive ? "active" : ""}`}>
     <Link to={path} className="menu-link">
-      <div data-i18n={dataI18n}>{label}</div>
+      <span>{label}</span>
     </Link>
   </li>
 );
 
 const Sidebar = () => {
-  const [isMrlcOpen, setIsMrlcOpen] = useState(false);
-  const [isSpOpen, setIsSpOpen] = useState(false);
   const location = useLocation();
+  const [isSpOpen, setIsSpOpen] = useState(false);
 
-  const toggleMrlc = (e) => {
-    e.preventDefault();
-    setIsMrlcOpen((prev) => !prev);
-  };
+  // Periksa apakah salah satu submenu "SP" aktif berdasarkan URL
+  const isSpActive = SP_ITEMS.some((item) => location.pathname.startsWith(item.path));
+
+  useEffect(() => {
+    if (isSpActive) {
+      setIsSpOpen(true); // Tetap aktif jika navigasi dalam menu "SP"
+    }
+  }, [isSpActive]);
 
   const toggleSp = (e) => {
     e.preventDefault();
-    setIsSpOpen((prev) => !prev);
+    setIsSpOpen((prev) => !prev); // Ubah state SP secara manual
   };
 
-  const isPathActive = (path) => location.pathname === path;
-  const isMrlcActive = isMrlcOpen || location.pathname.includes("/admin/");
-  const isSpActive = isSpOpen || SP_ITEMS.some((item) => location.pathname === item.path);
+  const isPathActive = (path) => location.pathname.startsWith(path);
 
   return (
-    <aside
-      id="layout-menu"
-      className="layout-menu menu-vertical menu bg-menu-theme"
-    >
+    <aside className="layout-menu menu-vertical menu bg-menu-theme">
       <div className="app-brand demo">
-        <a
-          href="/"
-          className="app-brand-link"
-          onClick={(e) => e.preventDefault()}
-        >
+        {/* <a href="/" className="app-brand-link" onClick={(e) => e.preventDefault()}>
           <span className="app-brand-logo demo">
             <Logo />
           </span>
-          <span className="app-brand-text demo menu-text fw-bolder ms-2">
-            Sneat
-          </span>
+          <span className="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
         </a>
-        <a
-          href="/"
-          className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none"
-          onClick={(e) => e.preventDefault()}
-        >
-          <i className="bx bx-chevron-left bx-sm align-middle" />
-        </a>
+        <a href="/" className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
+          <i className="bx bx-chevron-left bx-sm align-middle"></i>
+        </a> */}
       </div>
 
-      <div className="menu-inner-shadow" />
+      <div className="menu-inner-shadow"></div>
 
       <ul className="menu-inner py-1">
-        {/* MRLC Toggle */}
-        <li className={`menu-item ${isMrlcActive ? "active" : ""}`}>
-          <a href="/" className="menu-link menu-toggle" onClick={toggleMrlc}>
-            <i className="menu-icon tf-icons bx bx-home-circle" />
-            <div data-i18n="Layouts">MRLC</div>
+        {/* Dashboard */}
+        <MenuItem
+          path="/admin/dashboard"
+          label="Dashboard"
+          isActive={isPathActive("/admin/dashboard")}
+        />
+
+        {/* SP Section */}
+        <li className={`menu-item ${isSpOpen ? "active open" : ""}`}>
+          <a href="#" className="menu-link menu-toggle" onClick={toggleSp}>
+            <i className="menu-icon bx bx-folder"></i>
+            <span>SP</span>
           </a>
-          <ul className={`menu-sub ${isMrlcOpen ? "open" : ""}`}>
-            {/* Summary (Above SP) */}
-            <MenuItem
-              {...SUMMARY_ITEM}
-              isActive={isPathActive(SUMMARY_ITEM.path)}
-            />
-
-            {/* SP Toggle */}
-            <li className={`menu-item ${isSpActive ? "active" : ""}`}>
-              <a href="/" className="menu-link menu-toggle" onClick={toggleSp}>
-                <i className="menu-icon tf-icons bx bx-folder" />
-                <div data-i18n="Layouts">SP</div>
-              </a>
-              <ul className={`menu-sub ${isSpOpen ? "open" : ""}`}>
-                {SP_ITEMS.map((item) => (
-                  <MenuItem
-                    key={item.path}
-                    {...item}
-                    isActive={isPathActive(item.path)}
-                  />
-                ))}
-              </ul>
-            </li>
-
-            {/* Other MRLC Items */}
-            {OTHER_ITEMS.map((item) => (
+          <ul className={`menu-sub ${isSpOpen ? "open" : ""}`}>
+            {SP_ITEMS.map((item) => (
               <MenuItem
                 key={item.path}
-                {...item}
+                path={item.path}
+                label={item.label}
                 isActive={isPathActive(item.path)}
               />
             ))}
           </ul>
         </li>
+
+        {/* Other Items */}
+        {OTHER_ITEMS.map((item) => (
+          <MenuItem
+            key={item.path}
+            path={item.path}
+            label={item.label}
+            isActive={isPathActive(item.path)}
+          />
+        ))}
       </ul>
     </aside>
   );

@@ -23,10 +23,7 @@ const SCRIPTS = [
   { src: "/assets/vendor/libs/jquery/jquery.js", id: "jquery-js" },
   { src: "/assets/vendor/libs/popper/popper.js", id: "popper-js" },
   { src: "/assets/vendor/js/bootstrap.js", id: "bootstrap-js" },
-  {
-    src: "/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js",
-    id: "perfect-scrollbar-js",
-  },
+  { src: "/assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js", id: "perfect-scrollbar-js" },
   { src: "/assets/vendor/js/menu.js", id: "menu-js" },
   { src: "/assets/vendor/libs/apex-charts/apexcharts.js", id: "apexcharts-js" },
   { src: "/assets/js/main.js", id: "main-js" },
