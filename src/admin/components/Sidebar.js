@@ -37,7 +37,9 @@ const Sidebar = () => {
   const [isSpOpen, setIsSpOpen] = useState(false);
 
   // Periksa apakah salah satu submenu "SP" aktif berdasarkan URL
-  const isSpActive = SP_ITEMS.some((item) => location.pathname.startsWith(item.path));
+  const isSpActive = SP_ITEMS.some((item) =>
+    location.pathname.startsWith(item.path)
+  );
 
   useEffect(() => {
     if (isSpActive) {
