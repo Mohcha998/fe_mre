@@ -77,7 +77,7 @@ const LoginAdmin = () => {
         <div className="row">
           <div className="col-12 col-md-6">
             <img
-              src={`${process.env.PUBLIC_URL}/assets/login/images/undraw_remotely_2j6y.svg`}
+              src={`${process.env.PUBLIC_URL}/assets/login/images/logo_dashboard.png`}
               alt="Image"
               className="img-fluid"
             />
@@ -87,10 +87,6 @@ const LoginAdmin = () => {
               <div className="col-10 col-md-8">
                 <div className="mb-4">
                   <h3>Sign In</h3>
-                  <p className="mb-4">
-                    Lorem ipsum dolor sit amet elit. Sapiente sit aut eos
-                    consectetur adipisicing.
-                  </p>
                 </div>
                 {error && <div className="alert alert-danger">{error}</div>}
                 <form onSubmit={handleSubmit}>
@@ -133,20 +129,6 @@ const LoginAdmin = () => {
                     value="Log In"
                     className="btn btn-block btn-primary"
                   />
-                  <span className="d-block text-left my-4 text-muted">
-                    &mdash; or login with &mdash;
-                  </span>
-                  <div className="social-login">
-                    <a href="#" className="facebook">
-                      <span className="icon-facebook mr-3"></span>
-                    </a>
-                    <a href="#" className="twitter">
-                      <span className="icon-twitter mr-3"></span>
-                    </a>
-                    <a href="#" className="google">
-                      <span className="icon-google mr-3"></span>
-                    </a>
-                  </div>
                 </form>
               </div>
             </div>

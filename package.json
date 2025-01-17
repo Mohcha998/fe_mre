@@ -1,6 +1,7 @@
 {
   "name": "front",
   "version": "0.1.0",
+  "homepage": "/admin",
   "private": true,
   "dependencies": {
     "@restart/ui": "^1.9.2",

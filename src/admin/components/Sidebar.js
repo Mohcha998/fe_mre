@@ -1,57 +1,62 @@
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { FaGraduationCap, FaHome, FaFileInvoiceDollar  } from "react-icons/fa";
+import { RiUser3Line } from "react-icons/ri";
+import { BsMegaphone } from "react-icons/bs";
+import { FaPersonChalkboard } from "react-icons/fa6";
 
-const SP_ITEMS = [
-  { path: "/admin/sp", label: "Sesi Perkenalan" },
-  { path: "/admin/daftar-peserta-sp", label: "Daftar Peserta SP" },
-  { path: "/admin/hadir", label: "Daftar Hadir SP" },
+const MENU_ITEMS = [
+  { path: "/admin/dashboard", label: "Dashboard", icon: <FaHome /> },
+  {
+    path: "/admin/prospect",
+    label: "Prospect",
+    icon: <FaGraduationCap />,
+    subItems: [
+      { path: "/admin/prospect", label: "Prospect" },
+      {
+        path: "#",
+        label: "Sesi Perkenalan",
+        subItems: [
+          { path: "/admin/daftar-prospect", label: "Daftar Prospect" },
+          { path: "/admin/daftar-peserta", label: "Daftar Peserta" },
+          // { path: "/admin/hadir", label: "Daftar Hadir SP" },
+          // { path: "/admin/interest", label: "Interest Program" },
+          // { path: "/admin/data-student", label: "Data Student" }
+        ],
+      },
+      { path: "/admin/non-sesi-perkenalan", label: "Non Sesi Perkenalan" },
+      { path: "/admin/sign-up", label: "Sign-Up" },
+    ],
+  },
+  { path: "/admin/trainer", label: "Trainer", icon: <FaPersonChalkboard  /> },
+  { path: "/admin/student", label: "Student", icon: <RiUser3Line /> },
+  { path: "/admin/payment", label: "Payment", icon: <FaFileInvoiceDollar  /> },
+  { path: "/admin/announcement", label: "Announcement", icon: <BsMegaphone /> },
 ];
 
-const OTHER_ITEMS = [
-  { path: "/admin/interest", label: "Interest Program" },
-  { path: "/admin/data-student", label: "Data Student" },
-];
+// const Logo = () => (
+//   <svg
+//     width={25}
+//     viewBox="0 0 25 42"
+//     version="1.1"
+//     xmlns="http://www.w3.org/2000/svg"
+//     xmlnsXlink="http://www.w3.org/1999/xlink"
+//   >
+//     {/* SVG content */}
+//   </svg>
+// );
 
-const Logo = () => (
-  <svg
-    width={25}
-    viewBox="0 0 25 42"
-    version="1.1"
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-  >
-    {/* SVG content */}
-  </svg>
-);
-
-const MenuItem = ({ path, label, isActive }) => (
-  <li className={`menu-item ${isActive ? "active" : ""}`}>
-    <Link to={path} className="menu-link">
-      <span>{label}</span>
-    </Link>
-  </li>
-);
 
 const Sidebar = () => {
   const location = useLocation();
-  const [isSpOpen, setIsSpOpen] = useState(false);
+  const [openMenus, setOpenMenus] = useState({});
 
-  // Periksa apakah salah satu submenu "SP" aktif berdasarkan URL
-  const isSpActive = SP_ITEMS.some((item) =>
-    location.pathname.startsWith(item.path)
-  );
-
-  useEffect(() => {
-    if (isSpActive) {
-      setIsSpOpen(true); // Tetap aktif jika navigasi dalam menu "SP"
-    }
-  }, [isSpActive]);
-
-  const toggleSp = (e) => {
-    e.preventDefault();
-    setIsSpOpen((prev) => !prev); // Ubah state SP secara manual
+  // Toggle Submenu
+  const toggleMenu = (menu) => {
+    setOpenMenus((prev) => ({ ...prev, [menu]: !prev[menu] }));
   };
 
+  // Check if the current path is active
   const isPathActive = (path) => location.pathname.startsWith(path);
 
   return (
@@ -67,43 +72,87 @@ const Sidebar = () => {
           <i className="bx bx-chevron-left bx-sm align-middle"></i>
         </a> */}
       </div>
-
-      <div className="menu-inner-shadow"></div>
-
       <ul className="menu-inner py-1">
-        {/* Dashboard */}
-        <MenuItem
-          path="/admin/dashboard"
-          label="Dashboard"
-          isActive={isPathActive("/admin/dashboard")}
-        />
-
-        {/* SP Section */}
-        <li className={`menu-item ${isSpOpen ? "active open" : ""}`}>
-          <a href="#" className="menu-link menu-toggle" onClick={toggleSp}>
-            <i className="menu-icon bx bx-folder"></i>
-            <span>SP</span>
-          </a>
-          <ul className={`menu-sub ${isSpOpen ? "open" : ""}`}>
-            {SP_ITEMS.map((item) => (
-              <MenuItem
-                key={item.path}
-                path={item.path}
-                label={item.label}
-                isActive={isPathActive(item.path)}
-              />
-            ))}
-          </ul>
-        </li>
-
-        {/* Other Items */}
-        {OTHER_ITEMS.map((item) => (
-          <MenuItem
+        {MENU_ITEMS.map((item) => (
+          <li
             key={item.path}
-            path={item.path}
-            label={item.label}
-            isActive={isPathActive(item.path)}
-          />
+            className={`menu-item ${
+              isPathActive(item.path) || openMenus[item.label] ? "active open" : ""
+            }`}
+          >
+            {item.subItems ? (
+              <>
+                <a
+                  href="#"
+                  className="menu-link menu-toggle"
+                  onClick={() => toggleMenu(item.label)}
+                >
+                  <span className="menu-icon">{item.icon}</span>
+                  <span>{item.label}</span>
+                </a>
+                <ul
+                  className={`menu-sub ${
+                    openMenus[item.label] ? "open" : ""
+                  }`}
+                >
+                  {item.subItems.map((subItem) =>
+                    subItem.subItems ? (
+                      <li
+                        key={subItem.path}
+                        className={`menu-item ${
+                          isPathActive(subItem.path) || openMenus[subItem.label]
+                            ? "active open"
+                            : ""
+                        }`}
+                      >
+                        <a
+                          href="#"
+                          className="menu-link menu-toggle"
+                          onClick={() => toggleMenu(subItem.label)}
+                        >
+                          <span>{subItem.label}</span>
+                        </a>
+                        <ul
+                          className={`menu-sub ${
+                            openMenus[subItem.label] ? "open" : ""
+                          }`}
+                        >
+                          {subItem.subItems.map((innerItem) => (
+                            <li
+                              key={innerItem.path}
+                              className={`menu-item ${
+                                isPathActive(innerItem.path) ? "active" : ""
+                              }`}
+                            >
+                              <Link to={innerItem.path} className="menu-link">
+                                {innerItem.label}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    ) : (
+                      <li
+                        key={subItem.path}
+                        className={`menu-item ${
+                          isPathActive(subItem.path) ? "active" : ""
+                        }`}
+                      >
+                        <Link to={subItem.path} className="menu-link">
+                          {subItem.label}
+                        </Link>
+                      </li>
+                    )
+                  )}
+                </ul>
+              </>
+            ) : (
+              <Link to={item.path} className="menu-link">
+                <span className="menu-icon">{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            )}
+          </li>
         ))}
       </ul>
     </aside>

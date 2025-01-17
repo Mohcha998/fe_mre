@@ -22,7 +22,7 @@ function App() {
       <Router>
         <Routes>
           <Route
-            path="/login"
+            path="/admin"
             element={token ? <Navigate to="/admin/dashboard" /> : <LoginAdmin />}
           />
 
@@ -48,7 +48,7 @@ function App() {
 
           <Route
             path="*"
-            element={<Navigate to={token ? "/admin/dashboard" : "/login"} />}
+            element={<Navigate to={token ? "/admin/dashboard" : "/admin"} />}
           />
         </Routes>
       </Router>

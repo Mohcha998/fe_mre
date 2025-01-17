@@ -16,7 +16,11 @@ import PesertaSP from "./pages/peserta_sp/PesertaSP.jsx";
 import Hadir from "./pages/hadir_sp/Hadir.jsx";
 import Interest from "./pages/interest_program/Interest.jsx";
 import Student from "./pages/data_student/DataStudent.jsx";
-import Prospect from "./pages/prospect/ProspectDashboard.jsx";
+import Prospect from "./pages/prospect/Prospect.jsx";
+import DaftarProspect from "./pages/sesi_perkenalan/DaftarProspect.jsx";
+import DaftarPeserta from "./pages/sesi_perkenalan/DaftarPeserta.jsx";
+import NonSesiPerkenalan from "./pages/non_sesi_perkenalan/NonSesiPerkenalan.jsx";
+import SignUp from "./pages/sign-up/Sign-Up.jsx";
 
 const SCRIPTS = [
   { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
@@ -81,6 +85,11 @@ function AdminApp() {
               <Route path="/hadir" element={<Hadir />} />
               <Route path="/interest" element={<Interest />} />
               <Route path="/data-student" element={<Student />} />
+              <Route path="/prospect" element={<Prospect />} />
+              <Route path="/daftar-prospect" element={<DaftarProspect />} />
+              <Route path="/daftar-peserta" element={<DaftarPeserta />} />
+              <Route path="/non-sesi-perkenalan" element={<NonSesiPerkenalan />} />
+              <Route path="/sign-up" element={<SignUp />} />
             </Routes>
             <div className="content-backdrop fade"></div>
           </div>
