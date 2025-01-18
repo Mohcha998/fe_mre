@@ -2,7 +2,7 @@ import React from "react";
 
 const Prospect = () => {
   return (
-    <div className="container-fluid p-3">
+    <div className="container-xxl flex-grow-1 container-p-y">
       <div className="row g-4">
         {/* Today's Summary */}
         <div className="col-md-4">
@@ -38,17 +38,19 @@ const Prospect = () => {
           </div>
         </div>
 
+        {/* Empty space to take up 2/3 of the row */}
+        <div className="col-md-8"></div>
+
         {/* Filters and Metrics */}
-        <div className="col-md-8">
-          <div className="mb-3">
-            <select id="time-filter" className="form-select">
+        <div className="row g-3">
+          <div className="mb-1 col-md-2">
+            <select id="time-filter" className="form-select p-2">
               <option>Orders</option>
               <option>Month to date</option>
               <option>Year to date</option>
             </select>
           </div>
-
-          <div className="row row-cols-2 row-cols-md-4 g-3">
+          <div className="row g-3">
             <div className="col">
               <div className="card text-center">
                 <div className="card-body">

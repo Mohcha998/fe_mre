@@ -506,8 +506,9 @@ const AdminDashboard = () => {
         {/* Total Revenue */}
         <div className="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
           <div className="card" style={{ height: "620px" }}>
-            <div className="card-header d-flex justify-content-between">
+            <div className="card-header d-flex justify-content-between py-2">
               <div className="card-title mb-0">
+                <h5 className="mb-3 mt-3">Total Revenue</h5>
                 <ul className="nav nav-pills" role="tablist">
                   <li className="nav-item">
                     <button
@@ -559,7 +560,7 @@ const AdminDashboard = () => {
                 </div>
               </div>
               <div
-                className="table-responsive mt-4"
+                className="table-responsive mt-2"
                 style={{ maxHeight: "350px", overflowY: "auto" }}
               >
                 <table className="table table-striped">
@@ -585,51 +586,39 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div class="col-4 mb-6">
-          <div class="card" style={{ height: "298px" }}>
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center flex-sm-row flex-column gap-10">
-                <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                  <div class="card-title mb-6">
-                    <h5 class="text-nowrap mb-1">Student Report</h5>
-                    <span class="badge bg-label-warning">YEAR 2024</span>
-                  </div>
-                </div>
-              </div>
+        {/* Grafik Student */}
+        <div className="col-lg-4 col-12">
+          <div className="card mb-2">
+            <div className="card-body">
+              <h5 className="card-title">Grafik Student</h5>
+              <span className="badge bg-label-warning">YEAR 2024</span>
               <div id="chartOptions">
                 <ApexCharts
                   options={chartOptions.options}
                   series={chartOptions.series}
                   type="area"
-                  height={215}
+                  height={200}
                 />
               </div>
             </div>
           </div>
 
-          <div class="card mt-4 mb-4" style={{ height: "298px" }}>
-            <div class="card-body">
-              <div class="d-flex justify-content-between align-items-center flex-sm-row flex-column gap-10">
-                <div class="d-flex flex-sm-column flex-row align-items-start justify-content-between">
-                  <div class="card-title mb-6">
-                    <h5 class="text-nowrap mb-1">Profile Report</h5>
-                    <span class="badge bg-label-warning">YEAR 2024</span>
-                  </div>
-                </div>
-              </div>
+          {/* Grafik Revenue */}
+          <div className="card">
+            <div className="card-body">
+              <h5 className="card-title">Grafik Revenue</h5>
+              <span className="badge bg-label-warning">YEAR 2024</span>
               <div id="chartbawah">
                 <ApexCharts
                   options={chartOptions.options}
                   series={chartOptions.series}
                   type="area"
-                  height={215}
+                  height={200}
                 />
               </div>
             </div>
           </div>
         </div>
-
-        {/*sss */}
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import avatar from "../../assets/img/logo.png";
 
 const Navbar = () => {
   const { logout } = useAuth();
@@ -41,16 +42,16 @@ const Navbar = () => {
         <ul className="navbar-nav flex-row align-items-center ms-auto">
           {/* GitHub Button */}
           <li className="nav-item lh-1 me-3">
-            <a
-              className="github-button"
-              href="https://github.com/themeselection/sneat-html-admin-template-free"
-              data-icon="octicon-star"
-              data-size="large"
-              data-show-count="true"
-              aria-label="Star themeselection/sneat-html-admin-template-free on GitHub"
-            >
-              Star
-            </a>
+              {/* <a
+                className="github-button"
+                href="https://github.com/themeselection/sneat-html-admin-template-free"
+                data-icon="octicon-star"
+                data-size="large"
+                data-show-count="true"
+                aria-label="Star themeselection/sneat-html-admin-template-free on GitHub"
+              >
+                Star
+              </a> */}
           </li>
           {/* User Menu */}
           <li className="nav-item navbar-dropdown dropdown-user dropdown">
@@ -61,8 +62,8 @@ const Navbar = () => {
             >
               <div className="avatar avatar-online">
                 <img
-                  src="../assets/img/avatars/1.png"
-                  alt=""
+                  src={avatar}
+                  alt="avatar"
                   className="w-px-40 h-auto rounded-circle"
                 />
               </div>
@@ -74,14 +75,14 @@ const Navbar = () => {
                     <div className="flex-shrink-0 me-3">
                       <div className="avatar avatar-online">
                         <img
-                          src="../assets/img/avatars/1.png"
+                          src={avatar}
                           alt=""
                           className="w-px-40 h-auto rounded-circle"
                         />
                       </div>
                     </div>
                     <div className="flex-grow-1">
-                      <span className="fw-semibold d-block">John Doe</span>
+                      <span className="fw-semibold d-block">Admin</span>
                       <small className="text-muted">Admin</small>
                     </div>
                   </div>
@@ -103,7 +104,7 @@ const Navbar = () => {
                 </a>
               </li>
               <li>
-                <a className="dropdown-item" href="#">
+                {/* <a className="dropdown-item" href="#">
                   <span className="d-flex align-items-center align-middle">
                     <i className="flex-shrink-0 bx bx-credit-card me-2" />
                     <span className="flex-grow-1 align-middle">Billing</span>
@@ -111,7 +112,7 @@ const Navbar = () => {
                       4
                     </span>
                   </span>
-                </a>
+                </a> */}
               </li>
               <li>
                 <div className="dropdown-divider" />

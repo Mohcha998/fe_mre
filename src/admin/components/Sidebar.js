@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaGraduationCap, FaHome, FaFileInvoiceDollar  } from "react-icons/fa";
+import { FaGraduationCap, FaHome, FaFileInvoiceDollar } from "react-icons/fa";
 import { RiUser3Line } from "react-icons/ri";
 import { BsMegaphone } from "react-icons/bs";
 import { FaPersonChalkboard } from "react-icons/fa6";
+import logo_sidebar from "../../assets/img/logo_dashboard.png";
 
-const MENU_ITEMS = [
+const MENU_ITEMS = [  
   { path: "/admin/dashboard", label: "Dashboard", icon: <FaHome /> },
   {
     path: "/admin/prospect",
@@ -34,19 +35,6 @@ const MENU_ITEMS = [
   { path: "/admin/announcement", label: "Announcement", icon: <BsMegaphone /> },
 ];
 
-// const Logo = () => (
-//   <svg
-//     width={25}
-//     viewBox="0 0 25 42"
-//     version="1.1"
-//     xmlns="http://www.w3.org/2000/svg"
-//     xmlnsXlink="http://www.w3.org/1999/xlink"
-//   >
-//     {/* SVG content */}
-//   </svg>
-// );
-
-
 const Sidebar = () => {
   const location = useLocation();
   const [openMenus, setOpenMenus] = useState({});
@@ -62,17 +50,9 @@ const Sidebar = () => {
   return (
     <aside className="layout-menu menu-vertical menu bg-menu-theme">
       <div className="app-brand demo">
-        {/* <a href="/" className="app-brand-link" onClick={(e) => e.preventDefault()}>
-          <span className="app-brand-logo demo">
-            <Logo />
-          </span>
-          <span className="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
-        </a>
-        <a href="/" className="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
-          <i className="bx bx-chevron-left bx-sm align-middle"></i>
-        </a> */}
+        <img src={logo_sidebar} alt="logo-sidebar" width={150} />
       </div>
-      <ul className="menu-inner py-1">
+      <ul className="menu-inner py-3">
         {MENU_ITEMS.map((item) => (
           <li
             key={item.path}
