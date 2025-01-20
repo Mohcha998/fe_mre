@@ -1,4 +1,5 @@
 import React from "react";
+import { FaUsers, FaCalendarCheck, FaHourglassHalf, FaTimesCircle, FaDollarSign, FaGift, FaCheckCircle, FaUserPlus } from "react-icons/fa";
 
 const Prospect = () => {
   return (
@@ -12,26 +13,26 @@ const Prospect = () => {
             </div>
             <div className="card-body">
               <ul className="list-group list-group-flush">
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Leads Today <span>70</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaUsers style={{ color: 'blue', fontSize: '20px' }} className="me-2" /> Total Leads Today <span>70</span>
                 </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Pending Today <span>10</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaHourglassHalf style={{ color: 'orange', fontSize: '20px' }} className="me-2" /> Total Pending Today <span>10</span>
                 </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Expired Today <span>10</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaTimesCircle style={{ color: 'red', fontSize: '20px' }} className="me-2" /> Total Expired Today <span>10</span>
                 </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Paid Today <span>10</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaDollarSign style={{ color: 'green', fontSize: '20px' }} className="me-2" /> Total Paid Today <span>10</span>
                 </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Free Today <span>10</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaGift style={{ color: 'purple', fontSize: '20px' }} className="me-2" /> Total Free Today <span>10</span>
                 </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Hadir Today <span>10</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaCheckCircle style={{ color: 'teal', fontSize: '20px' }} className="me-2" /> Total Hadir Today <span>10</span>
                 </li>
-                <li className="list-group-item d-flex justify-content-between">
-                  Total Sign-Up Today <span>10</span>
+                <li className="list-group-item d-flex justify-content-between align-items-center">
+                  <FaUserPlus style={{ color: 'darkblue', fontSize: '20px' }} className="me-2" /> Total Sign-Up Today <span>10</span>
                 </li>
               </ul>
             </div>
@@ -54,7 +55,23 @@ const Prospect = () => {
             <div className="col">
               <div className="card text-center">
                 <div className="card-body">
-                  <h6 className="card-title">Leads</h6>
+                  <h6 className="card-title"><FaUsers style={{ color: 'blue', fontSize: '20px' }} className="me-1" /> Leads</h6>
+                  <p className="card-text fs-5 fw-bold">100</p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center">
+                <div className="card-body bg-primary rounded text-white">
+                  <h6 className="card-title"><FaHourglassHalf style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Pending</h6>
+                  <p className="card-text fs-5 fw-bold text-white">100</p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center">
+                <div className="card-body">
+                  <h6 className="card-title"><FaTimesCircle style={{ color: 'red', fontSize: '20px' }} className="me-1" /> Expired</h6>
                   <p className="card-text fs-5 fw-bold">100</p>
                 </div>
               </div>
@@ -62,7 +79,7 @@ const Prospect = () => {
             <div className="col">
               <div className="card text-center">
                 <div className="card-body">
-                  <h6 className="card-title">Pending</h6>
+                  <h6 className="card-title"><FaDollarSign style={{ color: 'green', fontSize: '20px' }} className="me-1" /> Paid</h6>
                   <p className="card-text fs-5 fw-bold">100</p>
                 </div>
               </div>
@@ -70,7 +87,7 @@ const Prospect = () => {
             <div className="col">
               <div className="card text-center">
                 <div className="card-body">
-                  <h6 className="card-title">Expired</h6>
+                  <h6 className="card-title"><FaGift style={{ color: 'purple', fontSize: '20px' }} className="me-1" /> Free</h6>
                   <p className="card-text fs-5 fw-bold">100</p>
                 </div>
               </div>
@@ -78,7 +95,7 @@ const Prospect = () => {
             <div className="col">
               <div className="card text-center">
                 <div className="card-body">
-                  <h6 className="card-title">Paid</h6>
+                  <h6 className="card-title"><FaCheckCircle style={{ color: 'teal', fontSize: '20px' }} className="me-1" /> Hadir</h6>
                   <p className="card-text fs-5 fw-bold">100</p>
                 </div>
               </div>
@@ -86,23 +103,7 @@ const Prospect = () => {
             <div className="col">
               <div className="card text-center">
                 <div className="card-body">
-                  <h6 className="card-title">Free</h6>
-                  <p className="card-text fs-5 fw-bold">100</p>
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <div className="card text-center">
-                <div className="card-body">
-                  <h6 className="card-title">Hadir</h6>
-                  <p className="card-text fs-5 fw-bold">100</p>
-                </div>
-              </div>
-            </div>
-            <div className="col">
-              <div className="card text-center">
-                <div className="card-body">
-                  <h6 className="card-title">Sign-Up</h6>
+                  <h6 className="card-title"><FaUserPlus style={{ color: 'darkblue', fontSize: '20px' }} className="me-1" /> Sign-Up</h6>
                   <p className="card-text fs-5 fw-bold">100</p>
                 </div>
               </div>

@@ -52,6 +52,30 @@ const Sidebar = () => {
       <div className="app-brand demo">
         <img src={logo_sidebar} alt="logo-sidebar" width={150} />
       </div>
+      <div
+  className="me-xl-0 d-xl-none"
+  style={{
+    position: 'absolute',
+    top: '10px', // Jarak dari atas
+    right: '10px', // Jarak dari kanan
+    zIndex: 1000, // Biar di atas elemen lain
+  }}
+>
+  <a
+    href="javascript:void(0);"
+    className="layout-menu-toggle menu-link text-large ms-auto btn btn-primary shadow rounded-circle"
+    style={{
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: '50px', // Ukuran tombol
+      height: '50px', // Tinggi tombol
+    }}
+  >
+    <i className="bx bx-chevron-left bx-sm align-middle"></i>
+  </a>
+</div>
+
       <ul className="menu-inner py-3">
         {MENU_ITEMS.map((item) => (
           <li
