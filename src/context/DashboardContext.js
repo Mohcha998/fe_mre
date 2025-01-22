@@ -28,7 +28,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -44,7 +44,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -60,7 +60,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -76,7 +76,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -92,7 +92,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -108,7 +108,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -124,7 +124,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const {
@@ -140,7 +140,7 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    refetchInterval: 60000,
+    // refetchInterval: 60000,
   });
 
   const value = {

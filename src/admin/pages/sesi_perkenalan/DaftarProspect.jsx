@@ -3,7 +3,13 @@ import { useProspects } from "../../../context/ProspectContext";
 import Select from "react-select";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
-import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
+import {
+  MdClose,
+  MdCheck,
+  MdWifiCalling1,
+  MdWifiCalling2,
+  MdWifiCalling3,
+} from "react-icons/md";
 
 // Constants
 const INITIAL_FILTERS = {
@@ -115,7 +121,6 @@ const TableRow = ({ item, index, updateFU }) => {
       <td>{item.email}</td>
       <td>{item.program_name}</td>
       <td>{item.branch_name}</td>
-      <td>{item.invitationCode || "-"}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
@@ -138,7 +143,8 @@ const TableRow = ({ item, index, updateFU }) => {
 };
 
 const DaftarProspect = () => {
-  const { prospects, loading, filterProspects, updateProspect } = useProspects();
+  const { prospects, loading, filterProspects, updateProspect } =
+    useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
 
   const handleFilterChange = (e) => {
@@ -215,7 +221,6 @@ const DaftarProspect = () => {
                     "Email",
                     "Program",
                     "Branch",
-                    "Invitation Code",
                     "Status",
                     "Source",
                     "FU",

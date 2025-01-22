@@ -5,7 +5,15 @@ import { useProspects } from "../../../context/ProspectContext";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
 import { LuMapPinCheckInside } from "react-icons/lu";
-import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3, MdOutlinePayments, MdPaid } from "react-icons/md";
+import {
+  MdClose,
+  MdCheck,
+  MdWifiCalling1,
+  MdWifiCalling2,
+  MdWifiCalling3,
+  MdOutlinePayments,
+  MdPaid,
+} from "react-icons/md";
 import Select from "react-select";
 
 const INITIAL_FILTERS = {
@@ -169,7 +177,15 @@ const TableRow = ({ item, onSignUp, updateFU }) => {
 
 //Main component
 const Hadir = ({ setActiveDetail }) => {
-  const { prgprospects, loading, filterProspects, updateProspect, HadirCount, paidCount, checkinCount } = useProspects();
+  const {
+    prgprospects,
+    loading,
+    filterProspects,
+    updateProspect,
+    HadirCount,
+    paidCount,
+    checkinCount,
+  } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [showModal, setShowModal] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState(null);
@@ -194,29 +210,29 @@ const Hadir = ({ setActiveDetail }) => {
   };
 
   const CARD_DATA = [
-      {
-        id: "totalPaid",
-        icon: <MdOutlinePayments  style={{ fontSize: "28px", color: "#4CAF50" }} />,
-        title: "Total Paid",
-        count: HadirCount ?? "Loading...",
-      },
-      {
-        id: "paidToday",
-        icon: <MdPaid style={{ fontSize: "28px", color: "#2196F3" }} />,
-        title: "Paid Today",
-        count: paidCount ?? "Loading...",
-      },
-      {
-        id: "checkin",
-        icon: (
-          <LuMapPinCheckInside
-            style={{ fontSize: "28px", color: "#FFC107" }}
-          />
-        ),
-        title: "Check-in",
-        count: checkinCount ?? "Loading...",
-      },
-    ];
+    {
+      id: "totalPaid",
+      icon: (
+        <MdOutlinePayments style={{ fontSize: "28px", color: "#4CAF50" }} />
+      ),
+      title: "Total Paid",
+      count: HadirCount ?? "Loading...",
+    },
+    {
+      id: "paidToday",
+      icon: <MdPaid style={{ fontSize: "28px", color: "#2196F3" }} />,
+      title: "Paid Today",
+      count: paidCount ?? "Loading...",
+    },
+    {
+      id: "checkin",
+      icon: (
+        <LuMapPinCheckInside style={{ fontSize: "28px", color: "#FFC107" }} />
+      ),
+      title: "Check-in",
+      count: checkinCount ?? "Loading...",
+    },
+  ];
 
   if (loading) return <div>Loading...</div>;
 

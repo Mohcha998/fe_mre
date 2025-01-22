@@ -4,7 +4,13 @@ import PaymentModal from "./PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
-import {MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
+import {
+  MdClose,
+  MdCheck,
+  MdWifiCalling1,
+  MdWifiCalling2,
+  MdWifiCalling3,
+} from "react-icons/md";
 import Select from "react-select";
 import DetailModal from "./DetailModal";
 

@@ -1,10 +1,17 @@
 import React, { useState } from "react";
 import moment from "moment";
+import PaymentModal from "../sesi_perkenalan/PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
 import Select from "react-select";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
-import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
+import {
+  MdClose,
+  MdCheck,
+  MdWifiCalling1,
+  MdWifiCalling2,
+  MdWifiCalling3,
+} from "react-icons/md";
 
 const INITIAL_FILTERS = {
   startDate: "",
@@ -97,7 +104,7 @@ const FilterInput = ({ name, value, onChange, options }) => {
   );
 };
 
-const TableRow = ({ item, index, updateFU }) => {
+const TableRow = ({ item, index, updateFU, handleCheckin, onSignUp }) => {
   const handleFUChange = async (selectedOption) => {
     try {
       const updatedData = await updateFU(item.id, {
@@ -108,6 +115,14 @@ const TableRow = ({ item, index, updateFU }) => {
       }
     } catch (error) {
       console.error("Error updating FU:", error);
+    }
+  };
+
+  const handleCheckinClick = async () => {
+    try {
+      await handleCheckin(item.id);
+    } catch (error) {
+      console.error("Check-in failed:", error);
     }
   };
 
@@ -141,13 +156,38 @@ const TableRow = ({ item, index, updateFU }) => {
           isSearchable={false}
         />
       </td>
+      <td>
+        <button
+          className="btn btn-primary btn-sm w-100"
+          onClick={handleCheckinClick}
+          disabled={item.tgl_checkin}
+        >
+          Check-in
+        </button>
+      </td>
+      <td>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => onSignUp(item)}
+        >
+          Sign Up
+        </button>
+      </td>
     </tr>
   );
 };
 
 const NonSesiPerkenalan = () => {
-  const { prgprospects, loading, filterProspects, updateProspect } = useProspects();
+  const {
+    prgprospects,
+    loading,
+    filterProspects,
+    updateProspect,
+    handleCheckin,
+  } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedProspect, setSelectedProspect] = useState(null);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -158,6 +198,16 @@ const NonSesiPerkenalan = () => {
     await filterProspects(filters);
   };
 
+  const handleSignUp = (prospect) => {
+    setSelectedProspect(prospect);
+    setShowModal(true);
+  };
+
+  const handleCreatePayment = (prospectData) => {
+    console.log("Creating payment for:", prospectData);
+    // Logika untuk membuat pembayaran
+  };
+
   // Urutkan prospects berdasarkan created_at (data terbaru di atas)
   const filteredProspects = prgprospects
     .filter((item) => {
@@ -166,7 +216,9 @@ const NonSesiPerkenalan = () => {
         if (key === "status") return item.status === Number(value);
         if (key === "startDate" || key === "endDate") {
           const itemDate = new Date(item.created_at);
-          const startDate = filters.startDate ? new Date(filters.startDate) : null;
+          const startDate = filters.startDate
+            ? new Date(filters.startDate)
+            : null;
           const endDate = filters.endDate ? new Date(filters.endDate) : null;
           return (
             (!startDate || itemDate >= startDate) &&
@@ -226,6 +278,8 @@ const NonSesiPerkenalan = () => {
                     "Tanggal SP",
                     "Source",
                     "Follow-up",
+                    "Hadir",
+                    "Sign-Up",
                   ].map((header) => (
                     <th key={header} className="text-center">
                       {header}
@@ -247,6 +301,7 @@ const NonSesiPerkenalan = () => {
                       item={item}
                       index={index} // Pass index to TableRow
                       updateFU={updateProspect}
+                      onSignUp={handleSignUp}
                     />
                   ))
                 )}
@@ -255,6 +310,12 @@ const NonSesiPerkenalan = () => {
           </div>
         </div>
       </div>
+      <PaymentModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onSubmit={handleCreatePayment}
+        prospectData={selectedProspect}
+      />
     </div>
   );
 };

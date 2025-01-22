@@ -67,37 +67,41 @@ export const ProspectProvider = ({ children }) => {
   const [filteredSPProspects, setFilteredSPProspects] = useState([]);
 
   // Using React Query hooks
-  const { data: fetchedProspects = [], isLoading: loading, error } = useQuery({
+  const {
+    data: fetchedProspects = [],
+    isLoading: loading,
+    error,
+  } = useQuery({
     queryKey: ["prospects"],
-    queryFn: fetchProspects
+    queryFn: fetchProspects,
   });
   const { data: fetchedSPProspects = [] } = useQuery({
     queryKey: ["spprospects"],
-    queryFn: fetchSPProspects
+    queryFn: fetchSPProspects,
   });
   const { data: prgprospects = [] } = useQuery({
     queryKey: ["prgprospects"],
-    queryFn: fetchPrgProspects
+    queryFn: fetchPrgProspects,
   });
   const { data: interestprospects = [] } = useQuery({
     queryKey: ["interestprospects"],
-    queryFn: fetchInterestProspects
+    queryFn: fetchInterestProspects,
   });
   const { data: prospectCount } = useQuery({
     queryKey: ["prospectCount"],
-    queryFn: fetchProspectCount
+    queryFn: fetchProspectCount,
   });
   const { data: pendingCount } = useQuery({
     queryKey: ["pendingCount"],
-    queryFn: fetchPendingCount
+    queryFn: fetchPendingCount,
   });
   const { data: expiredCount } = useQuery({
     queryKey: ["expiredCount"],
-    queryFn: fetchExpiredCount
+    queryFn: fetchExpiredCount,
   });
   const { data: paidCount } = useQuery({
     queryKey: ["paidCount"],
-    queryFn: fetchPaidCount
+    queryFn: fetchPaidCount,
   });
 
   // Update state when new data is fetched
@@ -193,8 +197,7 @@ export const ProspectProvider = ({ children }) => {
   const handleCheckin = async (id) => {
     try {
       await checkInMutation.mutateAsync(id);
-    } catch {
-    }
+    } catch {}
   };
 
   // Filter prospects function

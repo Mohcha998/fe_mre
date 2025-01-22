@@ -325,7 +325,7 @@ const AdminDashboard = () => {
       <div className="row g-3">
         {/* Total Student*/}
         <div className="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
-          <div className="card" style={{ height: "620px" }}>
+          <div className="card" style={{ height: "650px" }}>
             <div className="card-header d-flex justify-content-between">
               <div className="card-title mb-0">
                 <h5 className="mb-1 me-2">Total Students</h5>
@@ -349,13 +349,13 @@ const AdminDashboard = () => {
               </div>
               <div
                 className="table-responsive mt-4"
-                style={{ maxHeight: "350px", overflowY: "auto" }}
+                style={{ maxHeight: "380px", overflowY: "auto" }}
               >
                 <table className="table table-striped">
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Branch</th>
+                      <th>Learning Centre</th>
                       <th>Students</th>
                     </tr>
                   </thead>
@@ -376,7 +376,7 @@ const AdminDashboard = () => {
 
         {/* Total Revenue */}
         <div className="col-md-6 col-lg-4 col-xl-4 order-0 mb-6">
-          <div className="card" style={{ height: "620px" }}>
+          <div className="card" style={{ height: "650px" }}>
             <div className="card-header d-flex justify-content-between py-2">
               <div className="card-title mb-0">
                 <h5 className="mb-3 mt-3">Total Revenue</h5>
@@ -390,7 +390,7 @@ const AdminDashboard = () => {
                       role="tab"
                       onClick={() => handleTabClick("all-time")}
                     >
-                      All Time
+                      Yearly
                     </button>
                   </li>
                   <li className="nav-item">
@@ -432,13 +432,13 @@ const AdminDashboard = () => {
               </div>
               <div
                 className="table-responsive mt-2"
-                style={{ maxHeight: "350px", overflowY: "auto" }}
+                style={{ maxHeight: "380px", overflowY: "auto" }}
               >
                 <table className="table table-striped">
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Branch</th>
+                      <th>Learning Centre</th>
                       <th>Revenue</th>
                     </tr>
                   </thead>

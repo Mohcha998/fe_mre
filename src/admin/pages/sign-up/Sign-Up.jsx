@@ -4,7 +4,13 @@ import PaymentModal from "../interest_program/PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
-import { MdClose, MdCheck, MdWifiCalling1, MdWifiCalling2, MdWifiCalling3 } from "react-icons/md";
+import {
+  MdClose,
+  MdCheck,
+  MdWifiCalling1,
+  MdWifiCalling2,
+  MdWifiCalling3,
+} from "react-icons/md";
 import Select from "react-select";
 import DetailModal from "../interest_program/DetailModal";
 
@@ -145,15 +151,6 @@ const TableRow = ({ item, index, onSignUp, updateFU, onViewDetail }) => {
       </td>
       <td>
         <button
-          className="btn btn-primary btn-sm"
-          onClick={() => onSignUp(item)}
-          disabled={item.status === 1}
-        >
-          Sign Up
-        </button>
-      </td>
-      <td>
-        <button
           className="btn btn-info btn-sm"
           onClick={() => onViewDetail(item)}
           disabled={item.status === 0}
@@ -272,7 +269,6 @@ const SignUp = () => {
                     "Tanggal SP",
                     "Source",
                     "Follow-up",
-                    "Action",
                     "Detail",
                   ].map((header) => (
                     <th key={header} className="text-center">
@@ -295,7 +291,6 @@ const SignUp = () => {
                       item={item}
                       index={index} // Berikan indeks untuk nomor urut
                       updateFU={updateProspect}
-                      onSignUp={handleSignUp}
                       onViewDetail={handleViewDetail}
                     />
                   ))
