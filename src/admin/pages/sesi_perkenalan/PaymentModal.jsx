@@ -77,7 +77,7 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
             <label htmlFor="id_program" className="form-label">
               Program
             </label>
-            <input type="text" id="parent_id" value={prospectData?.id} />
+            <input type="hidden" id="parent_id" value={prospectData?.id} />
             {loading ? (
               <p>Loading programs...</p>
             ) : error ? (

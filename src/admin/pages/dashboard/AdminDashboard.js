@@ -236,14 +236,6 @@ const AdminDashboard = () => {
       stroke: {
         curve: "straight",
       },
-      title: {
-        text: "Student Count Over the Last Three Months",
-        align: "left",
-      },
-      subtitle: {
-        text: "Monthly Student Registration",
-        align: "left",
-      },
       labels: labelStudent || ["", "Nov", "Dec", "Jan"],
       xaxis: {
         type: "category",
@@ -277,14 +269,6 @@ const AdminDashboard = () => {
       },
       stroke: {
         curve: "straight",
-      },
-      title: {
-        text: "Payment Count Over the Last Three Months",
-        align: "left",
-      },
-      subtitle: {
-        text: "Monthly Payment Registration",
-        align: "left",
       },
       labels: labelPayment || ["", "Nov", "Dec", "Jan"],
       xaxis: {
@@ -470,13 +454,12 @@ const AdminDashboard = () => {
           <div className="card mb-2">
             <div className="card-body">
               <h5 className="card-title">Grafik Student</h5>
-              <span className="badge bg-label-warning">YEAR 2024</span>
               <div id="chartatas">
                 <ApexCharts
                   options={chartatas.options}
                   series={chartatas.series}
                   type="area"
-                  height={200}
+                  height={225}
                 />
               </div>
             </div>
@@ -486,13 +469,12 @@ const AdminDashboard = () => {
           <div className="card">
             <div className="card-body">
               <h5 className="card-title">Grafik Revenue</h5>
-              <span className="badge bg-label-warning">YEAR 2024</span>
               <div id="chartbawah">
                 <ApexCharts
                   options={chartbawah.options}
                   series={chartbawah.series}
                   type="area"
-                  height={200}
+                  height={225}
                 />
               </div>
             </div>

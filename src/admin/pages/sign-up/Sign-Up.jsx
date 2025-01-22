@@ -17,7 +17,7 @@ import DetailModal from "../interest_program/DetailModal";
 const INITIAL_FILTERS = {
   startDate: "",
   endDate: "",
-  branch_name: "",
+  cabang: "",
   program_name: "",
   status: "",
   source: "",
@@ -105,7 +105,7 @@ const FOLLOW_UP_OPTIONS = [
   { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
 ];
 
-const TableRow = ({ item, index, onSignUp, updateFU, onViewDetail }) => {
+const TableRow = ({ item, index, updateFU, onViewDetail }) => {
   const handleFUChange = async (selectedOption) => {
     try {
       const updatedData = await updateFU(item.id, {
@@ -126,7 +126,7 @@ const TableRow = ({ item, index, onSignUp, updateFU, onViewDetail }) => {
       <td>{item.phone}</td>
       <td>{item.email}</td>
       <td>{item.program_name}</td>
-      <td>{item.branch_name}</td>
+      <td>{item.cabang}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
@@ -251,7 +251,7 @@ const SignUp = () => {
 
       <div className="card mt-4">
         <div className="card-header text-white">
-          <h5 className="mb-0">List Interest Program</h5>
+          <h5 className="mb-0">List Customer</h5>
         </div>
         <div className="card-body px-0">
           <div className="table-responsive">

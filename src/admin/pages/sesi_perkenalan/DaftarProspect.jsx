@@ -15,7 +15,7 @@ import {
 const INITIAL_FILTERS = {
   startDate: "",
   endDate: "",
-  branch_name: "",
+  cabang: "",
   program_name: "",
   status: "",
   source: "",
@@ -120,7 +120,7 @@ const TableRow = ({ item, index, updateFU }) => {
       <td>{item.phone}</td>
       <td>{item.email}</td>
       <td>{item.program_name}</td>
-      <td>{item.branch_name}</td>
+      <td>{item.cabang}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
@@ -220,7 +220,7 @@ const DaftarProspect = () => {
                     "HP",
                     "Email",
                     "Program",
-                    "Branch",
+                    "Learning Centre",
                     "Status",
                     "Source",
                     "FU",

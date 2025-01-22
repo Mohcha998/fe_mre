@@ -19,7 +19,7 @@ import Select from "react-select";
 const INITIAL_FILTERS = {
   startDate: "",
   endDate: "",
-  branch_name: "",
+  cabang: "",
   program_name: "",
   status: "",
   source: "",
@@ -140,7 +140,7 @@ const TableRow = ({ item, onSignUp, updateFU }) => {
       <td>{item.phone}</td>
       <td>{item.email}</td>
       <td>{item.program_name}</td>
-      <td>{item.branch_name}</td>
+      <td>{item.cabang}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}

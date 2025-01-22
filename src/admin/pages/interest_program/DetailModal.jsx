@@ -15,7 +15,7 @@ const DetailModal = ({ show, onClose, prospectData }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Detail Prospect</Modal.Title>
+        <Modal.Title>Detail Customer</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className="mb-1 d-flex">
@@ -59,11 +59,11 @@ const DetailModal = ({ show, onClose, prospectData }) => {
         </div>
         <div className="mb-1 d-flex border-bottom">
           <strong className="col-4">Source</strong>
-          <span className="col-8">: {prospectData.source}</span>
+          {/* <span className="col-8">: {prospectData.source}</span> */}
         </div>
 
         {/* Menampilkan data anak-anak (children) */}
-        {children.length > 0 && (
+        {/* {children.length > 0 && (
           <div className="mt-3">
             <strong>Students:</strong>
             <ul>
@@ -77,7 +77,7 @@ const DetailModal = ({ show, onClose, prospectData }) => {
               ))}
             </ul>
           </div>
-        )}
+        )} */}
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={onClose}>
