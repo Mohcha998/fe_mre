@@ -25,6 +25,11 @@ const fetchPrgProspects = async () => {
   return response.data;
 };
 
+const fetchNonProspects = async () => {
+  const response = await axiosInstance.get("nonspcall");
+  return response.data;
+};
+
 const fetchInterestProspects = async () => {
   const response = await axiosInstance.get("interest-call");
   return response.data;
@@ -82,6 +87,11 @@ export const ProspectProvider = ({ children }) => {
   const { data: prgprospects = [] } = useQuery({
     queryKey: ["prgprospects"],
     queryFn: fetchPrgProspects,
+  });
+
+  const { data: nonspcall = [] } = useQuery({
+    queryKey: ["nonspcall"],
+    queryFn: fetchNonProspects,
   });
   const { data: interestprospects = [] } = useQuery({
     queryKey: ["interestprospects"],
@@ -229,6 +239,7 @@ export const ProspectProvider = ({ children }) => {
         registerUser,
         spprospects,
         prgprospects,
+        nonspcall,
         interestprospects,
         filteredSPProspects,
         loading,

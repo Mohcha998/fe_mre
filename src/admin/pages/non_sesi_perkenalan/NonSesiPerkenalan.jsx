@@ -178,13 +178,8 @@ const TableRow = ({ item, index, updateFU, handleCheckin, onSignUp }) => {
 };
 
 const NonSesiPerkenalan = () => {
-  const {
-    prgprospects,
-    loading,
-    filterProspects,
-    updateProspect,
-    handleCheckin,
-  } = useProspects();
+  const { nonspcall, loading, filterProspects, updateProspect, handleCheckin } =
+    useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [showModal, setShowModal] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState(null);
@@ -209,7 +204,7 @@ const NonSesiPerkenalan = () => {
   };
 
   // Urutkan prospects berdasarkan created_at (data terbaru di atas)
-  const filteredProspects = prgprospects
+  const filteredProspects = nonspcall
     .filter((item) => {
       return Object.entries(filters).every(([key, value]) => {
         if (!value) return true;
@@ -247,7 +242,7 @@ const NonSesiPerkenalan = () => {
                 value={filters[key]}
                 onChange={handleFilterChange}
                 options={[
-                  ...new Set(prgprospects.map((p) => p[key]).filter(Boolean)),
+                  ...new Set(nonspcall.map((p) => p[key]).filter(Boolean)),
                 ]}
               />
             ))}
