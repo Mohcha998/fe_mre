@@ -17,6 +17,7 @@ import { DaftarHadirProvider } from "./context/DaftarHadirContext";
 import { InterestProvider } from "./context/InterestContext";
 import { StudentProvider } from "./context/StudentContext";
 import { DashboardProvider } from "./context/DashboardContext";
+import ProspectDashboardProvider from "./context/ProspectDashboardContext";
 
 const queryClient = new QueryClient();
 
@@ -38,19 +39,21 @@ function App() {
             path="/admin/*"
             element={
               <ProtectedRoute>
-                <DashboardProvider>
-                  <ProspectProvider>
-                    <ProgramProvider>
-                      <DaftarHadirProvider>
-                        <InterestProvider>
-                          <StudentProvider>
-                            <AppAdmin />
-                          </StudentProvider>
-                        </InterestProvider>
-                      </DaftarHadirProvider>
-                    </ProgramProvider>
-                  </ProspectProvider>
-                </DashboardProvider>
+                <ProspectDashboardProvider>
+                  <DashboardProvider>
+                    <ProspectProvider>
+                      <ProgramProvider>
+                        <DaftarHadirProvider>
+                          <InterestProvider>
+                            <StudentProvider>
+                              <AppAdmin />
+                            </StudentProvider>
+                          </InterestProvider>
+                        </DaftarHadirProvider>
+                      </ProgramProvider>
+                    </ProspectProvider>
+                  </DashboardProvider>
+                </ProspectDashboardProvider>
                 <ReactQueryDevtools />
               </ProtectedRoute>
             }

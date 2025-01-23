@@ -347,7 +347,7 @@ const AdminDashboard = () => {
                     {branchStd.map((data, index) => (
                       <tr key={data.id}>
                         <td>{index + 1}</td>
-                        <td>{data.name}</td>
+                        <td>{data.kode_cabang}</td>
                         <td>{data.total_students}</td>
                       </tr>
                     ))}
@@ -431,7 +431,7 @@ const AdminDashboard = () => {
                       tableData.map((data, index) => (
                         <tr key={data.id || index}>
                           <td>{index + 1}</td>
-                          <td>{data.name || "N/A"}</td>
+                          <td>{data.kode_cabang || "N/A"}</td>
                           <td>{formatRupiah(data.total_revenue || 0)}</td>
                         </tr>
                       ))

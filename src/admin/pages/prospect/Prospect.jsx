@@ -1,7 +1,27 @@
-import React from "react";
-import { FaUsers, FaCalendarCheck, FaHourglassHalf, FaTimesCircle, FaDollarSign, FaGift, FaCheckCircle, FaUserPlus } from "react-icons/fa";
+import React, { useContext } from "react";
+import {
+  FaUsers,
+  FaCalendarCheck,
+  FaHourglassHalf,
+  FaTimesCircle,
+  FaDollarSign,
+  FaGift,
+  FaCheckCircle,
+  FaUserPlus,
+} from "react-icons/fa";
+import { ProspectDashboardContext } from "../../../context/ProspectDashboardContext";
 
 const Prospect = () => {
+  const { data, loading, error } = useContext(ProspectDashboardContext);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
       <div className="row g-4">
@@ -14,25 +34,53 @@ const Prospect = () => {
             <div className="card-body">
               <ul className="list-group list-group-flush">
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaUsers style={{ color: 'blue', fontSize: '20px' }} className="me-2" /> Total Leads Today <span>70</span>
+                  <FaUsers
+                    style={{ color: "blue", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Leads Today <span>{data.countLeadsToday}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaHourglassHalf style={{ color: 'orange', fontSize: '20px' }} className="me-2" /> Total Pending Today <span>10</span>
+                  <FaHourglassHalf
+                    style={{ color: "orange", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Pending Today <span>{data.countPendingToday}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaTimesCircle style={{ color: 'red', fontSize: '20px' }} className="me-2" /> Total Expired Today <span>10</span>
+                  <FaTimesCircle
+                    style={{ color: "red", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Expired Today <span>{data.countExpiredToday}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaDollarSign style={{ color: 'green', fontSize: '20px' }} className="me-2" /> Total Paid Today <span>10</span>
+                  <FaDollarSign
+                    style={{ color: "green", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Paid Today <span>{data.countPaidToday}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaGift style={{ color: 'purple', fontSize: '20px' }} className="me-2" /> Total Free Today <span>10</span>
+                  <FaGift
+                    style={{ color: "purple", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Free Today <span>{data.countFreeToday}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaCheckCircle style={{ color: 'teal', fontSize: '20px' }} className="me-2" /> Total Hadir Today <span>10</span>
+                  <FaCheckCircle
+                    style={{ color: "teal", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Hadir Today <span>{data.countHadirToday}</span>
                 </li>
                 <li className="list-group-item d-flex justify-content-between align-items-center">
-                  <FaUserPlus style={{ color: 'darkblue', fontSize: '20px' }} className="me-2" /> Total Sign-Up Today <span>10</span>
+                  <FaUserPlus
+                    style={{ color: "darkblue", fontSize: "20px" }}
+                    className="me-2"
+                  />{" "}
+                  Total Sign-Up Today <span>{data.countSignUpToday}</span>
                 </li>
               </ul>
             </div>
@@ -44,87 +92,126 @@ const Prospect = () => {
 
         {/* Filters and Metrics */}
         <div className="row g-3">
-  <div className="mb-1 col-md-2">
-    <select id="time-filter" className="form-select p-2">
-      <option>Orders</option>
-      <option>Month to date</option>
-      <option>Year to date</option>
-    </select>
-  </div>
-  <div className="row g-3">
-    <div className="col">
-      <div className="card text-center bg-primary text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaUsers style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Leads
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
+          <div className="mb-1 col-md-2">
+            <select id="time-filter" className="form-select p-2">
+              <option>Orders</option>
+              <option>Month to date</option>
+              <option>Year to date</option>
+            </select>
+          </div>
+          <div className="row g-3">
+            <div className="col">
+              <div className="card text-center bg-primary text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaUsers
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Leads
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white">
+                    {data.countLeadsToday}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center bg-warning text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaHourglassHalf
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Pending
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white">
+                    {data.countPendingToday}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center bg-danger text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaTimesCircle
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Expired
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white">
+                    {data.countExpiredToday}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center bg-success text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaDollarSign
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Paid
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white">
+                    {data.countPaidToday}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center bg-secondary text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaGift
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Free
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white">
+                    {data.countFreeToday}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center bg-info text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaCheckCircle
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Hadir
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white">
+                    {data.countHadirToday}
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="col">
+              <div className="card text-center bg-dark text-white">
+                <div className="card-body">
+                  <h6 className="card-title">
+                    <FaUserPlus
+                      style={{ color: "white", fontSize: "20px" }}
+                      className="me-1"
+                    />{" "}
+                    Sign-Up
+                  </h6>
+                  <p className="card-text fs-5 fw-bold text-white"></p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-    <div className="col">
-      <div className="card text-center bg-warning text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaHourglassHalf style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Pending
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
-        </div>
-      </div>
-    </div>
-    <div className="col">
-      <div className="card text-center bg-danger text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaTimesCircle style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Expired
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
-        </div>
-      </div>
-    </div>
-    <div className="col">
-      <div className="card text-center bg-success text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaDollarSign style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Paid
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
-        </div>
-      </div>
-    </div>
-    <div className="col">
-      <div className="card text-center bg-secondary text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaGift style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Free
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
-        </div>
-      </div>
-    </div>
-    <div className="col">
-      <div className="card text-center bg-info text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaCheckCircle style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Hadir
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
-        </div>
-      </div>
-    </div>
-    <div className="col">
-      <div className="card text-center bg-dark text-white">
-        <div className="card-body">
-          <h6 className="card-title">
-            <FaUserPlus style={{ color: 'white', fontSize: '20px' }} className="me-1" /> Sign-Up
-          </h6>
-          <p className="card-text fs-5 fw-bold text-white">100</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
       </div>
 
       {/* Data Tables */}
