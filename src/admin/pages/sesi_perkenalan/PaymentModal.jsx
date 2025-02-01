@@ -63,7 +63,7 @@ const PaymentModal = ({ show, onClose, onSubmit, prospectData }) => {
     };
 
     handleManualPayment(paymentData);
-    onClose(); // Menutup modal setelah submit
+    onClose();
   };
 
   return (

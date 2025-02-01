@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import moment from "moment";
-import PaymentModal from "../interest_program/PaymentModal";
 import { useProspects } from "../../../context/ProspectContext";
+import { MdArrowBack, MdArrowForward } from "react-icons/md";
+import DetailModal from "../interest_program/DetailModal";
+import ExcelExport from "../../../context/ExcelContext";
+import PaymentModal from "../interest_program/PaymentModal";
 import { FaWhatsapp } from "react-icons/fa";
 import { FcCallback } from "react-icons/fc";
 import {
@@ -12,7 +15,6 @@ import {
   MdWifiCalling3,
 } from "react-icons/md";
 import Select from "react-select";
-import DetailModal from "../interest_program/DetailModal";
 
 const INITIAL_FILTERS = {
   startDate: "",
@@ -23,11 +25,24 @@ const INITIAL_FILTERS = {
   source: "",
 };
 
-export const STATUS_OPTIONS = [
+const STATUS_OPTIONS = [
   { value: "0", label: "Pending" },
   { value: "1", label: "Paid" },
   { value: "2", label: "Expired" },
 ];
+
+const FOLLOW_UP_OPTIONS = [
+  { value: "0", label: <FaWhatsapp style={{ color: "green" }} /> },
+  { value: "1", label: <FcCallback /> },
+  { value: "2", label: <MdClose style={{ color: "red" }} /> },
+  { value: "3", label: <MdCheck style={{ color: "green" }} /> },
+  { value: "4", label: <MdWifiCalling1 style={{ color: "red" }} /> },
+  { value: "5", label: <MdWifiCalling2 style={{ color: "red" }} /> },
+  { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
+];
+
+const itemsPerPage = 10;
+const maxPageDisplay = 5;
 
 const formatLabel = (name) => {
   return name
@@ -95,16 +110,6 @@ const FilterInput = ({ name, value, onChange, options }) => {
   );
 };
 
-const FOLLOW_UP_OPTIONS = [
-  { value: "0", label: <FaWhatsapp style={{ color: "green" }} /> },
-  { value: "1", label: <FcCallback /> },
-  { value: "2", label: <MdClose style={{ color: "red" }} /> },
-  { value: "3", label: <MdCheck style={{ color: "green" }} /> },
-  { value: "4", label: <MdWifiCalling1 style={{ color: "red" }} /> },
-  { value: "5", label: <MdWifiCalling2 style={{ color: "red" }} /> },
-  { value: "6", label: <MdWifiCalling3 style={{ color: "red" }} /> },
-];
-
 const TableRow = ({ item, index, updateFU, onViewDetail }) => {
   const handleFUChange = async (selectedOption) => {
     try {
@@ -121,7 +126,7 @@ const TableRow = ({ item, index, updateFU, onViewDetail }) => {
 
   return (
     <tr className="text-center">
-      <td>{index + 1}</td> {/* Nomor urut berdasarkan indeks */}
+      <td>{index + 1}</td>
       <td>{item.name}</td>
       <td>{item.phone}</td>
       <td>{item.email}</td>
@@ -163,45 +168,32 @@ const TableRow = ({ item, index, updateFU, onViewDetail }) => {
 };
 
 const SignUp = () => {
-  const { interestprospects, loading, filterProspects, updateProspect } =
-    useProspects();
+  const {
+    interestprospects,
+    loading,
+    filterProspects,
+    updateProspect,
+    exportedToExcel,
+  } = useProspects();
   const [filters, setFilters] = useState(INITIAL_FILTERS);
   const [showModal, setShowModal] = useState(false);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageGroup, setPageGroup] = useState(0);
   const [selectedProspect, setSelectedProspect] = useState(null);
+  const [filteredProspects, setFilteredProspects] = useState([]);
+
+  useEffect(() => {
+    applyFilters();
+  }, [interestprospects, filters]);
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
   };
 
-  const applyFilters = async () => {
-    await filterProspects(filters);
-  };
-
-  const handleSignUp = (prospect) => {
-    setSelectedProspect(prospect);
-    setShowModal(true);
-  };
-
-  const handleViewDetail = (prospect) => {
-    setSelectedProspect(prospect);
-    setShowDetailModal(true);
-  };
-
-  const handleCloseDetailModal = () => {
-    setShowDetailModal(false);
-    setSelectedProspect(null);
-  };
-
-  const handleCreatePayment = (prospectData) => {
-    console.log("Creating payment for:", prospectData);
-  };
-
-  if (loading) return <div>Loading...</div>;
-
-  const filteredProspects = interestprospects
-    .filter((item) => {
+  const applyFilters = () => {
+    let filteredData = interestprospects.filter((item) => {
       return Object.entries(filters).every(([key, value]) => {
         if (!value) return true;
         if (key === "status") return item.status === Number(value);
@@ -216,10 +208,56 @@ const SignUp = () => {
             (!endDate || itemDate <= endDate)
           );
         }
-        return item[key]?.toString() === value;
+        return item[key]
+          ?.toString()
+          .toLowerCase()
+          .includes(value.toLowerCase());
       });
-    })
-    .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Urutkan berdasarkan data terbaru
+    });
+
+    setFilteredProspects(
+      filteredData.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+      )
+    );
+    setCurrentPage(1);
+    setPageGroup(0);
+  };
+
+  const handleViewDetail = (prospect) => {
+    setSelectedProspect(prospect);
+    setShowDetailModal(true); // Hanya satu baris untuk setShowDetailModal
+  };
+
+  const handleCloseDetailModal = () => {
+    setShowDetailModal(false);
+    setSelectedProspect(null);
+  };
+
+  const totalPages = Math.ceil(filteredProspects.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProspects = filteredProspects.slice(startIndex, endIndex);
+
+  const generatePageNumbers = () => {
+    const pages = [];
+    if (totalPages <= 5) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        pages.push(1, 2, 3, "...", totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
+      } else {
+        pages.push(1, "...", currentPage, "...", totalPages);
+      }
+    }
+    return pages;
+  };
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <div className="container-xxl flex-grow-1 container-p-y">
@@ -242,17 +280,25 @@ const SignUp = () => {
                 ]}
               />
             ))}
+            <div className="col-md-2">
+              <button
+                className="btn btn-primary"
+                onClick={applyFilters}
+                style={{ marginTop: "30px" }}
+              >
+                Apply Filters
+              </button>
+            </div>
           </div>
-          <button className="btn btn-primary mt-3" onClick={applyFilters}>
-            Filter
-          </button>
         </div>
       </div>
 
       <div className="card mt-4">
-        <div className="card-header text-white">
+        <div className="card-header text-white d-flex justify-content-between align-items-center">
           <h5 className="mb-0">List Customer</h5>
+          <ExcelExport data={exportedToExcel} fileName="Export Excel" />
         </div>
+
         <div className="card-body px-0">
           <div className="table-responsive">
             <table className="table table-striped table-hover">
@@ -285,31 +331,57 @@ const SignUp = () => {
                     </td>
                   </tr>
                 ) : (
-                  filteredProspects.map((item, index) => (
-                    <TableRow
-                      key={item.id}
-                      item={item}
-                      index={index} // Berikan indeks untuk nomor urut
-                      updateFU={updateProspect}
-                      onViewDetail={handleViewDetail}
-                    />
-                  ))
+                  filteredProspects
+                    .slice(startIndex, endIndex)
+                    .map((item, index) => (
+                      <TableRow
+                        key={`${item.id}-${index}`} // Kombinasi id dan index untuk memastikan key unik
+                        index={startIndex + index} // Berikan indeks untuk nomor urut
+                        item={item}
+                        updateFU={updateProspect}
+                        onViewDetail={handleViewDetail}
+                      />
+                    ))
                 )}
               </tbody>
             </table>
           </div>
+          <div className="d-flex justify-content-between align-items-center w-100">
+            <div className="ms-auto">
+              <button
+                onClick={() => setCurrentPage(Math.max(currentPage - 1, 1))}
+                className="btn btn-light"
+              >
+                <MdArrowBack />
+              </button>
+              {generatePageNumbers().map((page, index) =>
+                page === "..." ? (
+                  <span key={index}>...</span>
+                ) : (
+                  <button
+                    key={page}
+                    className={`btn btn-light ${
+                      currentPage === page ? "active" : ""
+                    }`}
+                    onClick={() => setCurrentPage(page)}
+                  >
+                    {page}
+                  </button>
+                )
+              )}
+              <button
+                onClick={() =>
+                  setCurrentPage(Math.min(currentPage + 1, totalPages))
+                }
+                className="btn btn-light"
+              >
+                <MdArrowForward />
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
-      {/* Payment Modal */}
-      <PaymentModal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={handleCreatePayment}
-        prospectData={selectedProspect}
-      />
-
-      {/* Detail Modal */}
       <DetailModal
         show={showDetailModal}
         onClose={handleCloseDetailModal}

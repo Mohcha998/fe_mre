@@ -156,23 +156,6 @@ const TableRow = ({ item, index, updateFU, handleCheckin, onSignUp }) => {
           isSearchable={false}
         />
       </td>
-      <td>
-        <button
-          className="btn btn-primary btn-sm w-100"
-          onClick={handleCheckinClick}
-          disabled={item.tgl_checkin}
-        >
-          Check-in
-        </button>
-      </td>
-      <td>
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => onSignUp(item)}
-        >
-          Sign Up
-        </button>
-      </td>
     </tr>
   );
 };
@@ -273,8 +256,6 @@ const NonSesiPerkenalan = () => {
                     "Tanggal SP",
                     "Source",
                     "Follow-up",
-                    "Hadir",
-                    "Sign-Up",
                   ].map((header) => (
                     <th key={header} className="text-center">
                       {header}

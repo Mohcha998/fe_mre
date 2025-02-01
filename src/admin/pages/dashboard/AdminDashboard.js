@@ -219,7 +219,7 @@ const AdminDashboard = () => {
     series: [
       {
         name: "STUDENT COUNT", // Example name, you can customize this
-        data: studentLastThreeMonths[0] || [26, 35, 50], // Your data here
+        data: studentLastThreeMonths[0] || [26, 35, 50],
       },
     ],
     options: {
@@ -312,14 +312,14 @@ const AdminDashboard = () => {
           <div className="card" style={{ height: "650px" }}>
             <div className="card-header d-flex justify-content-between">
               <div className="card-title mb-0">
-                <h5 className="mb-1 me-2">Total Students</h5>
+                <h5 className="mb-1 me-2">Total Leads</h5>
               </div>
             </div>
             <div className="card-body">
               <div className="d-flex justify-content-between align-items-center mb-6">
                 <div className="d-flex flex-column align-items-center gap-1">
                   <h3 className="mb-1">{branchTotal}</h3>
-                  <small>Total Students</small>
+                  <small>Total Leads</small>
                 </div>
                 <div id="orderStatistic">
                   <ApexCharts

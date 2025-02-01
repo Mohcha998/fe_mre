@@ -24,6 +24,11 @@ const fetchPrgProspects = async () => {
   const response = await axiosInstance.get("prgcall");
   return response.data;
 };
+// Export Excel
+const exportToExcel = async () => {
+  const response = await axiosInstance.get("export-su");
+  return response.data;
+};
 
 const fetchNonProspects = async () => {
   const response = await axiosInstance.get("nonspcall");
@@ -73,13 +78,19 @@ export const ProspectProvider = ({ children }) => {
 
   // Using React Query hooks
   const {
-    data: fetchedProspects = [],
+    data: exportedToExcel = [],
     isLoading: loading,
     error,
   } = useQuery({
-    queryKey: ["prospects"],
+    queryKey: ["exportToExcel"],
+    queryFn: exportToExcel,
+  });
+
+  const { data: fetchedProspects = [] } = useQuery({
+    queryKey: ["pprospects"],
     queryFn: fetchProspects,
   });
+
   const { data: fetchedSPProspects = [] } = useQuery({
     queryKey: ["spprospects"],
     queryFn: fetchSPProspects,
@@ -244,6 +255,7 @@ export const ProspectProvider = ({ children }) => {
         filteredSPProspects,
         loading,
         error,
+        exportedToExcel, // Export Excel
         updateProspect,
         filterProspects,
         prospectCount,

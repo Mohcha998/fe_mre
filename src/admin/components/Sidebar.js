@@ -6,7 +6,7 @@ import { BsMegaphone } from "react-icons/bs";
 import { FaPersonChalkboard } from "react-icons/fa6";
 import logo_sidebar from "../../assets/img/logo_dashboard.png";
 
-const MENU_ITEMS = [  
+const MENU_ITEMS = [
   { path: "/admin/dashboard", label: "Dashboard", icon: <FaHome /> },
   {
     path: "/admin/prospect",
@@ -22,16 +22,25 @@ const MENU_ITEMS = [
           { path: "/admin/daftar-peserta", label: "Daftar Peserta" },
           // { path: "/admin/hadir", label: "Daftar Hadir SP" },
           // { path: "/admin/interest", label: "Interest Program" },
-          // { path: "/admin/data-student", label: "Data Student" }
+          // { path: "/admin/data-student", label: "Data Student" },
         ],
       },
-      { path: "/admin/non-sesi-perkenalan", label: "Non Sesi Perkenalan" },
-      { path: "/admin/sign-up", label: "Sign-Up" },
+      {
+        path: "#",
+        label: "Sign-Up",
+        subItems: [
+          { path: "/admin/non-sesi-perkenalan", label: "Daftar Prospect" },
+          { path: "/admin/sign-up", label: "Daftar Peserta" },
+          // { path: "/admin/hadir", label: "Daftar Hadir SP" },
+          // { path: "/admin/interest", label: "Interest Program" },
+          // { path: "/admin/data-student", label: "Data Student" },
+        ],
+      },
     ],
   },
-  { path: "/admin/trainer", label: "Trainer", icon: <FaPersonChalkboard  /> },
-  { path: "/admin/student", label: "Student", icon: <RiUser3Line /> },
-  { path: "/admin/payment", label: "Payment", icon: <FaFileInvoiceDollar  /> },
+  { path: "/admin/trainer", label: "Trainer", icon: <FaPersonChalkboard /> },
+  { path: "/admin/data-student", label: "Student", icon: <RiUser3Line /> },
+  { path: "/admin/payment", label: "Payment", icon: <FaFileInvoiceDollar /> },
   { path: "/admin/announcement", label: "Announcement", icon: <BsMegaphone /> },
 ];
 
@@ -53,35 +62,37 @@ const Sidebar = () => {
         <img src={logo_sidebar} alt="logo-sidebar" width={150} />
       </div>
       <div
-  className="me-xl-0 d-xl-none"
-  style={{
-    position: 'absolute',
-    top: '10px', // Jarak dari atas
-    right: '10px', // Jarak dari kanan
-    zIndex: 1000, // Biar di atas elemen lain
-  }}
->
-  <a
-    href="javascript:void(0);"
-    className="layout-menu-toggle menu-link text-large ms-auto btn btn-primary shadow rounded-circle"
-    style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '50px', // Ukuran tombol
-      height: '50px', // Tinggi tombol
-    }}
-  >
-    <i className="bx bx-chevron-left bx-sm align-middle"></i>
-  </a>
-</div>
+        className="me-xl-0 d-xl-none"
+        style={{
+          position: "absolute",
+          top: "10px", // Jarak dari atas
+          right: "10px", // Jarak dari kanan
+          zIndex: 1000, // Biar di atas elemen lain
+        }}
+      >
+        <a
+          href="javascript:void(0);"
+          className="layout-menu-toggle menu-link text-large ms-auto btn btn-primary shadow rounded-circle"
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "50px", // Ukuran tombol
+            height: "50px", // Tinggi tombol
+          }}
+        >
+          <i className="bx bx-chevron-left bx-sm align-middle"></i>
+        </a>
+      </div>
 
       <ul className="menu-inner py-3">
         {MENU_ITEMS.map((item) => (
           <li
             key={item.path}
             className={`menu-item ${
-              isPathActive(item.path) || openMenus[item.label] ? "active open" : ""
+              isPathActive(item.path) || openMenus[item.label]
+                ? "active open"
+                : ""
             }`}
           >
             {item.subItems ? (
@@ -95,9 +106,7 @@ const Sidebar = () => {
                   <span>{item.label}</span>
                 </a>
                 <ul
-                  className={`menu-sub ${
-                    openMenus[item.label] ? "open" : ""
-                  }`}
+                  className={`menu-sub ${openMenus[item.label] ? "open" : ""}`}
                 >
                   {item.subItems.map((subItem) =>
                     subItem.subItems ? (

@@ -88,7 +88,10 @@ function AdminApp() {
               <Route path="/prospect" element={<Prospect />} />
               <Route path="/daftar-prospect" element={<DaftarProspect />} />
               <Route path="/daftar-peserta" element={<DaftarPeserta />} />
-              <Route path="/non-sesi-perkenalan" element={<NonSesiPerkenalan />} />
+              <Route
+                path="/non-sesi-perkenalan"
+                element={<NonSesiPerkenalan />}
+              />
               <Route path="/sign-up" element={<SignUp />} />
             </Routes>
             <div className="content-backdrop fade"></div>

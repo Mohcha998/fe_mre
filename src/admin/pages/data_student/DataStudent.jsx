@@ -21,11 +21,9 @@ const TableRow = ({ item }) => {
       <td>{item.id}</td>
       <td>{item.name}</td>
       <td>
-        {item.tgl_lahir
-          ? moment(item.tgl_lahir).format("DD-MM-YYYY")
-          : "SU NO SP"}
+        {item.tgl_lahir ? moment(item.tgl_lahir).format("DD-MM-YYYY") : "-"}
       </td>
-      <td>{item.phone}</td>
+      <td>{item.phone ? item.phone : "-"}</td>
       <td>{item.email}</td>
       <td>{item.program_name}</td>
       <td>{item.branch_name}</td>
@@ -33,7 +31,7 @@ const TableRow = ({ item }) => {
       <td>{item.kelas_name}</td>
       <td>{item.status === 0 ? "Inactive" : "Active"}</td>
       <td>
-        <button className="btn btn-primary btn-sm">Sign Up</button>
+        <button className="btn btn-warning btn-sm">Edit</button>
       </td>
     </tr>
   );
