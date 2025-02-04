@@ -130,17 +130,17 @@ const TableRow = ({ item, index, updateFU, onViewDetail }) => {
       <td>{item.name}</td>
       <td>{item.phone}</td>
       <td>{item.email}</td>
-      <td>{item.program_name}</td>
+      {/* <td>{item.program_name}</td> */}
       <td>{item.cabang}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
       </td>
-      <td>
+      {/* <td>
         {item.tgl_checkin
           ? moment(item.tgl_checkin).format("DD-MM-YYYY")
           : "SU NO SP"}
-      </td>
+      </td> */}
       <td>{item.source}</td>
       <td>
         <Select
@@ -296,7 +296,7 @@ const SignUp = () => {
       <div className="card mt-4">
         <div className="card-header text-white d-flex justify-content-between align-items-center">
           <h5 className="mb-0">List Customer</h5>
-          <ExcelExport data={exportedToExcel} fileName="Export Excel" />
+          {/* <ExcelExport data={exportedToExcel} fileName="Export Excel" /> */}
         </div>
 
         <div className="card-body px-0">
@@ -309,10 +309,10 @@ const SignUp = () => {
                     "Name",
                     "HP",
                     "Email",
-                    "Program",
-                    "Branch",
+                    // "Program",
+                    "Learning Centre",
                     "Status",
-                    "Tanggal SP",
+                    // "Tanggal SP",
                     "Source",
                     "Follow-up",
                     "Detail",

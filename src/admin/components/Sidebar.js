@@ -9,28 +9,28 @@ import logo_sidebar from "../../assets/img/logo_dashboard.png";
 const MENU_ITEMS = [
   { path: "/admin/dashboard", label: "Dashboard", icon: <FaHome /> },
   {
-    path: "/admin/prospect",
+    path: "/admin/non-sesi-perkenalan",
     label: "Prospect",
     icon: <FaGraduationCap />,
     subItems: [
-      { path: "/admin/prospect", label: "Prospect" },
-      {
-        path: "#",
-        label: "Sesi Perkenalan",
-        subItems: [
-          { path: "/admin/daftar-prospect", label: "Daftar Prospect" },
-          { path: "/admin/daftar-peserta", label: "Daftar Peserta" },
-          // { path: "/admin/hadir", label: "Daftar Hadir SP" },
-          // { path: "/admin/interest", label: "Interest Program" },
-          // { path: "/admin/data-student", label: "Data Student" },
-        ],
-      },
+      // { path: "/admin/prospect", label: "Prospect" },
+      // {
+      //   path: "#",
+      //   label: "Sesi Perkenalan",
+      //   subItems: [
+      //     { path: "/admin/daftar-prospect", label: "Daftar Prospect" },
+      //     { path: "/admin/daftar-peserta", label: "Daftar Peserta" },
+      //     // { path: "/admin/hadir", label: "Daftar Hadir SP" },
+      //     // { path: "/admin/interest", label: "Interest Program" },
+      //     // { path: "/admin/data-student", label: "Data Student" },
+      //   ],
+      // },
       {
         path: "#",
         label: "Sign-Up",
         subItems: [
           { path: "/admin/non-sesi-perkenalan", label: "Daftar Prospect" },
-          { path: "/admin/sign-up", label: "Daftar Peserta" },
+          { path: "/admin/sign-up", label: "Daftar Customer" },
           // { path: "/admin/hadir", label: "Daftar Hadir SP" },
           // { path: "/admin/interest", label: "Interest Program" },
           // { path: "/admin/data-student", label: "Data Student" },
@@ -38,10 +38,10 @@ const MENU_ITEMS = [
       },
     ],
   },
-  { path: "/admin/trainer", label: "Trainer", icon: <FaPersonChalkboard /> },
+  // { path: "/admin/trainer", label: "Trainer", icon: <FaPersonChalkboard /> },
   { path: "/admin/data-student", label: "Student", icon: <RiUser3Line /> },
   { path: "/admin/payment", label: "Payment", icon: <FaFileInvoiceDollar /> },
-  { path: "/admin/announcement", label: "Announcement", icon: <BsMegaphone /> },
+  // { path: "/admin/announcement", label: "Announcement", icon: <BsMegaphone /> },
 ];
 
 const Sidebar = () => {
