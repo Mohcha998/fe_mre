@@ -10,9 +10,11 @@ const MENU_ITEMS = [
   { path: "/admin/dashboard", label: "Dashboard", icon: <FaHome /> },
   {
     path: "/admin/non-sesi-perkenalan",
-    label: "Prospect",
+    label: "Sign-Up",
     icon: <FaGraduationCap />,
     subItems: [
+      { path: "/admin/non-sesi-perkenalan", label: "Daftar Prospect" },
+      { path: "/admin/sign-up", label: "Daftar Customer" },
       // { path: "/admin/prospect", label: "Prospect" },
       // {
       //   path: "#",
@@ -25,17 +27,16 @@ const MENU_ITEMS = [
       //     // { path: "/admin/data-student", label: "Data Student" },
       //   ],
       // },
-      {
-        path: "#",
-        label: "Sign-Up",
-        subItems: [
-          { path: "/admin/non-sesi-perkenalan", label: "Daftar Prospect" },
-          { path: "/admin/sign-up", label: "Daftar Customer" },
-          // { path: "/admin/hadir", label: "Daftar Hadir SP" },
-          // { path: "/admin/interest", label: "Interest Program" },
-          // { path: "/admin/data-student", label: "Data Student" },
-        ],
-      },
+      // {
+      //   path: "#",
+      //   label: "Sign-Up",
+      //   subItems: [
+
+      //     // { path: "/admin/hadir", label: "Daftar Hadir SP" },
+      //     // { path: "/admin/interest", label: "Interest Program" },
+      //     // { path: "/admin/data-student", label: "Data Student" },
+      //   ],
+      // },
     ],
   },
   // { path: "/admin/trainer", label: "Trainer", icon: <FaPersonChalkboard /> },

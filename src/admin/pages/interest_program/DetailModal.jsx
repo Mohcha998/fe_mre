@@ -37,14 +37,14 @@ const DetailModal = ({ show, onClose, prospectData }) => {
           <div className="flex-grow-1">
             <div className="mb-1 d-flex">
               <strong className="col-4">ID</strong>
-              <span className="col-8">: {prospectData.id}</span>
+              <span className="col-8">: {prospectData.invoice}</span>
             </div>
             <div className="mb-1 d-flex">
-              <strong className="col-4">Name</strong>
+              <strong className="col-4">Nama</strong>
               <span className="col-8">: {prospectData.name}</span>
             </div>
             <div className="mb-1 d-flex">
-              <strong className="col-4">Phone</strong>
+              <strong className="col-4">No HP</strong>
               <span className="col-8">: {prospectData.phone}</span>
             </div>
             <div className="mb-1 d-flex">
@@ -52,30 +52,23 @@ const DetailModal = ({ show, onClose, prospectData }) => {
               <span className="col-8">: {prospectData.email}</span>
             </div>
             <div className="mb-1 d-flex">
-              <strong className="col-4">Program Name</strong>
-              <span className="col-8">: {prospectData.program_name}</span>
-            </div>
-            <div className="mb-1 d-flex">
-              <strong className="col-4">Branch</strong>
-              <span className="col-8">: {prospectData.branch_name}</span>
+              <strong className="col-4">Learning Centre</strong>
+              <span className="col-8">: {prospectData.kd_cbg}</span>
             </div>
             <div className="mb-1 d-flex">
               <strong className="col-4">Status</strong>
               <span className="col-8">
-                : {selectedStatus ? selectedStatus.label : "N/A"}
+                :{/* : {selectedStatus ? selectedStatus.label : " "} */}
               </span>
             </div>
             <div className="mb-1 d-flex">
-              <strong className="col-4">Tanggal SP</strong>
+              <strong className="col-4">Tgl Daftar</strong>
               <span className="col-8">
-                :{" "}
-                {prospectData.tgl_checkin
-                  ? moment(prospectData.tgl_checkin).format("DD-MM-YYYY")
-                  : "SU NO SP"}
+                : {moment(prospectData.created_at).format("DD MMM YYYY, HH:mm")}
               </span>
             </div>
             <div className="mb-1 d-flex border-bottom">
-              <strong className="col-4">Source</strong>
+              {/* <strong className="col-4">Source</strong> */}
               {/* <span className="col-8">: {prospectData.source}</span> */}
             </div>
 
@@ -86,10 +79,25 @@ const DetailModal = ({ show, onClose, prospectData }) => {
                 <ul>
                   {children.map((student, index) => (
                     <li key={index}>
-                      <strong>Name:</strong> {student.nama_murid},{" "}
-                      <strong>Birthdate:</strong>{" "}
-                      {moment(student.tgl_lahir).format("DD-MM-YYYY")},{" "}
-                      <strong>Phone:</strong> {student.tlp_murid}
+                      <div className="mb-1 d-flex">
+                        <strong className="col-4">Nama</strong>
+                        <span className="col-8">: {prospectData.name}</span>
+                      </div>
+                      <div className="mb-1 d-flex">
+                        <strong className="col-4">Program</strong>
+                        <span className="col-8">: {student.program_name}</span>
+                      </div>
+                      {/* <div className="mb-1 d-flex">
+                        <strong className="col-4">Birthdate</strong>
+                        <span className="col-8">
+                          : {moment(student.tgl_lahir).format("DD-MM-YYYY")}
+                        </span>
+                      </div> */}
+                      <div className="mb-1 d-flex">
+                        <strong className="col-4">No HP</strong>
+                        <span className="col-8">: {student.tlp_murid}</span>
+                      </div>
+                      <hr className="my-3 border-gray-400" />
                     </li>
                   ))}
                 </ul>

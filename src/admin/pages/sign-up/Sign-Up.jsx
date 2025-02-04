@@ -19,16 +19,15 @@ import Select from "react-select";
 const INITIAL_FILTERS = {
   startDate: "",
   endDate: "",
-  cabang: "",
-  program_name: "",
+  kd_cbg: "",
   status: "",
   source: "",
 };
 
 const STATUS_OPTIONS = [
-  { value: "0", label: "Pending" },
-  { value: "1", label: "Paid" },
-  { value: "2", label: "Expired" },
+  // { value: "0", label: "Pending" },
+  { value: "1", label: " " },
+  // { value: "2", label: "Expired" },
 ];
 
 const FOLLOW_UP_OPTIONS = [
@@ -45,6 +44,7 @@ const itemsPerPage = 10;
 const maxPageDisplay = 5;
 
 const formatLabel = (name) => {
+  if (name === "kd_cbg") return "Learning Centre";
   return name
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
@@ -131,7 +131,8 @@ const TableRow = ({ item, index, updateFU, onViewDetail }) => {
       <td>{item.phone}</td>
       <td>{item.email}</td>
       {/* <td>{item.program_name}</td> */}
-      <td>{item.cabang}</td>
+      <td>{item.kd_cbg}</td>
+      <td>{moment(item.created_at).format("DD MMM YYYY, HH:mm")}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
@@ -311,6 +312,7 @@ const SignUp = () => {
                     "Email",
                     // "Program",
                     "Learning Centre",
+                    "Tgl Daftar",
                     "Status",
                     // "Tanggal SP",
                     "Source",

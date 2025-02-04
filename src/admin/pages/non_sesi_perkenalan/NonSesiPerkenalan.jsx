@@ -12,19 +12,18 @@ import {
   MdWifiCalling2,
   MdWifiCalling3,
 } from "react-icons/md";
+import Pagination from "../../../helper/pagination"; // Make sure to import the Pagination component
 
 const INITIAL_FILTERS = {
   startDate: "",
   endDate: "",
-  branch_name: "",
-  program_name: "",
+  kd_cbg: "",
   status: "",
   source: "",
 };
 
 const STATUS_OPTIONS = [
   { value: "0", label: "Pending" },
-  { value: "1", label: "Paid" },
   { value: "2", label: "Expired" },
 ];
 
@@ -39,6 +38,7 @@ const FOLLOW_UP_OPTIONS = [
 ];
 
 const formatLabel = (name) => {
+  if (name === "kd_cbg") return "Learning Centre";
   return name
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
@@ -132,17 +132,12 @@ const TableRow = ({ item, index, updateFU, handleCheckin, onSignUp }) => {
       <td>{item.name}</td>
       <td>{item.phone}</td>
       <td>{item.email}</td>
-      {/* <td>{item.program_name}</td> */}
-      <td>{item.branch_name}</td>
+      <td>{item.kd_cbg}</td>
+      <td>{moment(item.created_at).format("DD MMM YYYY, HH:mm")}</td>
       <td>
         {STATUS_OPTIONS.find((opt) => opt.value === String(item.status))
           ?.label || "N/A"}
       </td>
-      {/* <td>
-        {item.tgl_checkin
-          ? moment(item.tgl_checkin).format("DD-MM-YYYY")
-          : "SU NO SP"}
-      </td> */}
       <td>{item.source}</td>
       <td>
         <Select
@@ -167,6 +162,9 @@ const NonSesiPerkenalan = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedProspect, setSelectedProspect] = useState(null);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Set how many items you want per page
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prev) => ({ ...prev, [name]: value }));
@@ -183,10 +181,9 @@ const NonSesiPerkenalan = () => {
 
   const handleCreatePayment = (prospectData) => {
     console.log("Creating payment for:", prospectData);
-    // Logika untuk membuat pembayaran
   };
 
-  // Urutkan prospects berdasarkan created_at (data terbaru di atas)
+  // Apply filters and sort prospects
   const filteredProspects = nonspcall
     .filter((item) => {
       return Object.entries(filters).every(([key, value]) => {
@@ -207,6 +204,12 @@ const NonSesiPerkenalan = () => {
       });
     })
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)); // Sort descending by created_at
+
+  const totalPages = Math.ceil(filteredProspects.length / itemsPerPage);
+  const displayedProspects = filteredProspects.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   if (loading) return <div>Loading...</div>;
 
@@ -247,15 +250,14 @@ const NonSesiPerkenalan = () => {
                 <tr>
                   {[
                     "No",
-                    "Name",
-                    "HP",
+                    "Nama",
+                    "Phone",
                     "Email",
-                    // "Program",
-                    "Learning Centre",
+                    "Kode CBG",
+                    "Tanggal Daftar",
                     "Status",
-                    // "Tanggal SP",
-                    "Source",
-                    "Follow-up",
+                    "Sumber",
+                    "Follow Up",
                   ].map((header) => (
                     <th key={header} className="text-center">
                       {header}
@@ -264,34 +266,26 @@ const NonSesiPerkenalan = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProspects.length === 0 ? (
-                  <tr>
-                    <td colSpan="9" className="text-center">
-                      No data available
-                    </td>
-                  </tr>
-                ) : (
-                  filteredProspects.map((item, index) => (
-                    <TableRow
-                      key={item.id}
-                      item={item}
-                      index={index} // Pass index to TableRow
-                      updateFU={updateProspect}
-                      onSignUp={handleSignUp}
-                    />
-                  ))
-                )}
+                {displayedProspects.map((item, index) => (
+                  <TableRow
+                    key={item.id}
+                    item={item}
+                    index={(currentPage - 1) * itemsPerPage + index}
+                    updateFU={updateProspect}
+                    handleCheckin={handleCheckin}
+                    onSignUp={handleSignUp}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </div>
-      <PaymentModal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        onSubmit={handleCreatePayment}
-        prospectData={selectedProspect}
-      />
     </div>
   );
 };

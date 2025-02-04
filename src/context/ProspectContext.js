@@ -1,64 +1,27 @@
-import React, { createContext, useState, useEffect, useContext } from "react";
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  useContext,
+  useCallback,
+} from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { debounce } from "lodash";
 
-// Context creation
 export const ProspectContext = createContext();
+export const useProspects = () => useContext(ProspectContext);
 
-export const useProspects = () => {
-  return useContext(ProspectContext);
-};
-
-// Fetching data with React Query
-const fetchProspects = async () => {
-  const response = await axiosInstance.get("prospect");
-  return response.data;
-};
-
-const fetchSPProspects = async () => {
-  const response = await axiosInstance.get("spcall");
-  return response.data;
-};
-
-const fetchPrgProspects = async () => {
-  const response = await axiosInstance.get("prgcall");
-  return response.data;
-};
-// Export Excel
-const exportToExcel = async () => {
-  const response = await axiosInstance.get("export-su");
-  return response.data;
-};
-
-const fetchNonProspects = async () => {
-  const response = await axiosInstance.get("nonspcall");
-  return response.data;
-};
-
-const fetchInterestProspects = async () => {
-  const response = await axiosInstance.get("interest-call");
-  return response.data;
-};
-
-const fetchProspectCount = async () => {
-  const response = await axiosInstance.get("count_prospect");
-  return response.data.count;
-};
-
-const fetchPendingCount = async () => {
-  const response = await axiosInstance.get("count_pending");
-  return response.data.count;
-};
-
-const fetchExpiredCount = async () => {
-  const response = await axiosInstance.get("count_expired");
-  return response.data.count;
-};
-
-const fetchPaidCount = async () => {
-  const response = await axiosInstance.get("count_paid");
-  return response.data.count;
-};
+// Fetch functions
+const fetchProspects = async () => (await axiosInstance.get("prospect")).data;
+const fetchSPProspects = async () => (await axiosInstance.get("spcall")).data;
+const fetchPrgProspects = async () => (await axiosInstance.get("prgcall")).data;
+const fetchNonProspects = async () =>
+  (await axiosInstance.get("nonspcall")).data;
+const fetchInterestProspects = async () =>
+  (await axiosInstance.get("interest-call")).data;
+const fetchCounts = async (endpoint) =>
+  (await axiosInstance.get(endpoint)).data.count;
 
 export const ProspectProvider = ({ children }) => {
   const queryClient = useQueryClient();
@@ -70,174 +33,118 @@ export const ProspectProvider = ({ children }) => {
     status: "",
     source: "",
   });
-
-  // State initialization for prospects and spprospects
-  const [prospects, setProspects] = useState([]);
-  const [spprospects, setSPProspects] = useState([]);
   const [filteredSPProspects, setFilteredSPProspects] = useState([]);
 
-  // Using React Query hooks
-  const {
-    data: exportedToExcel = [],
-    isLoading: loading,
-    error,
-  } = useQuery({
-    queryKey: ["exportToExcel"],
-    queryFn: exportToExcel,
-  });
-
-  const { data: fetchedProspects = [] } = useQuery({
-    queryKey: ["pprospects"],
+  // React Query Hooks with Correct Syntax
+  const { data: prospects = [] } = useQuery({
+    queryKey: ["prospects"],
     queryFn: fetchProspects,
+    staleTime: 5 * 60 * 1000,
   });
-
-  const { data: fetchedSPProspects = [] } = useQuery({
+  const { data: spprospects = [] } = useQuery({
     queryKey: ["spprospects"],
     queryFn: fetchSPProspects,
+    staleTime: 5 * 60 * 1000,
   });
   const { data: prgprospects = [] } = useQuery({
     queryKey: ["prgprospects"],
     queryFn: fetchPrgProspects,
+    staleTime: 5 * 60 * 1000,
   });
-
   const { data: nonspcall = [] } = useQuery({
     queryKey: ["nonspcall"],
     queryFn: fetchNonProspects,
+    staleTime: 5 * 60 * 1000,
   });
   const { data: interestprospects = [] } = useQuery({
     queryKey: ["interestprospects"],
     queryFn: fetchInterestProspects,
+    staleTime: 5 * 60 * 1000,
   });
+
+  // Fetch Counts
   const { data: prospectCount } = useQuery({
     queryKey: ["prospectCount"],
-    queryFn: fetchProspectCount,
+    queryFn: () => fetchCounts("count_prospect"),
+    staleTime: 10 * 60 * 1000,
   });
   const { data: pendingCount } = useQuery({
     queryKey: ["pendingCount"],
-    queryFn: fetchPendingCount,
+    queryFn: () => fetchCounts("count_pending"),
+    staleTime: 10 * 60 * 1000,
   });
   const { data: expiredCount } = useQuery({
     queryKey: ["expiredCount"],
-    queryFn: fetchExpiredCount,
+    queryFn: () => fetchCounts("count_expired"),
+    staleTime: 10 * 60 * 1000,
   });
   const { data: paidCount } = useQuery({
     queryKey: ["paidCount"],
-    queryFn: fetchPaidCount,
+    queryFn: () => fetchCounts("count_paid"),
+    staleTime: 10 * 60 * 1000,
   });
 
-  // Update state when new data is fetched
-  useEffect(() => {
-    setProspects(fetchedProspects);
-    setSPProspects(fetchedSPProspects);
-  }, [fetchedProspects, fetchedSPProspects]);
-
-  // Filter logic
-  const applyFilters = () => {
-    const result = spprospects.filter((item) => {
-      const itemDate = new Date(item.created_at);
-      const start = filters.startDate ? new Date(filters.startDate) : null;
-      const end = filters.endDate ? new Date(filters.endDate) : null;
-
-      const withinDateRange =
-        (!start || itemDate >= start) && (!end || itemDate <= end);
-
-      const matchesFilters = Object.entries(filters).every(
-        ([key, value]) => !value || item[key] === value
+  // Apply Filters with Debounce
+  const applyFilters = useCallback(
+    debounce(() => {
+      setFilteredSPProspects(
+        spprospects.filter((item) => {
+          const itemDate = new Date(item.created_at);
+          const start = filters.startDate ? new Date(filters.startDate) : null;
+          const end = filters.endDate ? new Date(filters.endDate) : null;
+          const withinDateRange =
+            (!start || itemDate >= start) && (!end || itemDate <= end);
+          const matchesFilters = Object.entries(filters).every(
+            ([key, value]) => !value || item[key] === value
+          );
+          return withinDateRange && matchesFilters;
+        })
       );
-
-      return withinDateRange && matchesFilters;
-    });
-
-    setFilteredSPProspects(result);
-  };
+    }, 500),
+    [filters, spprospects]
+  );
 
   useEffect(() => {
     applyFilters();
-  }, [filters, spprospects]);
+  }, [filters, spprospects, applyFilters]);
 
-  // Update Prospect logic
-  const updateProspect = async (id, updatedData) => {
-    try {
-      const response = await axiosInstance.put(`prospect/${id}`, updatedData);
-      const updatedProspect = response.data;
+  // Update Prospect Mutation
+  const updateProspectMutation = useMutation({
+    mutationFn: async ({ id, updatedData }) =>
+      (await axiosInstance.put(`prospect/${id}`, updatedData)).data,
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["prospects"] }),
+  });
 
-      // Update the state with the updated prospect
-      setProspects((prevProspects) =>
-        prevProspects.map((prospect) =>
-          prospect.id === id
-            ? { ...prospect, ...updatedData, ...updatedProspect }
-            : prospect
-        )
-      );
-
-      return updatedProspect;
-    } catch (error) {
-      console.error("Error updating prospect:", error);
-    }
-  };
-
-  // Register user logic
-  const registerUser = async (data) => {
-    try {
-      const response = await axiosInstance.post("register", data);
-      if (response.status === 201) {
-        alert("User registered successfully");
-      }
-    } catch (error) {
-      console.error("Error registering user", error);
-      alert("Failed to register user");
-    }
-  };
-
-  // Check-in logic
+  // Check-in Mutation
   const checkInMutation = useMutation({
-    mutationFn: async (id) => {
-      const response = await axiosInstance.put(`/prospects/checkin/${id}`);
-      return response.data;
-    },
+    mutationFn: async (id) =>
+      (await axiosInstance.put(`/prospects/checkin/${id}`)).data,
     onMutate: async (id) => {
-      await queryClient.cancelQueries(["prospects"]);
+      await queryClient.cancelQueries({ queryKey: ["prospects"] });
       const previousData = queryClient.getQueryData(["prospects"]);
       queryClient.setQueryData(["prospects"], (old) =>
-        old.map((prospect) =>
-          prospect.id === id
-            ? { ...prospect, tgl_checkin: new Date().toISOString() }
-            : prospect
+        old.map((p) =>
+          p.id === id ? { ...p, tgl_checkin: new Date().toISOString() } : p
         )
       );
       return { previousData };
     },
-    onError: (err, id, context) => {
-      queryClient.setQueryData(["prospects"], context.previousData);
-    },
-    onSettled: () => {
-      queryClient.invalidateQueries(["prospects"]);
-    },
+    onError: (err, id, context) =>
+      queryClient.setQueryData(["prospects"], context.previousData),
+    onSettled: () => queryClient.invalidateQueries({ queryKey: ["prospects"] }),
   });
 
-  const handleCheckin = async (id) => {
-    try {
-      await checkInMutation.mutateAsync(id);
-    } catch {}
-  };
-
-  // Filter prospects function
+  // Filter Prospects Function
   const filterProspects = (filters) => {
-    const { startDate, endDate, ...otherFilters } = filters;
-
     return prospects.filter((item) => {
       const itemDate = new Date(item.created_at);
-
-      const start = startDate ? new Date(startDate) : null;
-      const end = endDate ? new Date(endDate) : null;
-
+      const start = filters.startDate ? new Date(filters.startDate) : null;
+      const end = filters.endDate ? new Date(filters.endDate) : null;
       const withinDateRange =
         (!start || itemDate >= start) && (!end || itemDate <= end);
-
-      const matchesFilters = Object.entries(otherFilters).every(
+      const matchesFilters = Object.entries(filters).every(
         ([key, value]) => !value || item[key] === value
       );
-
       return withinDateRange && matchesFilters;
     });
   };
@@ -246,24 +153,20 @@ export const ProspectProvider = ({ children }) => {
     <ProspectContext.Provider
       value={{
         prospects,
-        handleCheckin,
-        registerUser,
+        handleCheckin: checkInMutation.mutateAsync,
+        updateProspect: updateProspectMutation.mutateAsync,
         spprospects,
         prgprospects,
         nonspcall,
         interestprospects,
         filteredSPProspects,
-        loading,
-        error,
-        exportedToExcel, // Export Excel
-        updateProspect,
-        filterProspects,
         prospectCount,
         pendingCount,
         expiredCount,
         paidCount,
         filters,
         setFilters,
+        filterProspects,
       }}
     >
       {children}

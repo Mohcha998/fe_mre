@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../assets/vendor/fonts/boxicons.css";
 import "../assets/vendor/css/core.css";
@@ -21,6 +21,7 @@ import DaftarProspect from "./pages/sesi_perkenalan/DaftarProspect.jsx";
 import DaftarPeserta from "./pages/sesi_perkenalan/DaftarPeserta.jsx";
 import NonSesiPerkenalan from "./pages/non_sesi_perkenalan/NonSesiPerkenalan.jsx";
 import SignUp from "./pages/sign-up/Sign-Up.jsx";
+import EditStudent from "./pages/data_student/EditStudent";
 
 const SCRIPTS = [
   { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
@@ -93,6 +94,8 @@ function AdminApp() {
                 element={<NonSesiPerkenalan />}
               />
               <Route path="/sign-up" element={<SignUp />} />
+              {/* <Route path="/edit-student" element={<EditStudent />} /> */}
+              <Route path="/edit-student/:id" element={<EditStudent />} />
             </Routes>
             <div className="content-backdrop fade"></div>
           </div>

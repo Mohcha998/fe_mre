@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
+import { Link } from "react-router-dom";
 import moment from "moment";
+import Pagination from "../../../helper/pagination"; // Import Pagination
 import { StudentContext } from "../../../context/StudentContext"; // Import the context
 
 const STATUS_OPTIONS = [
@@ -9,44 +11,31 @@ const STATUS_OPTIONS = [
 ];
 
 const formatLabel = (name) => {
+  if (name === "branch_name") {
+    return "Learning Centre";
+  } else if (name === "course_name") {
+    return "Jenis";
+  }
   return name
     .replace(/([a-z])([A-Z])/g, "$1 $2")
     .replace(/_/g, " ")
     .replace(/^\w/, (c) => c.toUpperCase());
 };
 
-const TableRow = ({ item }) => {
-  return (
-    <tr className="text-center">
-      <td>{item.id}</td>
-      <td>{item.name}</td>
-      <td>
-        {item.tgl_lahir ? moment(item.tgl_lahir).format("DD-MM-YYYY") : "-"}
-      </td>
-      <td>{item.phone ? item.phone : "-"}</td>
-      <td>{item.email}</td>
-      <td>{item.program_name}</td>
-      <td>{item.branch_name}</td>
-      <td>{item.course_name}</td>
-      <td>{item.kelas_name}</td>
-      <td>{item.status === 0 ? "Inactive" : "Active"}</td>
-      <td>
-        <button className="btn btn-warning btn-sm">Edit</button>
-      </td>
-    </tr>
-  );
-};
+const itemsPerPage = 10;
 
 const DataStudent = () => {
-  const { students, loading, error } = useContext(StudentContext); // Use the context here
+  const { students, loading, error } = useContext(StudentContext);
   const [filters, setFilters] = useState({
     startDate: "",
     endDate: "",
     branch_name: "",
     program_name: "",
-    status: "",
-    source: "",
+    course_name: "",
   });
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10; // Jumlah item per halaman
 
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
@@ -58,7 +47,7 @@ const DataStudent = () => {
       if (!value) return true;
       if (key === "status") return item.status === Number(value);
       if (key === "startDate" || key === "endDate") {
-        const itemDate = new Date(item.tgl_lahir); // Adjusted to match schema
+        const itemDate = new Date(item.tgl_lahir);
         const startDate = filters.startDate
           ? new Date(filters.startDate)
           : null;
@@ -71,6 +60,15 @@ const DataStudent = () => {
       return item[key]?.toString() === value;
     });
   });
+
+  // Hitung total halaman
+  const totalPages = Math.ceil(filteredStudents.length / itemsPerPage);
+
+  // Ambil data sesuai halaman yang aktif
+  const displayedStudents = filteredStudents.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
@@ -126,14 +124,12 @@ const DataStudent = () => {
                   {[
                     "No",
                     "Name",
-                    "Tanggal Lahir",
                     "HP",
                     "Email",
+                    "Learning Centre",
                     "Program",
-                    "Branch",
-                    "Course",
+                    "Jenis",
                     "Kelas",
-                    "Status",
                     "Action",
                   ].map((header) => (
                     <th key={header} className="text-center">
@@ -143,20 +139,46 @@ const DataStudent = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredStudents.length === 0 ? (
+                {displayedStudents.length === 0 ? (
                   <tr>
-                    <td colSpan="11" className="text-center">
+                    <td colSpan="9" className="text-center">
                       No data available
                     </td>
                   </tr>
                 ) : (
-                  filteredStudents.map((item) => (
-                    <TableRow key={item.id} item={item} />
+                  displayedStudents.map((item, index) => (
+                    <tr key={item.id} className="text-center">
+                      <td>{(currentPage - 1) * itemsPerPage + index + 1}</td>
+                      <td>{item.name}</td>
+                      <td>{item.phone ? item.phone : "-"}</td>
+                      <td>{item.email}</td>
+                      <td>{item.program_name}</td>
+                      <td>{item.branch_name}</td>
+                      <td>{item.course_name}</td>
+                      <td>{item.kelas_name}</td>
+                      <td>
+                        <Link
+                          to={`/admin/edit-student/${item.id}`}
+                          className="btn btn-warning btn-sm"
+                        >
+                          Edit
+                        </Link>
+                      </td>
+                    </tr>
                   ))
                 )}
               </tbody>
             </table>
           </div>
+        </div>
+
+        {/* 🔹 Panggil Pagination di sini */}
+        <div className="card-footer d-flex justify-content-center">
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            setCurrentPage={setCurrentPage}
+          />
         </div>
       </div>
     </div>
