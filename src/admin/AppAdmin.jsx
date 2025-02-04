@@ -22,6 +22,7 @@ import DaftarPeserta from "./pages/sesi_perkenalan/DaftarPeserta.jsx";
 import NonSesiPerkenalan from "./pages/non_sesi_perkenalan/NonSesiPerkenalan.jsx";
 import SignUp from "./pages/sign-up/Sign-Up.jsx";
 import EditStudent from "./pages/data_student/EditStudent";
+import Dashboard from "./pages/dashboard/Dashboard.jsx";
 
 const SCRIPTS = [
   { src: "/assets/vendor/js/helpers.js", id: "helpers-js" },
@@ -80,7 +81,8 @@ function AdminApp() {
           <Navbar />
           <div className="content-wrapper">
             <Routes>
-              <Route path="/dashboard" element={<AdminDashboard />} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              {/* <Route path="/dashboard" element={<AdminDashboard />} /> */}
               <Route path="/sp" element={<SPProgram />} />
               <Route path="/daftar-peserta-sp" element={<PesertaSP />} />
               <Route path="/hadir" element={<Hadir />} />
