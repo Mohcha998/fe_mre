@@ -28,7 +28,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -44,7 +43,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -60,7 +58,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -76,7 +73,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -92,7 +88,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -108,7 +103,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -124,7 +118,6 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
 
   const {
@@ -140,8 +133,171 @@ export const DashboardProvider = ({ children }) => {
     refetchOnWindowFocus: true,
     refetchOnMount: true,
     staleTime: 0,
-    // refetchInterval: 60000,
   });
+
+  // Fetch Today Sign Data
+  const {
+    data: todaySignData,
+    isLoading: isTodaySignLoading,
+    error: todaySignError,
+  } = useQuery({
+    queryKey: ["todaySignData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-sign");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Pending Data
+  const {
+    data: todayPendingData,
+    isLoading: isTodayPendingLoading,
+    error: todayPendingError,
+  } = useQuery({
+    queryKey: ["todayPendingData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-pending");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Expired Data
+  const {
+    data: todayExpiredData,
+    isLoading: isTodayExpiredLoading,
+    error: todayExpiredError,
+  } = useQuery({
+    queryKey: ["todayExpiredData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-expired");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Paid Data
+  const {
+    data: todayPaidData,
+    isLoading: isTodayPaidLoading,
+    error: todayPaidError,
+  } = useQuery({
+    queryKey: ["todayPaidData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-paid");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Sign Yearly Data
+  const {
+    data: todaySignyData,
+    isLoading: isTodaySignyLoading,
+    error: todaySignyError,
+  } = useQuery({
+    queryKey: ["todaySignyData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-signy");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Pending Yearly Data
+  const {
+    data: todayPendingyData,
+    isLoading: isTodayPendingyLoading,
+    error: todayPendingyError,
+  } = useQuery({
+    queryKey: ["todayPendingyData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-pendingy");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Expired Yearly Data
+  const {
+    data: todayExpiredyData,
+    isLoading: isTodayExpiredyLoading,
+    error: todayExpiredyError,
+  } = useQuery({
+    queryKey: ["todayExpiredyData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-expiredy");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Fetch Today Paid Yearly Data
+  const {
+    data: todayPaidyData,
+    isLoading: isTodayPaidyLoading,
+    error: todayPaidyError,
+  } = useQuery({
+    queryKey: ["todayPaidyData"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("today-paidy");
+      return response.data;
+    },
+    refetchOnWindowFocus: true,
+    refetchOnMount: true,
+    staleTime: 0,
+  });
+
+  // Combine all loading states
+  const isLoadingAll =
+    isLoading ||
+    isTodaySignLoading ||
+    isTodayPendingLoading ||
+    isTodayExpiredLoading ||
+    isTodayPaidLoading ||
+    isTodaySignyLoading ||
+    isTodayPendingyLoading ||
+    isTodayExpiredyLoading ||
+    isTodayPaidyLoading ||
+    isTopBranchesLoading ||
+    isBranchRevenueLoading ||
+    isBranchRevenueMonthLoading ||
+    isStudentLastThreeMonthsLoading ||
+    isPaymentLastThreeMonthsLoading;
+
+  // Combine all errors
+  const errorAll =
+    error ||
+    todaySignError ||
+    todayPendingError ||
+    todayExpiredError ||
+    todayPaidError ||
+    todaySignyError ||
+    todayPendingyError ||
+    todayExpiredyError ||
+    todayPaidyError ||
+    topBranchesError ||
+    branchRevenueError ||
+    branchRevenueMonthError ||
+    topBranchesRevenueMonthError ||
+    topBranchesRevenueError ||
+    studentLastThreeMonthsError ||
+    paymentLastThreeMonthsError;
 
   const value = {
     branchStd: dashboardData?.branchStd || [],
@@ -156,22 +312,16 @@ export const DashboardProvider = ({ children }) => {
     labelStudent: studentLastThreeMonths?.labels || [],
     paymentLastThreeMonths: paymentLastThreeMonths?.series || [],
     labelPayment: paymentLastThreeMonths?.labels || [],
-    isLoading:
-      isLoading ||
-      isTopBranchesLoading ||
-      isBranchRevenueLoading ||
-      isBranchRevenueMonthLoading ||
-      isStudentLastThreeMonthsLoading ||
-      isPaymentLastThreeMonthsLoading,
-    error:
-      error ||
-      topBranchesError ||
-      branchRevenueError ||
-      branchRevenueMonthError ||
-      topBranchesRevenueMonthError ||
-      topBranchesRevenueError ||
-      studentLastThreeMonthsError ||
-      paymentLastThreeMonthsError,
+    todaySign: todaySignData || {},
+    todayPending: todayPendingData || {},
+    todayExpired: todayExpiredData || {},
+    todayPaid: todayPaidData || {},
+    todaySigny: todaySignyData || {},
+    todayPendingy: todayPendingyData || {},
+    todayExpiredy: todayExpiredyData || {},
+    todayPaidy: todayPaidyData || {},
+    isLoading: isLoadingAll,
+    error: errorAll,
   };
 
   return (

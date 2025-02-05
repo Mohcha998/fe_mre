@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState } from "react";
 import { MdOutlineCancel, MdPaid } from "react-icons/md";
 import { LuClock3 } from "react-icons/lu";
 import { formatRupiah } from "../../../helper/helper";
@@ -19,24 +19,48 @@ const Dashboard = () => {
     paymentLastThreeMonths,
     labelStudent,
     labelPayment,
-    } = useDashboard();
-  
+    todaySign,
+    todayPending,
+    todayExpired,
+    todayPaid,
+    todaySigny,
+    todayPendingy,
+    todayExpiredy,
+    todayPaidy,
+  } = useDashboard();
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
   const CARD_TODAY = [
-    { title: "Total Sign Up", count: "0" },
-    { title: "Pending", count: "0" },
-    { title: "Expired", count: "0" },
-    { title: "Paid", count: "0" },
+    { title: "Total Sign Up", count: todaySign.user_count || "0" },
+    { title: "Pending", count: todayPending.count || "0" },
+    { title: "Expired", count: todayExpired.count || "0" },
+    { title: "Paid", count: todayPaid.count || "0" },
   ];
 
   const CARD_YTD = [
-    { icon: <FaUserGraduate style={{ fontSize: "28px", color: "#4CAF50" }} />, title: "Total Student", count: "0" }, // Student
-    { icon: <LuClock3 style={{ fontSize: "28px", color: "#2196F3" }} />, title: "Pending", count: "0" }, // Pending (menunggu)
-    { icon: <MdOutlineCancel style={{ fontSize: "28px", color: "#FF5722" }} />, title: "Expired", count: "0" }, // Expired (dibatalkan/kadaluarsa)
-    { icon: <MdPaid style={{ fontSize: "28px", color: "#FFC107" }} />, title: "Paid", count: "0" }, // Paid (dibayar)
+    {
+      icon: <FaUserGraduate style={{ fontSize: "28px", color: "#4CAF50" }} />,
+      title: "Total Sign Up",
+      count: todaySigny?.user_count || "0",
+    }, // Student
+    {
+      icon: <LuClock3 style={{ fontSize: "28px", color: "#2196F3" }} />,
+      title: "Pending",
+      count: todayPendingy.count || "0",
+    }, // Pending (menunggu)
+    {
+      icon: <MdOutlineCancel style={{ fontSize: "28px", color: "#FF5722" }} />,
+      title: "Expired",
+      count: todayExpiredy.count || "0",
+    }, // Expired (dibatalkan/kadaluarsa)
+    {
+      icon: <MdPaid style={{ fontSize: "28px", color: "#FFC107" }} />,
+      title: "Paid",
+      count: todayPaidy.count || "0",
+    }, // Paid (dibayar)
   ];
 
   const CardYtd = ({ card }) => (
@@ -53,7 +77,11 @@ const Dashboard = () => {
 
   const CardToday = ({ title, count }) => (
     <div className="col-auto">
-      <div className="card shadow-sm" style={{ width: "200px", height: "50px" }} role="button">
+      <div
+        className="card shadow-sm"
+        style={{ width: "200px", height: "50px" }}
+        role="button"
+      >
         <div className="card-body d-flex justify-content-between align-items-center p-2">
           <h6 className="card-title mb-0">{title}</h6>
           <h6 className="fw-bold mb-0">{count}</h6>
@@ -73,204 +101,204 @@ const Dashboard = () => {
           0
         );
 
-        const labelsRev =
-        topBranchesRevenue?.map((branchrev) => branchrev.name) || [];
-    
-      const seriesRev = topBranchesRevenue?.map((branchrev) =>
-        parseInt(branchrev.total_revenue, 10)
-      );
-    
-      const labelsRevm =
-        topBranchesRevenueMonth?.map((branchrevm) => branchrevm.name) || [];
-    
-      const seriesRevm = topBranchesRevenueMonth?.map((branchrevm) =>
-        parseInt(branchrevm.total_revenue, 10)
-      );
+  const labelsRev =
+    topBranchesRevenue?.map((branchrev) => branchrev.name) || [];
 
-      const tableData =
+  const seriesRev = topBranchesRevenue?.map((branchrev) =>
+    parseInt(branchrev.total_revenue, 10)
+  );
+
+  const labelsRevm =
+    topBranchesRevenueMonth?.map((branchrevm) => branchrevm.name) || [];
+
+  const seriesRevm = topBranchesRevenueMonth?.map((branchrevm) =>
+    parseInt(branchrevm.total_revenue, 10)
+  );
+
+  const tableData =
     activeTab === "all-time" ? branchesRevenue : branchesRevenueMonth;
 
   const allTimeConfig = {
-      chart: {
-        height: 165,
-        width: 130,
-        type: "donut",
+    chart: {
+      height: 165,
+      width: 130,
+      type: "donut",
+    },
+    labels: labelsRev,
+    series: seriesRev,
+    colors: ["#3b82f6", "#10b981", "#f97316"],
+    stroke: {
+      width: 5,
+      colors: ["#ffffff"],
+    },
+    dataLabels: {
+      enabled: false,
+      formatter: (val) => `${parseInt(val)}%`,
+    },
+    legend: {
+      show: false,
+    },
+    grid: {
+      padding: {
+        top: 0,
+        bottom: 0,
+        right: 15,
       },
-      labels: labelsRev,
-      series: seriesRev,
-      colors: ["#3b82f6", "#10b981", "#f97316"],
-      stroke: {
-        width: 5,
-        colors: ["#ffffff"],
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "75%",
+          labels: {
+            show: true,
+            value: {
+              fontSize: "0.9rem",
+              fontFamily: "Public Sans",
+              color: "#000000",
+              offsetY: -15,
+              formatter: (val) => `${parseInt(val)}`,
+            },
+            name: {
+              offsetY: 20,
+              fontFamily: "Public Sans",
+            },
+            total: {
+              show: true,
+              fontSize: "0.8125rem",
+              color: "#666",
+              label: "Total Revenue",
+              formatter: () => `${formatRupiah(totalRevenue)}`,
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const monthlyConfig = {
+    chart: {
+      height: 165,
+      width: 130,
+      type: "donut",
+    },
+    labels: labelsRevm,
+    series: seriesRevm,
+    colors: ["#4635B1", "#5B913B", "#638C6D"],
+    stroke: {
+      width: 5,
+      colors: ["#ffffff"],
+    },
+    dataLabels: {
+      enabled: false,
+      formatter: (val) => `${parseInt(val)}%`,
+    },
+    legend: {
+      show: false,
+    },
+    grid: {
+      padding: {
+        top: 0,
+        bottom: 0,
+        right: 15,
+      },
+    },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: "75%",
+          labels: {
+            show: true,
+            value: {
+              fontSize: "0.9rem",
+              fontFamily: "Public Sans",
+              color: "#000000",
+              offsetY: -15,
+              formatter: (val) => `${parseInt(val)}`,
+            },
+            name: {
+              offsetY: 20,
+              fontFamily: "Public Sans",
+            },
+            total: {
+              show: true,
+              fontSize: "0.8125rem",
+              color: "#666",
+              label: "Total Revenue",
+              formatter: () => `${formatRupiah(currentTotalRevenue)}`,
+            },
+          },
+        },
+      },
+    },
+  };
+
+  const chartatas = {
+    series: [
+      {
+        name: "STUDENT COUNT", // Example name, you can customize this
+        data: studentLastThreeMonths[0] || [26, 35, 50],
+      },
+    ],
+    options: {
+      chart: {
+        type: "area",
+        height: 350,
+        zoom: {
+          enabled: false,
+        },
       },
       dataLabels: {
         enabled: false,
-        formatter: (val) => `${parseInt(val)}%`,
+      },
+      stroke: {
+        curve: "straight",
+      },
+      labels: labelStudent || ["", "Nov", "Dec", "Jan"],
+      xaxis: {
+        type: "category",
+      },
+      yaxis: {
+        opposite: true,
       },
       legend: {
-        show: false,
+        horizontalAlign: "left",
       },
-      grid: {
-        padding: {
-          top: 0,
-          bottom: 0,
-          right: 15,
-        },
-      },
-      plotOptions: {
-        pie: {
-          donut: {
-            size: "75%",
-            labels: {
-              show: true,
-              value: {
-                fontSize: "0.9rem",
-                fontFamily: "Public Sans",
-                color: "#000000",
-                offsetY: -15,
-                formatter: (val) => `${parseInt(val)}`,
-              },
-              name: {
-                offsetY: 20,
-                fontFamily: "Public Sans",
-              },
-              total: {
-                show: true,
-                fontSize: "0.8125rem",
-                color: "#666",
-                label: "Total Revenue",
-                formatter: () => `${formatRupiah(totalRevenue)}`,
-              },
-            },
-          },
-        },
-      },
-    };
+    },
+  };
 
-    const monthlyConfig = {
-        chart: {
-          height: 165,
-          width: 130,
-          type: "donut",
-        },
-        labels: labelsRevm,
-        series: seriesRevm,
-        colors: ["#4635B1", "#5B913B", "#638C6D"],
-        stroke: {
-          width: 5,
-          colors: ["#ffffff"],
-        },
-        dataLabels: {
+  const chartbawah = {
+    series: [
+      {
+        name: "PAYMENT COUNT",
+        data: paymentLastThreeMonths[0] || [26, 35, 50],
+      },
+    ],
+    options: {
+      chart: {
+        type: "area",
+        height: 350,
+        zoom: {
           enabled: false,
-          formatter: (val) => `${parseInt(val)}%`,
         },
-        legend: {
-          show: false,
-        },
-        grid: {
-          padding: {
-            top: 0,
-            bottom: 0,
-            right: 15,
-          },
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              size: "75%",
-              labels: {
-                show: true,
-                value: {
-                  fontSize: "0.9rem",
-                  fontFamily: "Public Sans",
-                  color: "#000000",
-                  offsetY: -15,
-                  formatter: (val) => `${parseInt(val)}`,
-                },
-                name: {
-                  offsetY: 20,
-                  fontFamily: "Public Sans",
-                },
-                total: {
-                  show: true,
-                  fontSize: "0.8125rem",
-                  color: "#666",
-                  label: "Total Revenue",
-                  formatter: () => `${formatRupiah(currentTotalRevenue)}`,
-                },
-              },
-            },
-          },
-        },
-      };
-
-      const chartatas = {
-        series: [
-          {
-            name: "STUDENT COUNT", // Example name, you can customize this
-            data: studentLastThreeMonths[0] || [26, 35, 50],
-          },
-        ],
-        options: {
-          chart: {
-            type: "area",
-            height: 350,
-            zoom: {
-              enabled: false,
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            curve: "straight",
-          },
-          labels: labelStudent || ["", "Nov", "Dec", "Jan"],
-          xaxis: {
-            type: "category",
-          },
-          yaxis: {
-            opposite: true,
-          },
-          legend: {
-            horizontalAlign: "left",
-          },
-        },
-      };
-
-      const chartbawah = {
-        series: [
-          {
-            name: "PAYMENT COUNT",
-            data: paymentLastThreeMonths[0] || [26, 35, 50],
-          },
-        ],
-        options: {
-          chart: {
-            type: "area",
-            height: 350,
-            zoom: {
-              enabled: false,
-            },
-          },
-          dataLabels: {
-            enabled: false,
-          },
-          stroke: {
-            curve: "straight",
-          },
-          labels: labelPayment || ["", "Nov", "Dec", "Jan"],
-          xaxis: {
-            type: "category",
-          },
-          yaxis: {
-            opposite: true,
-          },
-          legend: {
-            horizontalAlign: "left",
-          },
-        },
-      };
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: "straight",
+      },
+      labels: labelPayment || ["", "Nov", "Dec", "Jan"],
+      xaxis: {
+        type: "category",
+      },
+      yaxis: {
+        opposite: true,
+      },
+      legend: {
+        horizontalAlign: "left",
+      },
+    },
+  };
 
   return (
     // Today
@@ -329,7 +357,9 @@ const Dashboard = () => {
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-6">
                   <div className="d-flex flex-column align-items-center gap-1">
-                    <h3 className="mb-1">{formatRupiah(currentTotalRevenue)}</h3>
+                    <h3 className="mb-1">
+                      {formatRupiah(currentTotalRevenue)}
+                    </h3>
                     <small>Total Revenue</small>
                   </div>
                   <div id="monthlyConfig">
@@ -409,9 +439,13 @@ const Dashboard = () => {
                       </tr>
                       <br />
                       <tr>
-                        <td><strong>Total</strong></td>
+                        <td>
+                          <strong>Total</strong>
+                        </td>
                         <td></td>
-                        <td><strong>100</strong></td>
+                        <td>
+                          <strong>100</strong>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -422,7 +456,14 @@ const Dashboard = () => {
 
           {/* Source */}
           <div className="col-md-6 col-lg-4 col-xl-6 order-0 mb-4">
-            <div className="card" style={{ height: "650px", display: "flex", flexDirection: "column" }}>
+            <div
+              className="card"
+              style={{
+                height: "650px",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
               {/* Header Card */}
               <div className="card-header d-flex justify-content-between py-2">
                 <h5 className="mb-3 mt-3">Source</h5>
@@ -441,35 +482,39 @@ const Dashboard = () => {
                     <tbody>
                       <tr>
                         <td>Ad</td>
-                        <td>300</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>WiCi</td>
-                        <td>100</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>SocMed</td>
-                        <td>200</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>Referral</td>
-                        <td>10</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>Website</td>
-                        <td>100</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>WAB</td>
-                        <td>100</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>Email</td>
-                        <td>200</td>
+                        <td>0</td>
                       </tr>
                       <tr>
-                        <td><strong>Total</strong></td>
-                        <td><strong>1010</strong></td>
+                        <td>
+                          <strong>Total</strong>
+                        </td>
+                        <td>
+                          <strong>0</strong>
+                        </td>
                       </tr>
                     </tbody>
                   </table>
@@ -493,7 +538,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-  
+
             {/* Grafik Revenue */}
             <div className="card">
               <div className="card-body">

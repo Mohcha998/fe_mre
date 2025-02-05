@@ -111,7 +111,7 @@ const EditStudent = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Name</label>
+                      <label>Nama</label>
                       <input
                         type="text"
                         name="name"
@@ -123,7 +123,7 @@ const EditStudent = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Phone</label>
+                      <label>No HP</label>
                       <input
                         type="text"
                         name="phone"
@@ -138,7 +138,7 @@ const EditStudent = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Date of Birth</label>
+                      <label>No HP</label>
                       <input
                         type="date"
                         name="tgl_lahir"
@@ -150,7 +150,7 @@ const EditStudent = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>School Origin</label>
+                      <label>Asal Sekolah</label>
                       <input
                         type="text"
                         name="asal_sekolah"
@@ -181,14 +181,14 @@ const EditStudent = () => {
                 <div className="row mb-3">
                   <div className="col-md-4">
                     <div className="form-group">
-                      <label>Course</label>
+                      <label>Jenis</label>
                       <select
                         name="id_course"
                         value={formData.id_course}
                         onChange={handleInputChange}
                         className="form-control"
                       >
-                        <option value="">Select Course</option>
+                        <option value="">Select Jenis</option>
                         {dropdownData.courses.map((course) => (
                           <option key={course.id} value={course.id}>
                             {course.name}
@@ -199,14 +199,14 @@ const EditStudent = () => {
                   </div>
                   <div className="col-md-4">
                     <div className="form-group">
-                      <label>Branch</label>
+                      <label>Learning Centre</label>
                       <select
                         name="id_branch"
                         value={formData.id_branch}
                         onChange={handleInputChange}
                         className="form-control"
                       >
-                        <option value="">Select Branch</option>
+                        <option value="">Select Learning Centre</option>
                         {dropdownData.branches.map((branch) => (
                           <option key={branch.id} value={branch.id}>
                             {branch.name}
@@ -236,11 +236,11 @@ const EditStudent = () => {
                 </div>
 
                 {/* Father's Info */}
-                <h3>Father's Info</h3>
+                <h3>Info Ayah</h3>
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Father's Name</label>
+                      <label>Nama Ayah</label>
                       <input
                         type="text"
                         name="father.name"
@@ -252,7 +252,7 @@ const EditStudent = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Father's Phone</label>
+                      <label>No HP Ayah</label>
                       <input
                         type="text"
                         name="father.phone"
@@ -266,7 +266,7 @@ const EditStudent = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Father's Email</label>
+                      <label>Email Ayah</label>
                       <input
                         type="email"
                         name="father.email"
@@ -279,11 +279,11 @@ const EditStudent = () => {
                 </div>
 
                 {/* Mother's Info */}
-                <h3>Mother's Info</h3>
+                <h3>Info Ibu</h3>
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Mother's Name</label>
+                      <label>Nama Ibu</label>
                       <input
                         type="text"
                         name="mother.name"
@@ -295,7 +295,7 @@ const EditStudent = () => {
                   </div>
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Mother's Phone</label>
+                      <label>No Hp Ibu</label>
                       <input
                         type="text"
                         name="mother.phone"
@@ -309,7 +309,7 @@ const EditStudent = () => {
                 <div className="row mb-3">
                   <div className="col-md-6">
                     <div className="form-group">
-                      <label>Mother's Email</label>
+                      <label>Email Ibu</label>
                       <input
                         type="email"
                         name="mother.email"
@@ -322,7 +322,7 @@ const EditStudent = () => {
                 </div>
 
                 <button type="submit" className="btn btn-primary w-100">
-                  Update
+                  Submit
                 </button>
               </form>
             </div>

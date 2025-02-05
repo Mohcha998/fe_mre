@@ -152,8 +152,8 @@ const DataStudent = () => {
                       <td>{item.name}</td>
                       <td>{item.phone ? item.phone : "-"}</td>
                       <td>{item.email}</td>
-                      <td>{item.program_name}</td>
                       <td>{item.branch_name}</td>
+                      <td>{item.program_name}</td>
                       <td>{item.course_name}</td>
                       <td>{item.kelas_name}</td>
                       <td>
