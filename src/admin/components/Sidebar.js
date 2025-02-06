@@ -10,7 +10,7 @@ const MENU_ITEMS = [
   { path: "/admin/dashboard", label: "Dashboard", icon: <FaHome /> },
   {
     path: "/admin/non-sesi-perkenalan",
-    label: "Sign-Up",
+    label: "Sign Up",
     icon: <FaGraduationCap />,
     subItems: [
       { path: "/admin/non-sesi-perkenalan", label: "Daftar Prospect" },

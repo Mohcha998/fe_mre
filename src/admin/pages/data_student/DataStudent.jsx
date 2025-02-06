@@ -15,6 +15,8 @@ const formatLabel = (name) => {
     return "Learning Centre";
   } else if (name === "course_name") {
     return "Jenis";
+  } else if (name === "program_name") {
+    return "Program";
   }
   return name
     .replace(/([a-z])([A-Z])/g, "$1 $2")
@@ -32,6 +34,7 @@ const DataStudent = () => {
     branch_name: "",
     program_name: "",
     course_name: "",
+    kelas: "",
   });
 
   const [currentPage, setCurrentPage] = useState(1);

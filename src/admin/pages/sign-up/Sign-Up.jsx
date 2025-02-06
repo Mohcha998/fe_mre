@@ -307,7 +307,7 @@ const SignUp = () => {
                 <tr>
                   {[
                     "No",
-                    "Name",
+                    "Nama",
                     "HP",
                     "Email",
                     // "Program",

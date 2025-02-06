@@ -387,6 +387,7 @@ const Dashboard = () => {
                       <tr>
                         <th>No</th>
                         <th>Learning Centre</th>
+                        <th>Students</th>
                         <th>Revenue</th>
                       </tr>
                     </thead>
@@ -396,6 +397,7 @@ const Dashboard = () => {
                           <tr key={data.id || index}>
                             <td>{index + 1}</td>
                             <td>{data.kode_cabang || "N/A"}</td>
+                            <td>{data.total_students || "N/A"}</td>
                             <td>{formatRupiah(data.total_revenue || 0)}</td>
                           </tr>
                         ))
@@ -475,42 +477,65 @@ const Dashboard = () => {
                   <table className="table table-striped">
                     <thead>
                       <tr>
-                        <th>Source</th>
-                        <th>Jumlah</th>
+                        <th rowSpan="2">Source</th>
+                        <th colSpan="2" text-align="center">
+                          Jumlah
+                        </th>
+                        <th rowSpan="2">Total</th>
+                      </tr>
+                      <tr>
+                        <th>Prospect</th>
+                        <th>Customer</th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr>
-                        <td>Ad</td>
+                        <td>SP</td>
+                        <td>0</td>
+                        <td>0</td>
                         <td>0</td>
                       </tr>
                       <tr>
                         <td>WiCi</td>
                         <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
                       </tr>
                       <tr>
                         <td>SocMed</td>
+                        <td>0</td>
+                        <td>0</td>
+                        <td>0</td>
+                      </tr>
+                      <tr>
+                        <td>Ad</td>
+                        <td>0</td>
+                        <td>0</td>
                         <td>0</td>
                       </tr>
                       <tr>
                         <td>Referral</td>
                         <td>0</td>
-                      </tr>
-                      <tr>
-                        <td>Website</td>
+                        <td>0</td>
                         <td>0</td>
                       </tr>
-                      <tr>
+                      {/* <tr>
                         <td>WAB</td>
                         <td>0</td>
                       </tr>
                       <tr>
                         <td>Email</td>
                         <td>0</td>
-                      </tr>
+                      </tr> */}
                       <tr>
                         <td>
                           <strong>Total</strong>
+                        </td>
+                        <td>
+                          <strong>0</strong>
+                        </td>
+                        <td>
+                          <strong>0</strong>
                         </td>
                         <td>
                           <strong>0</strong>

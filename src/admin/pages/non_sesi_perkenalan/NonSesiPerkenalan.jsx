@@ -241,7 +241,7 @@ const NonSesiPerkenalan = () => {
 
       <div className="card mt-4">
         <div className="card-header text-white">
-          <h5 className="mb-0">List Peserta</h5>
+          <h5 className="mb-0">List Prospect</h5>
         </div>
         <div className="card-body px-0">
           <div className="table-responsive">
@@ -251,12 +251,12 @@ const NonSesiPerkenalan = () => {
                   {[
                     "No",
                     "Nama",
-                    "Phone",
+                    "HP",
                     "Email",
-                    "Kode CBG",
+                    "Learning Centre",
                     "Tanggal Daftar",
                     "Status",
-                    "Sumber",
+                    "Source",
                     "Follow Up",
                   ].map((header) => (
                     <th key={header} className="text-center">

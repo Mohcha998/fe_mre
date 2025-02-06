@@ -209,7 +209,7 @@ const EditStudent = () => {
                         <option value="">Select Learning Centre</option>
                         {dropdownData.branches.map((branch) => (
                           <option key={branch.id} value={branch.id}>
-                            {branch.name}
+                            {branch.kode_cabang}
                           </option>
                         ))}
                       </select>
