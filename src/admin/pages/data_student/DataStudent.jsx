@@ -80,7 +80,7 @@ const DataStudent = () => {
     <div className="container-xxl flex-grow-1 container-p-y">
       <div className="card mt-1">
         <div className="card-header">
-          <h5>Filter</h5>
+          <h5 className="fs-5 fw-bold">Filter</h5>
         </div>
         <div className="card-body">
           <div className="row g-3">
@@ -117,7 +117,7 @@ const DataStudent = () => {
 
       <div className="card mt-4">
         <div className="card-header text-white">
-          <h5 className="mb-0">Data Students</h5>
+          <h5 className="mb-0 fs-5 fw-bold">Data Students</h5>
         </div>
         <div className="card-body px-0">
           <div className="table-responsive">

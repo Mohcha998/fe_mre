@@ -42,49 +42,52 @@ const Dashboard = () => {
 
   const CARD_YTD = [
     {
-      icon: <FaUserGraduate style={{ fontSize: "28px", color: "#4CAF50" }} />,
+      icon: <FaUserGraduate className="text-white" style={{ fontSize: "28px" }} />,
       title: "Total Sign Up",
       count: todaySigny?.user_count || "0",
-    }, // Student
+      bgColor: "bg-primary",
+    }, 
     {
-      icon: <LuClock3 style={{ fontSize: "28px", color: "#2196F3" }} />,
+      icon: <LuClock3 className="text-white" style={{ fontSize: "28px" }} />,
       title: "Pending",
       count: todayPendingy.count || "0",
-    }, // Pending (menunggu)
+      bgColor: "bg-warning", // Biru (Bootstrap)
+    }, 
     {
-      icon: <MdOutlineCancel style={{ fontSize: "28px", color: "#FF5722" }} />,
+      icon: <MdOutlineCancel className="text-white" style={{ fontSize: "28px" }} />,
       title: "Expired",
       count: todayExpiredy.count || "0",
-    }, // Expired (dibatalkan/kadaluarsa)
+      bgColor: "bg-danger", // Merah (Bootstrap)
+    }, 
     {
-      icon: <MdPaid style={{ fontSize: "28px", color: "#FFC107" }} />,
+      icon: <MdPaid className="text-white" style={{ fontSize: "28px" }} />,
       title: "Paid",
       count: todayPaidy.count || "0",
-    }, // Paid (dibayar)
-  ];
+      bgColor: "bg-success", // Kuning (Bootstrap)
+    }, 
+  ];   
 
   const CardYtd = ({ card }) => (
     <div className="col">
-      <div className="card text-center" role="button">
+      <div className={`card text-center shadow-sm text-white ${card.bgColor}`} >
         <div className="card-body">
           <div className="mb-2">{card.icon}</div>
           <h6 className="card-title mb-1">{card.title}</h6>
-          <p className="fw-bold mb-0">{card.count}</p>
+          <p className="card-text fs-5 fw-bold text-white">{card.count}</p>
         </div>
       </div>
     </div>
-  );
+  );  
 
   const CardToday = ({ title, count }) => (
     <div className="col-auto">
       <div
         className="card shadow-sm"
         style={{ width: "200px", height: "50px" }}
-        role="button"
       >
         <div className="card-body d-flex justify-content-between align-items-center p-2">
           <h6 className="card-title mb-0">{title}</h6>
-          <h6 className="fw-bold mb-0">{count}</h6>
+          <h6 className="card-text fs-5 fw-bold">{count}</h6>
         </div>
       </div>
     </div>
@@ -325,7 +328,7 @@ const Dashboard = () => {
             <div className="card" style={{ height: "650px" }}>
               <div className="card-header d-flex justify-content-between py-2">
                 <div className="card-title mb-0">
-                  <h5 className="mb-3 mt-3">Total Revenue</h5>
+                  <h5 className="mb-3 mt-3 fs-5 fw-bold">Total Revenue</h5>
                   <ul className="nav nav-pills" role="tablist">
                     <li className="nav-item">
                       <button
@@ -403,7 +406,7 @@ const Dashboard = () => {
                         ))
                       ) : (
                         <tr>
-                          <td colSpan="3" className="text-center">
+                          <td colSpan="4" className="text-center">
                             No data available
                           </td>
                         </tr>
@@ -420,7 +423,7 @@ const Dashboard = () => {
             <div className="card mb-2" style={{ height: "650px" }}>
               <div className="card-header d-flex justify-content-between py-2">
                 <div className="card-title mb-0">
-                  <h5 className="mb-3 mt-3">Total Student</h5>
+                  <h5 className="mb-3 mt-3 fs-5 fw-bold">Total Student</h5>
                 </div>
               </div>
               <div className="card-body">
@@ -468,7 +471,7 @@ const Dashboard = () => {
             >
               {/* Header Card */}
               <div className="card-header d-flex justify-content-between py-2">
-                <h5 className="mb-3 mt-3">Source</h5>
+                <h5 className="mb-3 mt-3 fs-5 fw-bold">Source</h5>
               </div>
 
               {/* Body Card */}
@@ -527,6 +530,7 @@ const Dashboard = () => {
                         <td>Email</td>
                         <td>0</td>
                       </tr> */}
+                      <br />
                       <tr>
                         <td>
                           <strong>Total</strong>
@@ -552,7 +556,7 @@ const Dashboard = () => {
           <div className="col-lg-6 col-12">
             <div className="card mb-2">
               <div className="card-body">
-                <h5 className="card-title">Grafik Student</h5>
+                <h5 className="card-title fs-5 fw-bold">Grafik Student</h5>
                 <div id="chartatas">
                   <ApexCharts
                     options={chartatas.options}
@@ -567,7 +571,7 @@ const Dashboard = () => {
             {/* Grafik Revenue */}
             <div className="card">
               <div className="card-body">
-                <h5 className="card-title">Grafik Revenue</h5>
+                <h5 className="card-title fs-5 fw-bold">Grafik Revenue</h5>
                 <div id="chartbawah">
                   <ApexCharts
                     options={chartbawah.options}

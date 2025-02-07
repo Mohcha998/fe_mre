@@ -44,7 +44,7 @@ const DetailModal = ({ show, onClose, prospectData }) => {
               <span className="col-8">: {prospectData.name}</span>
             </div>
             <div className="mb-1 d-flex">
-              <strong className="col-4">No HP</strong>
+              <strong className="col-4">HP</strong>
               <span className="col-8">: {prospectData.phone}</span>
             </div>
             <div className="mb-1 d-flex">
@@ -75,7 +75,7 @@ const DetailModal = ({ show, onClose, prospectData }) => {
             {/* Menampilkan data anak-anak (children) */}
             {children.length > 0 && (
               <div className="mt-3">
-                <strong>Students:</strong>
+                <strong>Student:</strong>
                 <ul>
                   {children.map((student, index) => (
                     <li key={index}>
@@ -94,7 +94,7 @@ const DetailModal = ({ show, onClose, prospectData }) => {
                         </span>
                       </div> */}
                       <div className="mb-1 d-flex">
-                        <strong className="col-4">No HP</strong>
+                        <strong className="col-4">HP</strong>
                         <span className="col-8">: {student.tlp_murid}</span>
                       </div>
                       <hr className="my-3 border-gray-400" />
